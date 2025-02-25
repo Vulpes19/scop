@@ -18,6 +18,8 @@ set(SOURCES
     src/main.cpp
     src/ErrorHandler.cpp
     src/App.cpp
+    src/Object.cpp
+    srs/glad.cpp
 )
 
 add_subdirectory(ext/glad)

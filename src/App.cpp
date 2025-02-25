@@ -4,6 +4,10 @@ App::App(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		throw(ErrorHandler("SDL failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 	
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
 	window = SDL_CreateWindow("Snake",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -13,10 +17,18 @@ App::App(void) {
 	if (window == NULL)
 		throw(ErrorHandler("SDL window failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 
+	SDL_GLContext context = SDL_GL_CreateContext(window);
+
+    // Initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+			throw(ErrorHandler("GLAD failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
+    }
+    glViewport( 0, 0, WIDTH, HEIGHT );
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	if (renderer == NULL)
 		throw(ErrorHandler("SDL renderer failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 
+	triangle = new Object();
 	//init App stuff
 	running = true;
 }
@@ -42,8 +54,10 @@ void    App::update(void) {
 }
 
 void    App::render(void) {
-    SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
+	triangle->render();
+    // SDL_RenderClear(renderer);
+	// SDL_RenderPresent(renderer);
+	SDL_GL_SwapWindow(window);
 }
 
 bool    App::isRunning(void) const {
