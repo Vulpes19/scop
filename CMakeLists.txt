@@ -19,7 +19,6 @@ set(SOURCES
     src/ErrorHandler.cpp
     src/App.cpp
     src/Object.cpp
-    srs/glad.cpp
 )
 
 add_subdirectory(ext/glad)
@@ -34,4 +33,4 @@ target_link_libraries(scop PRIVATE
     opengl32
 )
 
-target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad)
+target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad/include)

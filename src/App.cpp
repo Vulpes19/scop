@@ -8,12 +8,12 @@ App::App(void) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	window = SDL_CreateWindow("Snake",
+	window = SDL_CreateWindow("scop",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		WIDTH,
 		HEIGHT,
-		0);
+		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (window == NULL)
 		throw(ErrorHandler("SDL window failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 
