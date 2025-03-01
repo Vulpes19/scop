@@ -3,6 +3,8 @@
 #include <iostream>
 #include "ErrorHandler.hpp"
 #include <SDL2/SDL.h>
+#include "Object.hpp"
+#include "./glad/glad.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -19,5 +21,6 @@ class App {
 		SDL_Window* window = nullptr;
 		SDL_Renderer* renderer = nullptr;
 		SDL_Event	event;
+        Object  *triangle;
 		bool	running = false;
 };
