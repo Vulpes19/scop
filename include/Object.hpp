@@ -3,6 +3,7 @@
 #include "./glad/glad.h"
 #include <iostream>
 #include "Shader.hpp"
+#include "SDL.h"
 
 class Object {
     public:
