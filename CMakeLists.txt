@@ -19,6 +19,7 @@ set(SOURCES
     src/ErrorHandler.cpp
     src/App.cpp
     src/Object.cpp
+    src/Shader.cpp
 )
 
 add_subdirectory(ext/glad)

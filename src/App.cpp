@@ -17,16 +17,13 @@ App::App(void) {
 	if (window == NULL)
 		throw(ErrorHandler("SDL window failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 
-	SDL_GLContext context = SDL_GL_CreateContext(window);
+	context = SDL_GL_CreateContext(window);
 
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
 			throw(ErrorHandler("GLAD failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
     }
     glViewport( 0, 0, WIDTH, HEIGHT );
-	renderer = SDL_CreateRenderer(window, -1, 0);
-	if (renderer == NULL)
-		throw(ErrorHandler("SDL renderer failed to initialise: " + std::string(SDL_GetError()), __FILE__, __LINE__));
 
 	triangle = new Object();
 	//init App stuff
@@ -34,6 +31,7 @@ App::App(void) {
 }
 
 App::~App(void) {
+	SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
@@ -55,8 +53,6 @@ void    App::update(void) {
 
 void    App::render(void) {
 	triangle->render();
-    // SDL_RenderClear(renderer);
-	// SDL_RenderPresent(renderer);
 	SDL_GL_SwapWindow(window);
 }
 
