@@ -15,7 +15,7 @@ int main (int ac, char **av) {
     }
     catch (const ErrorHandler &e)
 	{
-		std::cerr << e.what() << " - " << "in file: " << e.getFile() << " line: " << e.getLine() << std::endl;
+		std::cout << e.what() << " - " << "in file: " << e.getFile() << " line: " << e.getLine() << std::endl;
 	}
     return (0);
 }
