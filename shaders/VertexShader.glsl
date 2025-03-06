@@ -9,7 +9,8 @@ out vec2 TexCoord;
 
 void main()
 {
-    gl_Position = vec4(aPos, 1.0); // passing vec3 to vec4's constructor
+    // gl_Position = vec4(aPos, 1.0); // passing vec3 to vec4's constructor
+    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
     vertexColor = aColor; // set the output variable to a dark-red color
     TexCoord = aTexCoord;
 }

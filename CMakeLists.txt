@@ -36,4 +36,4 @@ target_link_libraries(scop PRIVATE
     opengl32
 )
 
-target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad/include)
+target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad/include ${CMAKE_SOURCE_DIR}/ext/stb_image)

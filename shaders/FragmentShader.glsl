@@ -9,5 +9,6 @@ uniform sampler2D ourTexture; // built-in data-type for texture objects
 void main()
 {
     // FragColor = vec4(vertexColor, 1.0);
-    FragColor = texture(ourTexture, TexCoord);
+    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    // FragColor = texture(ourTexture, TexCoord);
 } 
