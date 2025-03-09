@@ -21,6 +21,7 @@ set(SOURCES
     src/App.cpp
     src/Object.cpp
     src/Shader.cpp
+    src/TextureLoader.cpp
 )
 
 add_subdirectory(ext/glad)

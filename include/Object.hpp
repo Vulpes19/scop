@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Shader.hpp"
 #include "SDL.h"
-#include "SDL_image.h"
+#include "TextureLoader.hpp"
 class Object {
     public:
         Object(void);

@@ -25,7 +25,7 @@ Object::Object(void) {
    shader->compileShader(GL_FRAGMENT_SHADER);
    shader->createShader();
 
-   glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
@@ -40,14 +40,9 @@ Object::Object(void) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     //texture generating
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        throw(ErrorHandler("Error failed to init SDL_image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
-    }
-    SDL_Surface* image = IMG_Load("C:\\Users\\asus\\Documents\\scop\\assets\\brick2.png");
-    if (!image) {
-        std::cout << IMG_GetError() << std::endl;
-        throw(ErrorHandler("Error failed to load image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
-    }
+    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\brick2.png");
+    
+    glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
@@ -55,18 +50,9 @@ Object::Object(void) {
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
-    // int width, height, nrChannels;
-    // unsigned char *data = stbi_load("C:\\Users\\asus\\Documents\\scop\\assets\\brick2.png", &width, &height, &nrChannels, 0);
-    // if (data)
-    // {
-    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    //     glGenerateMipmap(GL_TEXTURE_2D);
-    // }
-    // else
-    // {
-    //     std::cout << "Failed to load texture" << std::endl;
-    // }
-    // stbi_image_free(data);
+    glUniform1i(glGetUniformLocation(shader->getShaderProgram(), "texture1"), 0);
+
+    SDL_Surface *image = TextureLoader::getInstance()->getImage("brick2");
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
              GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
