@@ -16,5 +16,6 @@ class Object {
         Shader      *shader;
         unsigned int VAO;
         unsigned int EBO;
-        unsigned int texture;
+        unsigned int texture1;
+        unsigned int texture2;
 };

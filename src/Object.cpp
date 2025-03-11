@@ -42,22 +42,35 @@ Object::Object(void) {
     //texture generating
     TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\brick2.png");
     
-    glActiveTexture(GL_TEXTURE0);
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
-    glUniform1i(glGetUniformLocation(shader->getShaderProgram(), "texture1"), 0);
-
+    
     SDL_Surface *image = TextureLoader::getInstance()->getImage("brick2");
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
              GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    // texture 2 
+    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\cracks.png");
+    
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
+    
     SDL_FreeSurface(image);
+    image = TextureLoader::getInstance()->getImage("cracks");
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, 
+             GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
     //texture generation
     
     
@@ -67,10 +80,13 @@ Object::Object(void) {
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
+    
     // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     // glEnableVertexAttribArray(2);
-
+    
+    shader->useShader();
+    shader->setUniform("texture1", 0);
+    shader->setUniform("texture2", 1);
 }
 
 Object::~Object(void) {
@@ -80,13 +96,13 @@ Object::~Object(void) {
 void    Object::render(void) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shader->getShaderProgram());
-    glBindTexture(GL_TEXTURE_2D, texture);
-    // float timeValue = SDL_GetTicks();
-    // float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
     // int vertexColorLocation = glGetUniformLocation(shader->getShaderProgram(), "ourColor");
     // glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    shader->useShader();
     // glBindVertexArray(VAO);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(VAO);
