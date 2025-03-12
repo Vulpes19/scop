@@ -56,7 +56,7 @@ Object::Object(void) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // texture 2 
-    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\cracks.png");
+    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\crcks.png");
     
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);

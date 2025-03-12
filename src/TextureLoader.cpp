@@ -22,7 +22,6 @@ TextureLoader* TextureLoader::getInstance(void)
 void    TextureLoader::loadImage(const char *path) {
     SDL_Surface* image = IMG_Load(path);
     if (!image) {
-        std::cout << IMG_GetError() << std::endl;
         throw(ErrorHandler("Error failed to load image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
     }
 
