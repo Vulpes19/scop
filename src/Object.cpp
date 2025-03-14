@@ -40,7 +40,7 @@ Object::Object(void) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     //texture generating
-    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\brick2.png");
+    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\brick.png");
     
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
@@ -50,13 +50,13 @@ Object::Object(void) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
     
-    SDL_Surface *image = TextureLoader::getInstance()->getImage("brick2");
+    SDL_Surface *image = TextureLoader::getInstance()->getImage("brick");
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
              GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // texture 2 
-    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\crcks.png");
+    TextureLoader::getInstance()->loadImage("C:\\Users\\asus\\Documents\\scop\\assets\\cracks.png");
     
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);

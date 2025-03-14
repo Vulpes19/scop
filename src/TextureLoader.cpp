@@ -31,7 +31,6 @@ void    TextureLoader::loadImage(const char *path) {
         throw(ErrorHandler("Error failed to load image: can't name the texture the path should have 'assets'", __FILE__, __LINE__));   
     
     std::string ID = strPath.substr(index + 7, strPath.length() - 40);
-    std::cout << ID << std::endl;
 
     textures[ID] = image;
 }
