@@ -74,6 +74,10 @@ void    Shader::createShader(void) {
     glDeleteShader(fragmentShader);
 }
 
-unsigned int    Shader::getShaderProgram(void) const {
-    return (shaderProgram);
+void    Shader::setUniform(const char *uniform, GLint id) {
+    glUniform1i(glGetUniformLocation(shaderProgram, uniform), id);
+}
+
+void    Shader::useShader(void) {
+    glUseProgram(shaderProgram);
 }
