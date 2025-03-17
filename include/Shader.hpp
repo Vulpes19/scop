@@ -15,7 +15,8 @@ class Shader {
         void    loadShader(const char *, GLenum);
         void    compileShader(GLenum);
         void    createShader(void);
-        unsigned int getShaderProgram(void) const;
+        void    setUniform(const char *uniform, GLint);
+        void    useShader(void);
     private:
         unsigned int vertexShader;
         unsigned int fragmentShader;

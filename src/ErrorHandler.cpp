@@ -1,6 +1,6 @@
 #include "ErrorHandler.hpp"
 
-ErrorHandler::ErrorHandler(std::string errorMsg, const char* fileName, int line) : errorMsg(errorMsg.c_str()), fileName(fileName), line(line)
+ErrorHandler::ErrorHandler(std::string errorMsg, const char* fileName, int line) : errorMsg(errorMsg), fileName(fileName), line(line)
 {}
 
 ErrorHandler::~ErrorHandler(void) noexcept
@@ -8,7 +8,7 @@ ErrorHandler::~ErrorHandler(void) noexcept
 
 const char* ErrorHandler::what(void) const noexcept
 {
-	return (errorMsg);
+	return (errorMsg.c_str());
 }
 
 const char* ErrorHandler::getFile(void) const noexcept

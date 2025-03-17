@@ -11,7 +11,7 @@ class ErrorHandler : public std::exception
         const char* getFile(void) const noexcept;
         int			getLine(void) const noexcept;
     private:
-        const char* errorMsg;
+        std::string errorMsg;
         const char* fileName;
         int			line;
 };

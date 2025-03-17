@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Shader.hpp"
 #include "SDL.h"
-
+#include "TextureLoader.hpp"
 class Object {
     public:
         Object(void);
@@ -15,4 +15,7 @@ class Object {
         unsigned int VBO; //vertex buffer object we need to store verticies in GPU memory
         Shader      *shader;
         unsigned int VAO;
+        unsigned int EBO;
+        unsigned int texture1;
+        unsigned int texture2;
 };
