@@ -5,6 +5,8 @@
 #include "Shader.hpp"
 #include "SDL.h"
 #include "TextureLoader.hpp"
+#include "Matrix.hpp"
+
 class Object {
     public:
         Object(void);
@@ -18,4 +20,6 @@ class Object {
         unsigned int EBO;
         unsigned int texture1;
         unsigned int texture2;
+        Matrix4x4   transform;
+        unsigned int   transformLoc;
 };

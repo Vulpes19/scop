@@ -14,7 +14,9 @@ Matrix4x4    Matrix4x4::identity(void) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             matrix.mat[row][col] = (col == row) ? 1.0f : 0.0f;
+            std::cout << matrix.mat[row][col] << " ";
         }
+        std::cout << std::endl;
     }
     return matrix;
 }

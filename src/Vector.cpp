@@ -3,7 +3,7 @@
 Vector::Vector(void) : x(0.0f), y(0.0f), z(0.0f)
 {}
 
-Vector::Vector(float x, float y, float z = 0.0f) : x(x), y(y), z(z)
+Vector::Vector(float x, float y, float z) : x(x), y(y), z(z)
 {}
 
 Vector::Vector(const Vector &vec) {
