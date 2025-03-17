@@ -87,8 +87,9 @@ Object::Object(void) {
     shader->useShader();
     shader->setUniform("texture1", 0);
     shader->setUniform("texture2", 1);
-    // transform = Matrix4x4::identity().translate(Vector(0.5f, 0.5f));
-    // transformLoc = shader->getUniformLoc("transform");
+    transform = Matrix4x4::identity();
+    transform.scale(Vector(2.5f, 2.5f, 1.0f));
+    transformLoc = shader->getUniformLoc("transform");
 }
 
 Object::~Object(void) {
@@ -99,7 +100,6 @@ void    Object::render(void) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     // shader->useShader();
-    // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform.data());
     // float timeValue = SDL_GetTicks();
     // float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
     // int vertexColorLocation = glGetUniformLocation(shader->getShaderProgram(), "ourColor");
@@ -109,6 +109,7 @@ void    Object::render(void) {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
     shader->useShader();
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform.data());
     // glBindVertexArray(VAO);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(VAO);
