@@ -1,9 +1,9 @@
 #include "Vector.hpp"
 
-Vector::Vector(void) : x(0.0), y(0.0), z(0.0)
+Vector::Vector(void) : x(0.0f), y(0.0f), z(0.0f)
 {}
 
-Vector::Vector(double x, double y, double z = 0.0) : x(x), y(y), z(z)
+Vector::Vector(float x, float y, float z = 0.0f) : x(x), y(y), z(z)
 {}
 
 Vector::Vector(const Vector &vec) {
@@ -15,28 +15,37 @@ Vector::Vector(const Vector &vec) {
 Vector::~Vector(void)
 {}
 
-Vector    Vector::operator+(double scalar) {
+Vector    Vector::operator+(float scalar) {
     return (Vector(x + scalar, y + scalar, z + scalar));
 }
-Vector    Vector::operator-(double scalar) {
+Vector    Vector::operator-(float scalar) {
     return (Vector(x - scalar, y - scalar, z - scalar));
 }
-Vector    Vector::operator*(double scalar) {
+Vector    Vector::operator*(float scalar) {
     return (Vector(x * scalar, y * scalar, z * scalar));
 }
-Vector    Vector::operator/(double scalar) {
+Vector    Vector::operator/(float scalar) {
     return (Vector(x / scalar, y / scalar, z / scalar));
 }
-Vector  &Vector::operator*=(double scalar) {
+Vector  &Vector::operator*=(float scalar) {
     return (Vector(x * scalar, y * scalar, z * scalar));
 }
+Vector  &Vector::operator+=(float scalar) {
+    return (Vector(x + scalar, y + scalar, z + scalar));
+}
+Vector  &Vector::operator-=(float scalar) {
+    return (Vector(x - scalar, y - scalar, z - scalar));
+}
+Vector  &Vector::operator/=(float scalar) {
+    return (Vector(x / scalar, y / scalar, z / scalar));
+}
 
-double Vector::length(void) {
+float Vector::length(void) {
     return (sqrt(x * x + y * y + z * z));
 }
 
 void    Vector::normalize(void) {
-    double length = this->length();
+    float length = this->length();
 
     if (length > 1)
         *this *= 1 / length;

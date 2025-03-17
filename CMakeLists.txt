@@ -20,6 +20,8 @@ set(SOURCES
     src/App.cpp
     src/Object.cpp
     src/Shader.cpp
+    src/Vector.cpp
+    src/Matrix.cpp
 )
 
 add_subdirectory(ext/glad)

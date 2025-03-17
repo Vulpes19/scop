@@ -6,25 +6,27 @@ class Vector {
     public :
         //constructors
         Vector(void);
-        Vector(double x, double y, double z = 0);
+        Vector(float x, float y, float z = 0.0f);
         Vector(const Vector &vec);
 
         ~Vector(void);
         // vector operations
-        Vector  operator+(double scalar);
-        Vector  operator-(double scalar);
-        Vector  operator*(double scalar);
-        Vector  operator/(double scalar);
-        Vector  &operator*=(double scalar);
-        Vector  &operator+=(double scalar);
-        Vector  &operator-=(double scalar);
-        Vector  &operator/=(double scalar);
+        Vector  operator+(float scalar);
+        Vector  operator-(float scalar);
+        Vector  operator*(float scalar);
+        Vector  operator/(float scalar);
+        Vector  &operator*=(float scalar);
+        Vector  &operator+=(float scalar);
+        Vector  &operator-=(float scalar);
+        Vector  &operator/=(float scalar);
         
-        double  length(void);
+        float  crossProduct(const Vector &vec);
+        float  dotProduct(const Vector &vec);
+        float  length(void);
         void    normalize(void);
 
-        double x;
-        double y;
-        double z;
-        double w = 1;
+        float x;
+        float y;
+        float z;
+        float w = 1.0f;
 };
