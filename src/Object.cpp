@@ -87,9 +87,11 @@ Object::Object(void) {
     shader->useShader();
     shader->setUniform("texture1", 0);
     shader->setUniform("texture2", 1);
-    transform = Matrix4x4::identity();
-    transform.scale(Vector(0.5f, 0.5f, 1.0f));
-    transform.translate(Vector(0.2f, -0.2f, 0.0f));
+    // transform = Matrix4x4::identity();
+    // transform.scale(Vector(0.5f, 0.5f, 1.0f));
+    // transform.translate(Vector(0.2f, -0.2f, 0.0f));
+    // transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, 30.0f);
+
     transformLoc = shader->getUniformLoc("transform");
 }
 
@@ -109,6 +111,10 @@ void    Object::render(void) {
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
+    transform = Matrix4x4::identity();
+    // transform.scale(Vector(0.5f, 0.5f, 1.0f));
+    // transform.translate(Vector(0.2f, -0.2f, 0.0f));
+    transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, (float)SDL_GetTicks());
     shader->useShader();
     glUniformMatrix4fv(transformLoc, 1, GL_TRUE, transform.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     // glBindVertexArray(VAO);
