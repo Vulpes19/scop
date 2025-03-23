@@ -56,7 +56,7 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
 
 Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
     float rad_angle = angle * PI / 180.0f;
-    std::cout << PI << std::endl;
+    
     switch (axis)
     {
         case X_AXIS:
