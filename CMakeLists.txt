@@ -21,6 +21,8 @@ set(SOURCES
     src/App.cpp
     src/Object.cpp
     src/Shader.cpp
+    src/Vector.cpp
+    src/Matrix.cpp
     src/TextureLoader.cpp
 )
 

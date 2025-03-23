@@ -87,6 +87,12 @@ Object::Object(void) {
     shader->useShader();
     shader->setUniform("texture1", 0);
     shader->setUniform("texture2", 1);
+    // transform = Matrix4x4::identity();
+    // transform.scale(Vector(0.5f, 0.5f, 1.0f));
+    // transform.translate(Vector(0.2f, -0.2f, 0.0f));
+    // transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, 30.0f);
+
+    transformLoc = shader->getUniformLoc("transform");
 }
 
 Object::~Object(void) {
@@ -96,13 +102,21 @@ Object::~Object(void) {
 void    Object::render(void) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    // shader->useShader();
+    // float timeValue = SDL_GetTicks();
+    // float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
     // int vertexColorLocation = glGetUniformLocation(shader->getShaderProgram(), "ourColor");
     // glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
+    transform = Matrix4x4::identity();
+    // transform.scale(Vector(0.5f, 0.5f, 1.0f));
+    // transform.translate(Vector(0.2f, -0.2f, 0.0f));
+    transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, (float)SDL_GetTicks());
     shader->useShader();
+    glUniformMatrix4fv(transformLoc, 1, GL_TRUE, transform.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     // glBindVertexArray(VAO);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(VAO);

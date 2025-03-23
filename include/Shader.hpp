@@ -16,6 +16,7 @@ class Shader {
         void    compileShader(GLenum);
         void    createShader(void);
         void    setUniform(const char *uniform, GLint);
+        unsigned int getUniformLoc(const char *uniform); 
         void    useShader(void);
     private:
         unsigned int vertexShader;

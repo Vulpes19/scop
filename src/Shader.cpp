@@ -78,6 +78,9 @@ void    Shader::setUniform(const char *uniform, GLint id) {
     glUniform1i(glGetUniformLocation(shaderProgram, uniform), id);
 }
 
+unsigned int Shader::getUniformLoc(const char *uniform) {
+    return glGetUniformLocation(shaderProgram, uniform);
+}
 void    Shader::useShader(void) {
     glUseProgram(shaderProgram);
 }
