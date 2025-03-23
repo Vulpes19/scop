@@ -16,9 +16,14 @@ class Matrix4x4 {
         ~Matrix4x4(void);
 
         static Matrix4x4 identity(void);
+
+        //transformation matrices
         Matrix4x4 &translate(Vector vec);
         Matrix4x4 &scale(Vector vec);
         Matrix4x4 &rotate(Vector vec, enum AXIS, float angle);
+
+        //perspective projection matrix
+        Matrix4x4   &perspective(Vector vec);
 
         float *data(void);
 
