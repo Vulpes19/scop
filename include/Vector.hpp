@@ -15,10 +15,10 @@ class Vector {
         Vector  operator-(float scalar);
         Vector  operator*(float scalar);
         Vector  operator/(float scalar);
-        Vector  &operator*=(float scalar);
-        Vector  &operator+=(float scalar);
-        Vector  &operator-=(float scalar);
-        Vector  &operator/=(float scalar);
+        Vector  operator*=(float scalar);
+        Vector  operator+=(float scalar);
+        Vector  operator-=(float scalar);
+        Vector  operator/=(float scalar);
         
         float  crossProduct(const Vector &vec);
         float  dotProduct(const Vector &vec);

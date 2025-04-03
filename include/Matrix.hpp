@@ -10,24 +10,30 @@ enum AXIS {
     Z_AXIS
 };
 
-class Matrix4x4 {
-    public:
-        Matrix4x4(void);
-        ~Matrix4x4(void);
+namespace Vulpes3D {
 
-        static Matrix4x4 identity(void);
+    const float PI = 3.141592653589793f;
 
-        //transformation matrices
-        Matrix4x4 &translate(Vector vec);
-        Matrix4x4 &scale(Vector vec);
-        Matrix4x4 &rotate(Vector vec, enum AXIS, float angle);
+    float     to_radians(float angle);
+    
+    class Matrix4x4 {
+        public:
+            Matrix4x4(void);
+            ~Matrix4x4(void);
 
-        //perspective projection matrix
-        Matrix4x4   &perspective(Vector vec);
+            static Matrix4x4 identity(void);
 
-        float *data(void);
+            //transformation matrices
+            Matrix4x4   &translate(Vector vec);
+            Matrix4x4   &scale(Vector vec);
+            Matrix4x4   &rotate(Vector vec, enum AXIS, float angle);
 
-        float mat[4][4];
-    private:
-        static const float PI;
+            //perspective projection matrix
+            Matrix4x4   &perspective(float fov, float aspect, float far_plane, float near_plane);
+
+            float *data(void);
+
+            float mat[4][4];
+    };
+
 };

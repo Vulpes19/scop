@@ -1,6 +1,6 @@
 #include "Matrix.hpp"
 
-const float Matrix4x4::PI = 3.141592653589793f;
+using namespace Vulpes3D;
 
 Matrix4x4::Matrix4x4(void) {
 
@@ -55,27 +55,26 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
 }
 
 Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
-    float rad_angle = angle * PI / 180.0f;
     
     switch (axis)
     {
         case X_AXIS:
-            mat[1][1] = cos(rad_angle);
-            mat[1][2] = -sin(rad_angle);
-            mat[2][1] = sin(rad_angle);
-            mat[2][2] = cos(rad_angle);
+            mat[1][1] = cos(angle);
+            mat[1][2] = -sin(angle);
+            mat[2][1] = sin(angle);
+            mat[2][2] = cos(angle);
             break;
         case Y_AXIS:
-            mat[0][0] = cos(rad_angle);
-            mat[0][2] = sin(rad_angle);
-            mat[2][0] = -sin(rad_angle);
-            mat[2][2] = cos(rad_angle);
+            mat[0][0] = cos(angle);
+            mat[0][2] = sin(angle);
+            mat[2][0] = -sin(angle);
+            mat[2][2] = cos(angle);
             break;
         case Z_AXIS:
-            mat[0][0] = cos(rad_angle);
-            mat[0][1] = -sin(rad_angle);
-            mat[1][0] = sin(rad_angle);
-            mat[1][1] = cos(rad_angle);
+            mat[0][0] = cos(angle);
+            mat[0][1] = -sin(angle);
+            mat[1][0] = sin(angle);
+            mat[1][1] = cos(angle);
             break;
         default:
             break;
@@ -87,6 +86,19 @@ Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
         }
         std::cout << std::endl;
     }
+    return *this;
+}
+
+Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float far_plane, float near_plane) {
+    float tan_half_fov = tan(fov / 2.0f);
+
+    mat[0][0] = 1.0f / (aspect * tan_half_fov);
+    mat[1][1] = 1.0f / tan_half_fov;
+    mat[2][2] = -(far_plane + near_plane) / (far_plane - near_plane);
+    mat[2][3] = -1.0f;
+    mat[3][2] = -(2.0f * far_plane * near_plane) / (far_plane - near_plane);
+    mat[3][3] = 0.0f;
+
     return *this;
 }
 
