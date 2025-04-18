@@ -20,8 +20,13 @@ class Object {
         unsigned int EBO;
         unsigned int texture1;
         unsigned int texture2;
-        Vulpes3D::Matrix4x4   transform;
+        Vulpes3D::Matrix4x4   model;
+        Vulpes3D::Matrix4x4   view;
+        // glm::mat4   model;
+        // glm::mat4   view;
+        Vulpes3D::Matrix4x4   projection;
+        // glm::mat4 projection;
         unsigned int   modelLoc;
         unsigned int   projectionLoc;
-        unsigned int   viewLoc
+        unsigned int   viewLoc;
 };

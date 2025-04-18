@@ -12,7 +12,7 @@ enum AXIS {
 
 namespace Vulpes3D {
 
-    const float PI = 3.141592653589793f;
+    const float PI = 3.1415926535897f;
 
     float     to_radians(float angle);
     
@@ -29,7 +29,7 @@ namespace Vulpes3D {
             Matrix4x4   &rotate(Vector vec, enum AXIS, float angle);
 
             //perspective projection matrix
-            Matrix4x4   &perspective(float fov, float aspect, float far_plane, float near_plane);
+            Matrix4x4   &perspective(float fov, float aspect, float near_plane, float far_plane);
 
             float *data(void);
 

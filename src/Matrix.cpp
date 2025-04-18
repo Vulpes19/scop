@@ -29,12 +29,15 @@ Matrix4x4   &Matrix4x4::translate(Vector vec) {
     mat[2][3] += vec.z;
     // matrix.mat[3][3] = 1.0f;
     std::cout << "=================" << std::endl;
+    std::cout << "TRANSLATION" << std::endl;
+    std::cout << "=================" << std::endl;
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             std::cout << mat[row][col] << " ";
         }
         std::cout << std::endl;
     }
+    
     return *this;
 }
 
@@ -44,6 +47,8 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
     mat[2][2] *= vec.z;
     // matrix.mat[3][3] = 1.0f;
 
+    std::cout << "=================" << std::endl;
+    std::cout << "SCALING" << std::endl;
     std::cout << "=================" << std::endl;
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
@@ -80,6 +85,8 @@ Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
             break;
     }
     std::cout << "=================" << std::endl;
+    std::cout << "ROTATION" << std::endl;
+    std::cout << "=================" << std::endl;
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             std::cout << mat[row][col] << " ";
@@ -89,16 +96,25 @@ Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
     return *this;
 }
 
-Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float far_plane, float near_plane) {
+Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float near_plane, float far_plane) {
     float tan_half_fov = tan(fov / 2.0f);
 
     mat[0][0] = 1.0f / (aspect * tan_half_fov);
     mat[1][1] = 1.0f / tan_half_fov;
-    mat[2][2] = -(far_plane + near_plane) / (far_plane - near_plane);
+    mat[2][2] = (far_plane + near_plane) / (near_plane - far_plane);   // <-- flipped
     mat[2][3] = -1.0f;
-    mat[3][2] = -(2.0f * far_plane * near_plane) / (far_plane - near_plane);
+    mat[3][2] = (2.0f * far_plane * near_plane) / (near_plane - far_plane);  // <-- flipped
     mat[3][3] = 0.0f;
 
+    std::cout << "=================" << std::endl;
+    std::cout << "PROJECTION" << std::endl;
+    std::cout << "=================" << std::endl;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            std::cout << mat[row][col] << " ";
+        }
+        std::cout << std::endl;
+    }
     return *this;
 }
 

@@ -1,6 +1,4 @@
 #include "Object.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "./stb_image/stb_image.h"
 
 Object::Object(void) {
     // float vertices[] = {
@@ -87,12 +85,41 @@ Object::Object(void) {
     shader->useShader();
     shader->setUniform("texture1", 0);
     shader->setUniform("texture2", 1);
-    transform = Vulpes3D::Matrix4x4::identity();
-    transform.scale(Vector(0.5f, 0.5f, 1.0f));
+
+    
+    // model = Vulpes3D::Matrix4x4::identity();
+    // model.scale(Vector(0.5f, 0.5f, 1.0f));
     // transform.translate(Vector(0.2f, -0.2f, 0.0f));
-    // transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, Vulpes3D::to_radians(30.0f));
+    // model.rotate(Vector(0.2f, -0.2f, 0.0f), X_AXIS, Vulpes3D::to_radians(30.0f));
+
+    // projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
+    
+    // view = Vulpes3D::Matrix4x4::identity();
+    // view.translate(Vector(0.0f, 0.0f, -3.0f));
+
+    
+    
+    model = Vulpes3D::Matrix4x4::identity();
+    view = Vulpes3D::Matrix4x4::identity();
+    projection = Vulpes3D::Matrix4x4::identity();
+    
+    projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    model.rotate(Vector(0.2f, -0.2f, 0.0f), X_AXIS, Vulpes3D::to_radians(-55.0f));
+    view.translate(Vector(0.0f, 0.0f, -3.0f));
+    // model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    // view          = glm::mat4(1.0f);
+    // projection    = glm::mat4(1.0f);
+    
+    // projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    // view  = glm::translate(view, glm::vec3(0.0, 0.0, -3.0));
+    // model = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0, 0.0, 0.0));
 
     modelLoc = shader->getUniformLoc("model");
+    projectionLoc = shader->getUniformLoc("projection");
+    viewLoc = shader->getUniformLoc("view");
+    std::cout << "model -> " << modelLoc << std::endl;
+    std::cout << "projection -> " << projectionLoc << std::endl;
+    std::cout << "view -> " << viewLoc << std::endl;
 }
 
 Object::~Object(void) {
@@ -100,31 +127,32 @@ Object::~Object(void) {
 }
 
 void    Object::render(void) {
+    // glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    // shader->useShader();
-    // float timeValue = SDL_GetTicks();
-    // float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-    // int vertexColorLocation = glGetUniformLocation(shader->getShaderProgram(), "ourColor");
-    // glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    transform = Vulpes3D::Matrix4x4::identity();
-    // transform.scale(Vector(0.5f, 0.5f, 1.0f));
-    // transform.translate(Vector(0.2f, -0.2f, 0.0f));
-    transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, (float)SDL_GetTicks());
+    
+
     shader->useShader();
-    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, transform.data()); //OpenGL expects matrix in Column major "GL_TRUE"
-    // glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    // glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    // glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+   
     glBindVertexArray(VAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 }
 
 void    Object::update(void) {
-    
+    // transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, Vulpes3D::to_radians((float)SDL_GetTicks()));
 }
