@@ -1,18 +1,56 @@
 #include "Object.hpp"
 
 Object::Object(void) {
-    // float vertices[] = {
-    //     // Positions       // Colors       // Texture Coords (U, V)
-    //     -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, // Bottom-left
-    //     0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, // Bottom-right
-    //     0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f  // Top-center
-    // };
-    float vertices[] = {
-        0.5f,  0.5f, 0.0f, 1.0f, 1.0f,  // top right
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
-       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  // bottom left
-       -0.5f,  0.5f, 0.0f, 0.0f, 1.0f   // top left 
-   };
+    
+//     float vertices[] = {
+//         0.5f,  0.5f, 0.0f, 1.0f, 1.0f,  // top right
+//         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
+//        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  // bottom left
+//        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f   // top left 
+//    };
+float vertices[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
    unsigned int indices[] = {  // note that we start from 0!
        0, 1, 3,   // first triangle
        1, 2, 3    // second triangle
@@ -104,8 +142,9 @@ Object::Object(void) {
     projection = Vulpes3D::Matrix4x4::identity();
     
     projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-    model.rotate(Vector(0.2f, -0.2f, 0.0f), X_AXIS, Vulpes3D::to_radians(-55.0f));
     view.translate(Vector(0.0f, 0.0f, -3.0f));
+    model.rotate(Vector(0.2f, -0.2f, 0.0f), X_AXIS,  Vulpes3D::to_radians(-55.0f));
+    // glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     // model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     // view          = glm::mat4(1.0f);
     // projection    = glm::mat4(1.0f);
@@ -113,7 +152,7 @@ Object::Object(void) {
     // projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
     // view  = glm::translate(view, glm::vec3(0.0, 0.0, -3.0));
     // model = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0, 0.0, 0.0));
-
+    
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
@@ -123,24 +162,23 @@ Object::Object(void) {
 }
 
 Object::~Object(void) {
-
+    
 }
 
 void    Object::render(void) {
-    // glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
     
-
+    
     shader->useShader();
 
-    // glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     // glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     // glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
@@ -149,10 +187,14 @@ void    Object::render(void) {
    
     glBindVertexArray(VAO);
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
 }
 
 void    Object::update(void) {
-    // transform.rotate(Vector(0.2f, -0.2f, 0.0f), Z_AXIS, Vulpes3D::to_radians((float)SDL_GetTicks()));
+    float time = SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
+
+    model = Vulpes3D::Matrix4x4::identity();
+    model.rotate(Vector(0.0f, 0.0f, 1.0f), X_AXIS, time);
 }

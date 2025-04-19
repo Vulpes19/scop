@@ -60,6 +60,7 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
 }
 
 Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
+    //passed vector is not use until future implementation
     
     switch (axis)
     {
