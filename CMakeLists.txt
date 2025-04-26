@@ -9,12 +9,6 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# IF    (CMAKE_COMPILER_IS_GNUCC)
-#   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexceptions")
-# ELSEIF(MSVC71 OR MSVC80)
-#   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /EHc-")
-# ENDIF (CMAKE_COMPILER_IS_GNUCC)
-
 set(SOURCES
     src/main.cpp
     src/ErrorHandler.cpp
@@ -24,6 +18,7 @@ set(SOURCES
     src/Vector.cpp
     src/Matrix.cpp
     src/TextureLoader.cpp
+    src/Helpers.cpp
 )
 
 add_subdirectory(ext/glad)
@@ -39,4 +34,4 @@ target_link_libraries(scop PRIVATE
     opengl32
 )
 
-target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad/include ${CMAKE_SOURCE_DIR}/ext/stb_image)
+target_include_directories(scop PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/ext/glad/include)

@@ -49,6 +49,7 @@ void    App::handleInput(void) {
 }
 
 void    App::update(void) {
+	triangle->update();
 }
 
 void    App::render(void) {

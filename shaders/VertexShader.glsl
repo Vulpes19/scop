@@ -7,12 +7,14 @@ layout (location = 1) in vec2 aTexCoord;
 // out vec3 vertexColor; // specify a color output to the fragment shader
 out vec2 TexCoord;
 
-uniform mat4 transform;
+uniform mat4 model;
+uniform mat4 projection;
+uniform mat4 view;
 
 void main()
 {
     // vertexColor = aColor; // set the output variable to a dark-red color
-    gl_Position = transform * vec4(aPos, 1.0); // passing vec3 to vec4's constructor
+    gl_Position = projection * view * model * vec4(aPos, 1.0); // passing vec3 to vec4's constructor
     TexCoord = aTexCoord;
     // vertexColor = aColor; // set the output variable to a dark-red color
 }
