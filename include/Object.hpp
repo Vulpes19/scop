@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include "TextureLoader.hpp"
 #include "Matrix.hpp"
+#include <vector>
 
 class Object {
     public:
@@ -29,4 +30,5 @@ class Object {
         unsigned int   modelLoc;
         unsigned int   projectionLoc;
         unsigned int   viewLoc;
+        std::vector<Vector> cubePositions;
 };

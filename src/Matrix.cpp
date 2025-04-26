@@ -16,9 +16,9 @@ Matrix4x4    Matrix4x4::identity(void) {
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             matrix.mat[row][col] = (col == row) ? 1.0f : 0.0f;
-            std::cout << matrix.mat[row][col] << " ";
+            // std::cout << matrix.mat[row][col] << " ";
         }
-        std::cout << std::endl;
+        // std::cout << std::endl;
     }
     return matrix;
 }
@@ -28,15 +28,15 @@ Matrix4x4   &Matrix4x4::translate(Vector vec) {
     mat[1][3] += vec.y;
     mat[2][3] += vec.z;
     // matrix.mat[3][3] = 1.0f;
-    std::cout << "=================" << std::endl;
-    std::cout << "TRANSLATION" << std::endl;
-    std::cout << "=================" << std::endl;
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            std::cout << mat[row][col] << " ";
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "=================" << std::endl;
+    // std::cout << "TRANSLATION" << std::endl;
+    // std::cout << "=================" << std::endl;
+    // for (int row = 0; row < 4; row++) {
+    //     for (int col = 0; col < 4; col++) {
+    //         std::cout << mat[row][col] << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     
     return *this;
 }
@@ -47,15 +47,15 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
     mat[2][2] *= vec.z;
     // matrix.mat[3][3] = 1.0f;
 
-    std::cout << "=================" << std::endl;
-    std::cout << "SCALING" << std::endl;
-    std::cout << "=================" << std::endl;
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            std::cout << mat[row][col] << " ";
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "=================" << std::endl;
+    // std::cout << "SCALING" << std::endl;
+    // std::cout << "=================" << std::endl;
+    // for (int row = 0; row < 4; row++) {
+    //     for (int col = 0; col < 4; col++) {
+    //         std::cout << mat[row][col] << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     return *this;
 }
 
@@ -85,15 +85,15 @@ Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
         default:
             break;
     }
-    std::cout << "=================" << std::endl;
-    std::cout << "ROTATION" << std::endl;
-    std::cout << "=================" << std::endl;
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            std::cout << mat[row][col] << " ";
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "=================" << std::endl;
+    // std::cout << "ROTATION" << std::endl;
+    // std::cout << "=================" << std::endl;
+    // for (int row = 0; row < 4; row++) {
+    //     for (int col = 0; col < 4; col++) {
+    //         std::cout << mat[row][col] << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     return *this;
 }
 
@@ -107,15 +107,15 @@ Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float near_plane, f
     mat[3][2] = (2.0f * far_plane * near_plane) / (near_plane - far_plane);  // <-- flipped
     mat[3][3] = 0.0f;
 
-    std::cout << "=================" << std::endl;
-    std::cout << "PROJECTION" << std::endl;
-    std::cout << "=================" << std::endl;
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            std::cout << mat[row][col] << " ";
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "=================" << std::endl;
+    // std::cout << "PROJECTION" << std::endl;
+    // std::cout << "=================" << std::endl;
+    // for (int row = 0; row < 4; row++) {
+    //     for (int col = 0; col < 4; col++) {
+    //         std::cout << mat[row][col] << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     return *this;
 }
 
