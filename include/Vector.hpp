@@ -13,6 +13,7 @@ class Vector {
         // vector operations
         Vector  operator+(float scalar);
         Vector  operator-(float scalar);
+        Vector  operator-(Vector vec);
         Vector  operator*(float scalar);
         Vector  operator/(float scalar);
         Vector  operator*=(float scalar);
@@ -20,9 +21,9 @@ class Vector {
         Vector  operator-=(float scalar);
         Vector  operator/=(float scalar);
         
-        float  crossProduct(const Vector &vec);
-        float  dotProduct(const Vector &vec);
-        float  length(void);
+        Vector  crossProduct(const Vector &vec);
+        float   dotProduct(const Vector &vec);
+        float   length(void);
         void    normalize(void);
 
         float x;
