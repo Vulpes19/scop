@@ -24,7 +24,8 @@ class Vector {
         Vector  crossProduct(const Vector &vec);
         float   dotProduct(const Vector &vec);
         float   length(void);
-        void    normalize(void);
+        // void    normalize(void);
+        Vector  normalize(void);
 
         float x;
         float y;

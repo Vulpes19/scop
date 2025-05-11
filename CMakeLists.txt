@@ -19,6 +19,7 @@ set(SOURCES
     src/Matrix.cpp
     src/TextureLoader.cpp
     src/Helpers.cpp
+    src/Camera.cpp
 )
 
 add_subdirectory(ext/glad)

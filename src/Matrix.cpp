@@ -119,6 +119,47 @@ Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float near_plane, f
     return *this;
 }
 
+Matrix4x4   &Matrix4x4::lookAt(Vector position, Vector target, Vector up) {
+    Vector zAxis = (position - target).normalize();
+
+    Vector xAxis = up.crossProduct(zAxis).normalize();
+
+    Vector yAxis = zAxis.crossProduct(xAxis);
+    
+    mat[0][0] = xAxis.x;
+    mat[0][1] = xAxis.y;
+    mat[0][2] = xAxis.z;
+    mat[0][3] = -xAxis.dotProduct(position);
+
+    mat[1][0] = yAxis.x;
+    mat[1][1] = yAxis.y;
+    mat[1][2] = yAxis.z;
+    mat[1][3] = -yAxis.dotProduct(position);
+
+    mat[2][0] = zAxis.x;
+    mat[2][1] = zAxis.y;
+    mat[2][2] = zAxis.z;
+    mat[2][3] = -zAxis.dotProduct(position);
+
+    return *this;
+}
+
 float   *Matrix4x4::data(void) {
     return &mat[0][0];
+}
+
+Matrix4x4   &Matrix4x4::operator*(const Matrix4x4 &other) const {
+    Matrix4x4   result;
+
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            result.mat[row][col] = 
+                mat[row][0] * other.mat[0][col] +
+                mat[row][1] * other.mat[1][col] +
+                mat[row][2] * other.mat[2][col] +
+                mat[row][3] * other.mat[3][col];
+        }
+    }
+
+    return (result);
 }
