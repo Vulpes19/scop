@@ -126,16 +126,19 @@ Matrix4x4   &Matrix4x4::lookAt(Vector position, Vector target, Vector up) {
 
     Vector yAxis = zAxis.crossProduct(xAxis);
     
+    //right vector
     mat[0][0] = xAxis.x;
     mat[0][1] = xAxis.y;
     mat[0][2] = xAxis.z;
     mat[0][3] = -xAxis.dotProduct(position);
 
+    //up vector
     mat[1][0] = yAxis.x;
     mat[1][1] = yAxis.y;
     mat[1][2] = yAxis.z;
     mat[1][3] = -yAxis.dotProduct(position);
 
+    //direction vector
     mat[2][0] = zAxis.x;
     mat[2][1] = zAxis.y;
     mat[2][2] = zAxis.z;

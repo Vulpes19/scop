@@ -3,17 +3,24 @@
 #include "./glad/glad.h"
 #include <iostream>
 #include "Matrix.hpp"
+#include "InputObserver.hpp"
+#include "InputDetector.hpp"
 
-class Camera {
+class Camera : public InputObserver {
     public:
-        Camera(void);
+        Camera(Vector position, Vector target, Vector up);
         ~Camera(void);
-        // Vulpes3D::Matrix4x4 &lookAt(Vector &target);
-        float *getView(void);
+        Vulpes3D::Matrix4x4 getView(void);
+        void	keyDown(SDL_Scancode, float, InputManager * = nullptr) override;
+        void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
-        Vector cameraPos;
-        Vector cameraDirection;
+        Vector cameraPosition;
+        Vector cameraTarget;
         Vector cameraRight;
         Vector cameraUp;
+        Vector front;
         Vulpes3D::Matrix4x4 view;
+        float   movementSpeed;
+        float   movementSensitivity;
+        float   zoom;
 };
