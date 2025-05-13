@@ -18,7 +18,9 @@ class Vector {
         Vector  operator/(float scalar);
         Vector  operator*=(float scalar);
         Vector  operator+=(float scalar);
+        Vector  operator+=(Vector vec);
         Vector  operator-=(float scalar);
+        Vector  operator-=(Vector vec);
         Vector  operator/=(float scalar);
         
         Vector  crossProduct(const Vector &vec);

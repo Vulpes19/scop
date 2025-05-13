@@ -36,8 +36,14 @@ Vector  Vector::operator*=(float scalar) {
 Vector  Vector::operator+=(float scalar) {
     return (Vector(x + scalar, y + scalar, z + scalar));
 }
+Vector  Vector::operator+=(Vector vec) {
+    return (Vector(x + vec.x, y + vec.y, z + vec.z));
+}
 Vector  Vector::operator-=(float scalar) {
     return (Vector(x - scalar, y - scalar, z - scalar));
+}
+Vector  Vector::operator-=(Vector vec) {
+    return (Vector(x - vec.x, y - vec.y, z - vec.z));
 }
 Vector  Vector::operator/=(float scalar) {
     return (Vector(x / scalar, y / scalar, z / scalar));

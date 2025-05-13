@@ -14,11 +14,12 @@ class Camera : public InputObserver {
         void	keyDown(SDL_Scancode, float, InputManager * = nullptr) override;
         void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
-        Vector cameraPosition;
+        Vector cameraPosition; 
         Vector cameraTarget;
         Vector cameraRight;
         Vector cameraUp;
         Vector front;
+        Vector right;
         Vulpes3D::Matrix4x4 view;
         float   movementSpeed;
         float   movementSensitivity;
