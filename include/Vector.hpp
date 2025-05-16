@@ -12,16 +12,17 @@ class Vector {
         ~Vector(void);
         // vector operations
         Vector  operator+(float scalar);
+        Vector  operator+(const Vector &vec);
         Vector  operator-(float scalar);
-        Vector  operator-(Vector vec);
+        Vector  operator-(const Vector &vec);
         Vector  operator*(float scalar);
         Vector  operator/(float scalar);
-        Vector  operator*=(float scalar);
-        Vector  operator+=(float scalar);
-        Vector  operator+=(Vector vec);
-        Vector  operator-=(float scalar);
-        Vector  operator-=(Vector vec);
-        Vector  operator/=(float scalar);
+        Vector  &operator*=(float scalar);
+        Vector  &operator+=(float scalar);
+        Vector  &operator+=(const Vector &vec);
+        Vector  &operator-=(float scalar);
+        Vector  &operator-=(const Vector &vec);
+        Vector  &operator/=(float scalar);
         
         Vector  crossProduct(const Vector &vec);
         float   dotProduct(const Vector &vec);

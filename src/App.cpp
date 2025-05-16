@@ -26,6 +26,14 @@ App::App(void) {
     glViewport( 0, 0, WIDTH, HEIGHT );
 
 	triangle = new Object();
+	input = new InputManager();
+	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
+
+	InputObserver* stateObserver = dynamic_cast<InputObserver*>(camera);
+	 if (stateObserver)
+		 input->addObserver(stateObserver);
+	 else
+		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
 	//init App stuff
 	running = true;
 }
@@ -41,6 +49,9 @@ void    App::handleInput(void) {
 	{
 		switch (event.type)
 		{
+			case SDL_KEYDOWN:
+				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime);
+				break;
 			case SDL_QUIT:
 				running = false;
 				break;
@@ -50,10 +61,15 @@ void    App::handleInput(void) {
 
 void    App::update(void) {
 	triangle->update();
+	float currentFrame = SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
+
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+	// camera->update();
 }
 
 void    App::render(void) {
-	triangle->render();
+	triangle->render(camera->getView());
 	SDL_GL_SwapWindow(window);
 }
 

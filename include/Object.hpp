@@ -7,12 +7,13 @@
 #include "TextureLoader.hpp"
 #include "Matrix.hpp"
 #include <vector>
+#include "Camera.hpp"
 
 class Object {
     public:
         Object(void);
         ~Object(void);
-        void render(void);
+        void render(Vulpes3D::Matrix4x4 view);
         void update(void);
     private:
         unsigned int VBO; //vertex buffer object we need to store verticies in GPU memory
@@ -22,9 +23,9 @@ class Object {
         unsigned int texture1;
         unsigned int texture2;
         Vulpes3D::Matrix4x4   model;
-        Vulpes3D::Matrix4x4   view;
+        Vulpes3D::Matrix4x4   view2;
         // glm::mat4   model;
-        // glm::mat4   view;
+        // glm::mat4   view2;
         Vulpes3D::Matrix4x4   projection;
         // glm::mat4 projection;
         unsigned int   modelLoc;

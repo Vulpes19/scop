@@ -148,7 +148,7 @@ float vertices[] = {
     
     
     // model = Vulpes3D::Matrix4x4::identity();
-    view = Vulpes3D::Matrix4x4::identity();
+    view2 = Vulpes3D::Matrix4x4::identity();
     projection = Vulpes3D::Matrix4x4::identity();
     
     projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -166,16 +166,13 @@ float vertices[] = {
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
-    std::cout << "model -> " << modelLoc << std::endl;
-    std::cout << "projection -> " << projectionLoc << std::endl;
-    std::cout << "view -> " << viewLoc << std::endl;
 }
 
 Object::~Object(void) {
     
 }
 
-void    Object::render(void) {
+void    Object::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -189,12 +186,6 @@ void    Object::render(void) {
     
     shader->useShader();
 
-    view = Vulpes3D::Matrix4x4::identity();
-    float radius = 10.0f;
-    float time = SDL_GetTicks() / 1000.0f;
-    float camX = static_cast<float>(sin(time) * radius);
-    float camZ = static_cast<float>(cos(time) * radius);
-    view.lookAt(Vector(camX, 0.0f, camZ), Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 1.0f, 0.0f));
     // glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     // glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
@@ -215,7 +206,6 @@ void    Object::render(void) {
 }
 
 void    Object::update(void) {
-    // float time = SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     // model = Vulpes3D::Matrix4x4::identity();
     // model.rotate(Vector(0.0f, 0.0f, 1.0f), X_AXIS, time);

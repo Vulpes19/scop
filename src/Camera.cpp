@@ -1,8 +1,8 @@
 #include "Camera.hpp"
 
-Camera::Camera(Vector position, Vector target, Vector up) {
+Camera::Camera(Vector position, Vector front, Vector up) {
     cameraPosition = position;
-    target = cameraTarget;
+    cameraFront = front;
     cameraUp = up;
 
     view.identity();
@@ -37,7 +37,8 @@ Camera::~Camera(void) {
 // }
 
 Vulpes3D::Matrix4x4   Camera::getView(void) {
-    return (view.lookAt(cameraPosition, cameraTarget, cameraUp));
+    view.identity();
+    return (view.lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp));
 }
 
 void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) {
@@ -45,16 +46,16 @@ void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) 
 
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_W)
-            cameraPosition += front * velocity;
+            cameraPosition += cameraFront * velocity;
         if (key == SDL_SCANCODE_S)
-            cameraPosition -= front * velocity;
+            cameraPosition -= cameraFront * velocity;
         if (key == SDL_SCANCODE_A)
-            cameraPosition -= right * velocity;
+            cameraPosition -= cameraFront.crossProduct(cameraUp).normalize() * velocity;
         if (key == SDL_SCANCODE_D)
-            cameraPosition += right * velocity;
+            cameraPosition += cameraFront.crossProduct(cameraUp).normalize() * velocity;
     }
 }
 
-void    Camera::mouseMove(Uint8, InputManager* = nullptr) {
+void    Camera::mouseMove(Uint8, InputManager* ) {
 
 }

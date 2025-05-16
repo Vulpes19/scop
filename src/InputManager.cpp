@@ -19,7 +19,7 @@ void	InputManager::eraseObserver(InputObserver* observer)
 	std::cout << "after : observers nbr " << observers.size() << std::endl;
 }
 
-void	InputManager::notifyOnKeyDown(SDL_Scancode key, double deltaTime)
+void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime)
 {
 	for (auto observer : observers)
 	{

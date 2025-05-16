@@ -18,10 +18,13 @@ Vector::~Vector(void)
 Vector    Vector::operator+(float scalar) {
     return (Vector(x + scalar, y + scalar, z + scalar));
 }
+Vector    Vector::operator+(const Vector &vec) {
+    return (Vector(x + vec.x, y + vec.y, z + vec.z));
+}
 Vector    Vector::operator-(float scalar) {
     return (Vector(x - scalar, y - scalar, z - scalar));
 }
-Vector    Vector::operator-(Vector vec) {
+Vector    Vector::operator-(const Vector &vec) {
     return (Vector(x - vec.x, y - vec.y, z - vec.z));
 }
 Vector    Vector::operator*(float scalar) {
@@ -30,23 +33,42 @@ Vector    Vector::operator*(float scalar) {
 Vector    Vector::operator/(float scalar) {
     return (Vector(x / scalar, y / scalar, z / scalar));
 }
-Vector  Vector::operator*=(float scalar) {
-    return (Vector(x * scalar, y * scalar, z * scalar));
+Vector  &Vector::operator*=(float scalar) {
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+    return *this;
 }
-Vector  Vector::operator+=(float scalar) {
-    return (Vector(x + scalar, y + scalar, z + scalar));
+
+Vector  &Vector::operator+=(float scalar) {
+    x += scalar;
+    y += scalar;
+    z += scalar;
+    return *this;
 }
-Vector  Vector::operator+=(Vector vec) {
-    return (Vector(x + vec.x, y + vec.y, z + vec.z));
+Vector  &Vector::operator+=(const Vector &vec) {
+    x += vec.x;
+    y += vec.y;
+    z += vec.z;
+    return *this;
 }
-Vector  Vector::operator-=(float scalar) {
-    return (Vector(x - scalar, y - scalar, z - scalar));
+Vector  &Vector::operator-=(float scalar) {
+    x -= scalar;
+    y -= scalar;
+    z -= scalar;
+    return *this;
 }
-Vector  Vector::operator-=(Vector vec) {
-    return (Vector(x - vec.x, y - vec.y, z - vec.z));
+Vector  &Vector::operator-=(const Vector &vec) {
+    x -= vec.x;
+    y -= vec.y;
+    z -= vec.z;
+    return *this;
 }
-Vector  Vector::operator/=(float scalar) {
-    return (Vector(x / scalar, y / scalar, z / scalar));
+Vector  &Vector::operator/=(float scalar) {
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
+    return *this;
 }
 
 float Vector::length(void) {

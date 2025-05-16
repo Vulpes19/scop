@@ -144,6 +144,10 @@ Matrix4x4   &Matrix4x4::lookAt(Vector position, Vector target, Vector up) {
     mat[2][2] = zAxis.z;
     mat[2][3] = -zAxis.dotProduct(position);
 
+    mat[3][0] = 0.0f;
+    mat[3][1] = 0.0f;
+    mat[3][2] = 0.0f;
+    mat[3][3] = 1.0f;
     return *this;
 }
 

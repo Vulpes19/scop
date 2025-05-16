@@ -16,12 +16,12 @@ class Camera : public InputObserver {
     private:
         Vector cameraPosition; 
         Vector cameraTarget;
+        Vector cameraFront;
         Vector cameraRight;
         Vector cameraUp;
-        Vector front;
         Vector right;
         Vulpes3D::Matrix4x4 view;
-        float   movementSpeed;
+        float   movementSpeed = 5.5f;
         float   movementSensitivity;
         float   zoom;
 };
