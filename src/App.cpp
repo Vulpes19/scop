@@ -61,7 +61,7 @@ void    App::handleInput(void) {
 
 void    App::update(void) {
 	triangle->update();
-	float currentFrame = SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
+	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
