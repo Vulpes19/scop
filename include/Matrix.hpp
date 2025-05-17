@@ -19,6 +19,7 @@ namespace Vulpes3D {
     class Matrix4x4 {
         public:
             Matrix4x4(void);
+            Matrix4x4(Vector A, Vector B, Vector C);
             ~Matrix4x4(void);
 
             static Matrix4x4 identity(void);
@@ -30,6 +31,12 @@ namespace Vulpes3D {
 
             //perspective projection matrix
             Matrix4x4   &perspective(float fov, float aspect, float near_plane, float far_plane);
+
+            // This matrix transforms all thr world coordinates to the view space
+            Matrix4x4   &lookAt(Vector position, Vector direction, Vector up);
+
+            // operations
+            Matrix4x4  &operator*(const Matrix4x4 &other) const;
 
             float *data(void);
 

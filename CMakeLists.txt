@@ -19,6 +19,9 @@ set(SOURCES
     src/Matrix.cpp
     src/TextureLoader.cpp
     src/Helpers.cpp
+    src/Camera.cpp
+    src/InputManager.cpp
+    src/InputDetector.cpp
 )
 
 add_subdirectory(ext/glad)
