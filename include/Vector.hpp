@@ -2,6 +2,13 @@
 
 #include <iostream>
 
+struct Vector2 {
+    Vector2(void) {};
+    Vector2(float x, float y) : x(x), y(y) {};
+    float x;
+    float y;
+};
+
 class Vector {
     public :
         //constructors

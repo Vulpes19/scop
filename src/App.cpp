@@ -25,7 +25,7 @@ App::App(void) {
     }
     glViewport( 0, 0, WIDTH, HEIGHT );
 
-	triangle = new Object();
+	// triangle = new Object();
 	model = new Model("42");
 	input = new InputManager();
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
@@ -61,7 +61,7 @@ void    App::handleInput(void) {
 }
 
 void    App::update(void) {
-	triangle->update();
+	// triangle->update();
 	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     deltaTime = currentFrame - lastFrame;
@@ -70,7 +70,8 @@ void    App::update(void) {
 }
 
 void    App::render(void) {
-	triangle->render(camera->getView());
+	// triangle->render(camera->getView());
+	model->render(camera->getView());
 	SDL_GL_SwapWindow(window);
 }
 

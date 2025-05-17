@@ -5,11 +5,67 @@ Model::Model(std::string modelName) {
     if (material.isMaterial)
         parseMaterial();
     
+    std::cout << mesh.vertices.size() << std::endl;
     for (const Face &face : mesh.faces) {
-        for (const VertexIndex &vi : face.vertices) {
+        Vertex v1, v2, v3;
+        
+        std::cout << "hell " << face.v1.v << " " << face.v1.vt << " " << face.v1.vn << std::endl;
+        v1.position = mesh.vertices[face.v1.v - 1];
+        if (face.v1.vt > 0)
+            v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
+        if (face.v1.vn > 0)
+            v1.normal = mesh.normals[face.v1.vn - 1];
+        // std::cout << "hello" << std::endl;
+        
+        v2.position = mesh.vertices[face.v2.v - 1];
+        if (face.v2.vt > 0)
+            v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
+        if (face.v2.vn > 0)
+            v2.normal = mesh.normals[face.v2.vn - 1];
+        // std::cout << "hello2" << std::endl;
+        
+        v3.position = mesh.vertices[face.v3.v - 1];
+        if (face.v3.vn > 0)
+            v3.normal = mesh.normals[face.v3.vn - 1];
+        // std::cout << "hello3" << std::endl;
 
-        }
+        vertexBuffer.push_back(v1);
+        vertexBuffer.push_back(v2);
+        vertexBuffer.push_back(v3);
     }
+    std::cout << vertexBuffer.size() << std::endl;
+    shader = new Shader();
+    shader->compileShader(GL_VERTEX_SHADER);
+    shader->compileShader(GL_FRAGMENT_SHADER);
+    shader->createShader();
+    
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    
+    glBindVertexArray(VAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(vertexBuffer), vertexBuffer.data(), GL_STATIC_DRAW);
+    
+    projection = Vulpes3D::Matrix4x4::identity();
+    model = Vulpes3D::Matrix4x4::identity();
+    
+    projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    modelLoc = shader->getUniformLoc("model");
+    projectionLoc = shader->getUniformLoc("projection");
+    viewLoc = shader->getUniformLoc("view");
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+    glEnableVertexAttribArray(0);
+
+    // TexCoord
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+    glEnableVertexAttribArray(1);
+
+    // Normal
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    glEnableVertexAttribArray(2);
 }
 
 Model::~Model(void) {
@@ -46,11 +102,10 @@ void    Model::parseModel(std::string &modelName) {
         }
         if (line.substr(0, line.find(" ")) == "vt") {
             std::istringstream iss(line.substr(1));
-            float x, y, z;
+            float x, y;
             iss >> x;
             iss >> y;
-            iss >> z;
-            mesh.textureCoord.push_back(Vector(x, y, z));
+            mesh.textureCoord.push_back(Vector2(x, y));
         }
         if (line.substr(0, line.find(" ")) == "vn") {
             std::istringstream iss(line.substr(1));
@@ -160,16 +215,17 @@ void    Model::parseMaterial(void) {
     }
 }
 void    Model::render(Vulpes3D::Matrix4x4 view) {
-    shader = new Shader();
-    shader->compileShader(GL_VERTEX_SHADER);
-    shader->compileShader(GL_FRAGMENT_SHADER);
-    shader->createShader();
- 
-     glGenVertexArrays(1, &VAO);
-     glGenBuffers(1, &VBO);
-     glGenBuffers(1, &EBO);
- 
-     glBindVertexArray(VAO);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    shader->useShader();
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glBindVertexArray(VAO);
+
+    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 }
 
 void    Model::update() {

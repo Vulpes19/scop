@@ -24,12 +24,12 @@ struct Face {
 struct Vertex {
     Vector position;
     Vector normal;
-    Vector texCoord;
+    Vector2 texCoord;
 };
 
 struct Mesh {
     std::vector<Vector> vertices;
-    std::vector<Vector> textureCoord;
+    std::vector<Vector2> textureCoord;
     std::vector<Vector> normals;
     std::vector<Face> faces;
 };
