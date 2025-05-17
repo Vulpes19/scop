@@ -22,6 +22,7 @@ set(SOURCES
     src/Camera.cpp
     src/InputManager.cpp
     src/InputDetector.cpp
+    src/Model.cpp
 )
 
 add_subdirectory(ext/glad)
