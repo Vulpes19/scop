@@ -39,13 +39,13 @@ struct Mesh {
 struct Material {
     std::string name;
     bool        isMaterial = false;
-    float Ns;
-    Vector  Ka;
-    Vector  Kd;
-    Vector  Ks;
-    float   Ni;
-    float   d;
-    int     illum;
+    float   Ns; // Shininess
+    Vector  Ka; // Ambient color
+    Vector  Kd; // Diffuse color
+    Vector  Ks; // Specular color
+    float   Ni; // Optical density (IOR)
+    float   d;  // Transparency
+    int     illum; // Illumination model
 };
 
 class Model : public InputObserver {

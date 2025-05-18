@@ -151,7 +151,7 @@ float vertices[] = {
     view2 = Vulpes3D::Matrix4x4::identity();
     projection = Vulpes3D::Matrix4x4::identity();
     
-    projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     // view.translate(Vector(0.0f, 0.0f, -3.0f));
     // model.rotate(Vector(0.2f, -0.2f, 0.0f), X_AXIS,  Vulpes3D::to_radians(-55.0f));
     // glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));

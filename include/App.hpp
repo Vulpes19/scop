@@ -7,8 +7,8 @@
 #include "./glad/glad.h"
 #include "Model.hpp"
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1280
+#define HEIGHT 640
 
 class App {
     public:

@@ -62,7 +62,7 @@ Model::Model(std::string modelName) {
     projection = Vulpes3D::Matrix4x4::identity();
     model = Vulpes3D::Matrix4x4::identity();
     
-    projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     model.translate(center);
 
     modelLoc = shader->getUniformLoc("model");
