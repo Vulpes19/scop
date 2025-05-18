@@ -26,16 +26,22 @@ App::App(void) {
     glViewport( 0, 0, WIDTH, HEIGHT );
 
 	// triangle = new Object();
-	model = new Model("42");
+	model = new Model("teapot2");
 	input = new InputManager();
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
 
-	InputObserver* stateObserver = dynamic_cast<InputObserver*>(camera);
-	 if (stateObserver)
-		 input->addObserver(stateObserver);
+	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);
+	InputObserver* modelObserver = dynamic_cast<InputObserver*>(model);
+	if (cameraObserver)
+		 input->addObserver(cameraObserver);
 	 else
 		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
-	//init App stuff
+	if (modelObserver)
+		 input->addObserver(modelObserver);
+	 else
+		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
+	
+	 //init App stuff
 	running = true;
 }
 

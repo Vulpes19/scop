@@ -9,7 +9,6 @@ Model::Model(std::string modelName) {
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
-        std::cout << "hell " << face.v1.v << " " << face.v1.vt << " " << face.v1.vn << std::endl;
         v1.position = mesh.vertices[face.v1.v - 1];
         if (face.v1.vt > 0)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
@@ -33,7 +32,19 @@ Model::Model(std::string modelName) {
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
     }
-    std::cout << vertexBuffer.size() << std::endl;
+    // Getting model's center
+    Vector min = mesh.vertices[0];
+    Vector max = mesh.vertices[0];
+    for (const Vector &vec : mesh.vertices) {
+        min.x = std::min(min.x, vec.x);
+        min.y = std::min(min.y, vec.y);
+        min.z = std::min(min.z, vec.z);
+        max.x = std::max(max.x, vec.x);
+        max.y = std::max(max.y, vec.y);
+        max.z = std::max(max.z, vec.z);
+    }
+    center = (min + max) / 2.0f;
+
     shader = new Shader();
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
@@ -52,6 +63,8 @@ Model::Model(std::string modelName) {
     model = Vulpes3D::Matrix4x4::identity();
     
     projection.perspective(Vulpes3D::to_radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    model.translate(center);
+
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
@@ -218,13 +231,12 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
     shader->useShader();
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glBindVertexArray(VAO);
 
-    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 }
 
@@ -232,8 +244,33 @@ void    Model::update() {
 
 }
 
-void    Model::keyDown(SDL_Scancode, float, InputManager *) {
-
+void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) {
+    if (InputDetector::getInstance()->isKeyPressed(key)) {
+        if (key == SDL_SCANCODE_I) {
+            std::cout << "rotating on X" << std::endl;
+            angle += 5.0f;
+            model.identity();
+            model.translate(-center);
+            model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
+            model.translate(center);
+        }
+        if (key == SDL_SCANCODE_O) {
+            angle += 5.0f;
+            std::cout << "rotating on Y" << std::endl;
+            model.identity();
+            model.translate(-center);
+            model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
+            model.translate(center);
+        }
+        if (key == SDL_SCANCODE_P) {
+            std::cout << "rotating on Z" << std::endl;
+            angle += 5.0f;
+            model.identity();
+            model.translate(-center);
+            model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
+            model.translate(center);
+        }
+    }
 }
 
 void    Model::mouseMove(Uint8, InputManager*) {

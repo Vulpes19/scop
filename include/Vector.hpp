@@ -21,6 +21,7 @@ class Vector {
         Vector  operator+(float scalar);
         Vector  operator+(const Vector &vec);
         Vector  operator-(float scalar);
+        Vector  operator-(void);
         Vector  operator-(const Vector &vec);
         Vector  operator*(float scalar);
         Vector  operator/(float scalar);

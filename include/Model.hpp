@@ -8,7 +8,9 @@
 #include "Matrix.hpp"
 #include <vector>
 #include "InputObserver.hpp"
+#include "InputDetector.hpp"
 #include <sstream>
+#include <algorithm>
 
 
 struct VertexIndex {
@@ -72,4 +74,6 @@ class Model : public InputObserver {
         unsigned int          modelLoc;
         unsigned int          projectionLoc;
         unsigned int          viewLoc;
+        float                 angle = 0.0f;
+        Vector                center;
 };

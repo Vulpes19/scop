@@ -24,6 +24,9 @@ Vector    Vector::operator+(const Vector &vec) {
 Vector    Vector::operator-(float scalar) {
     return (Vector(x - scalar, y - scalar, z - scalar));
 }
+Vector    Vector::operator-(void) {
+    return (Vector(-x, -y, -z));
+}
 Vector    Vector::operator-(const Vector &vec) {
     return (Vector(x - vec.x, y - vec.y, z - vec.z));
 }
