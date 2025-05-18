@@ -25,16 +25,23 @@ App::App(void) {
     }
     glViewport( 0, 0, WIDTH, HEIGHT );
 
-	triangle = new Object();
+	// triangle = new Object();
+	model = new Model("teapot2");
 	input = new InputManager();
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
 
-	InputObserver* stateObserver = dynamic_cast<InputObserver*>(camera);
-	 if (stateObserver)
-		 input->addObserver(stateObserver);
+	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);
+	InputObserver* modelObserver = dynamic_cast<InputObserver*>(model);
+	if (cameraObserver)
+		 input->addObserver(cameraObserver);
 	 else
 		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
-	//init App stuff
+	if (modelObserver)
+		 input->addObserver(modelObserver);
+	 else
+		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
+	
+	 //init App stuff
 	running = true;
 }
 
@@ -60,7 +67,7 @@ void    App::handleInput(void) {
 }
 
 void    App::update(void) {
-	triangle->update();
+	// triangle->update();
 	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     deltaTime = currentFrame - lastFrame;
@@ -69,7 +76,8 @@ void    App::update(void) {
 }
 
 void    App::render(void) {
-	triangle->render(camera->getView());
+	// triangle->render(camera->getView());
+	model->render(camera->getView());
 	SDL_GL_SwapWindow(window);
 }
 
