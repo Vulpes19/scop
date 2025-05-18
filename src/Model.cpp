@@ -249,24 +249,24 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) {
         if (key == SDL_SCANCODE_I) {
             std::cout << "rotating on X" << std::endl;
             angle += 5.0f;
-            model.identity();
             model.translate(-center);
+            model.identity();
             model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
         if (key == SDL_SCANCODE_O) {
             angle += 5.0f;
             std::cout << "rotating on Y" << std::endl;
-            model.identity();
             model.translate(-center);
+            model.identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
         if (key == SDL_SCANCODE_P) {
             std::cout << "rotating on Z" << std::endl;
             angle += 5.0f;
-            model.identity();
             model.translate(-center);
+            model.identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
