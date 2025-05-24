@@ -1,32 +1,42 @@
 #include "Model.hpp"
 
-Model::Model(std::string modelName) {
+Model::Model(std::string modelName, Vector cameraPos) {
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
     
-    std::cout << mesh.vertices.size() << std::endl;
+    std::cout << "helloooo" << std::endl;
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
         v1.position = mesh.vertices[face.v1.v - 1];
-        if (face.v1.vt > 0)
-            v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
-        if (face.v1.vn > 0)
-            v1.normal = mesh.normals[face.v1.vn - 1];
-        // std::cout << "hello" << std::endl;
-        
         v2.position = mesh.vertices[face.v2.v - 1];
-        if (face.v2.vt > 0)
-            v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
-        if (face.v2.vn > 0)
-            v2.normal = mesh.normals[face.v2.vn - 1];
-        // std::cout << "hello2" << std::endl;
-        
         v3.position = mesh.vertices[face.v3.v - 1];
-        if (face.v3.vn > 0)
+
+        std::cout << "wassup" << std::endl;
+        if (face.v1.isText)
+            v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
+        if (face.v2.isText)
+            v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
+    
+        std:: cout << face.v1.vn << std::endl;
+        if (!face.v1.isNormal || !face.v2.isNormal || !face.v3.isNormal)
+        {
+            std::cout << "im just entering" << std::endl;
+            Vector normal = (v2.position - v1.position).crossProduct(v3.position - v1.position);
+            std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
+            normal.normalize();
+
+            v1.normal = normal;
+            v2.normal = normal;
+            v3.normal = normal;
+        }
+        else {
+            std::cout << "wsupp22" << std::endl;
+            v1.normal = mesh.normals[face.v1.vn - 1];
+            v2.normal = mesh.normals[face.v2.vn - 1];
             v3.normal = mesh.normals[face.v3.vn - 1];
-        // std::cout << "hello3" << std::endl;
+        }
 
         vertexBuffer.push_back(v1);
         vertexBuffer.push_back(v2);
@@ -64,6 +74,15 @@ Model::Model(std::string modelName) {
     
     projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     model.translate(center);
+
+    shader->setUniform("material.ambient", material.Ka);
+    shader->setUniform("material.diffuse", material.Kd);
+    shader->setUniform("material.specular", material.Ks);
+    shader->setUniform("material.shininess", material.Ns);
+    shader->setUniform("lightColor", Vector(1.0f, 1.0f, 1.0f));
+    shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    // shader->setUniform("lightPos", Vector(1.2f, 1.0f, 2.0f));
+    shader->setUniform("viewPos", cameraPos);
 
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
@@ -160,23 +179,32 @@ std::vector<VertexIndex>    Model::parseFaceVertex(std::string &line) {
         size_t firstSlash = part.find('/');
         size_t secondSlash = part.find('/', firstSlash + 1);
 
-        if (firstSlash == std::string::npos)
+        if (firstSlash == std::string::npos) {
             vi.v = std::stoi(part); // f v
+            vi.isNormal = false;
+            vi.isText = false;
+        }
         else if (secondSlash == std::string::npos) {
             // f v/vt
             vi.v = std::stoi(part.substr(0, firstSlash));
             vi.vt = std::stoi(part.substr(firstSlash + 1));
+            vi.isNormal = false;
+            vi.isText = true;
         }
         else if (secondSlash == firstSlash + 1) {
             // f v//vn
             vi.v = std::stoi(part.substr(0, firstSlash));
             vi.vn = std::stoi(part.substr(secondSlash + 1));
+            vi.isNormal = true;
+            vi.isText = false;
         }
         else {
             // f v/vt/vn
             vi.v = std::stoi(part.substr(0, firstSlash));
             vi.vt = std::stoi(part.substr(firstSlash + 1, secondSlash - firstSlash - 1));
             vi.vn = std::stoi(part.substr(secondSlash + 1));
+            vi.isNormal = true;
+            vi.isText = true;
         }
         result.push_back(vi);
     }
@@ -199,31 +227,24 @@ void    Model::parseMaterial(void) {
         iss >> prefix;
         if (prefix == "Ns") {
             iss >> material.Ns;
-            std::cout << material.Ns << std::endl;
         }
         else if (prefix == "Ka") {
             iss >> material.Ka.x >> material.Ka.y >> material.Ka.z;
-            std::cout << material.Ka.x << " " << material.Ka.y << " " << material.Ka.z << std::endl;
         }
         else if (prefix == "Kd") {
             iss >> material.Kd.x >> material.Kd.y >> material.Kd.z;
-            std::cout << material.Kd.x << " " << material.Kd.y << " " << material.Kd.z << std::endl;
         }
         else if (prefix == "Ks") {
             iss >> material.Ks.x >> material.Ks.y >> material.Ks.z;
-            std::cout << material.Ks.x << " " << material.Ks.y << " " << material.Ks.z << std::endl;
         }
         else if (prefix == "Ni") {
             iss >> material.Ni;
-            std::cout << material.Ni << std::endl;
         }
         else if (prefix == "d") {
             iss >> material.d;
-            std::cout << material.d << std::endl;
         }
         else if (prefix == "illum") {
             iss >> material.illum;
-            std::cout << material.illum << std::endl;
         }
     }
 }

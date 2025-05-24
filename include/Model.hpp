@@ -17,6 +17,8 @@ struct VertexIndex {
     VertexIndex(void) {};
     VertexIndex(int v, int vt, int vn) : v(v), vt(vt), vn(vn) {};
     int v, vt, vn;
+    bool isText = false;
+    bool isNormal = false;
 };
 
 struct Face {
@@ -50,7 +52,7 @@ struct Material {
 
 class Model : public InputObserver {
     public:
-        Model(std::string);
+        Model(std::string, Vector);
         ~Model(void);
         void    parseModel(std::string&);
         std::vector<VertexIndex>    parseFaceVertex(std::string&);
