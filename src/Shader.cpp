@@ -2,8 +2,8 @@
 
 Shader::Shader(void)
 {
-    loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", GL_VERTEX_SHADER);
-    loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl", GL_FRAGMENT_SHADER);
+    loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
+    loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
 }
 
 Shader::~Shader(void)

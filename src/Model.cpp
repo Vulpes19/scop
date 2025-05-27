@@ -86,7 +86,7 @@ Model::~Model(void) {
 }
 
 void    Model::parseModel(std::string &modelName) {
-    std::string filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    std::string filePath = "/assets/models/" + modelName + ".obj";
 
     std::ifstream file(filePath.c_str());
 
@@ -149,7 +149,7 @@ void    Model::parseModel(std::string &modelName) {
     }
 }
 
-std::vector<VertexIndex>    Model::parseFaceVertex(std::string &line) {
+std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
     std::vector <VertexIndex> result;
 
     std::istringstream iss(line);

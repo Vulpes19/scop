@@ -1,5 +1,5 @@
 #include <iostream>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "App.hpp"
 
 int main (int ac, char **av) {

@@ -22,6 +22,6 @@ class Camera : public InputObserver {
         Vector right;
         Vulpes3D::Matrix4x4 view;
         float   movementSpeed = 10.5f;
-        float   movementSensitivity;
-        float   zoom;
+        // float   movementSensitivity;
+        // float   zoom;
 };
