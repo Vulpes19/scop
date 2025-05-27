@@ -3,31 +3,31 @@
 Model::Model(std::string modelName) {
     parseModel(modelName);
     if (material.isMaterial)
-        parseMaterial();
+    parseMaterial();
     
     std::cout << mesh.vertices.size() << std::endl;
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
         v1.position = mesh.vertices[face.v1.v - 1];
-        if (face.v1.vt > 0)
+        if (!mesh.textureCoord.empty() && face.v1.vt > 0)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
-        if (face.v1.vn > 0)
+        if (!mesh.normals.empty() && face.v1.vn > 0)
             v1.normal = mesh.normals[face.v1.vn - 1];
         // std::cout << "hello" << std::endl;
         
         v2.position = mesh.vertices[face.v2.v - 1];
-        if (face.v2.vt > 0)
+        if (!mesh.textureCoord.empty() && face.v2.vt > 0)
             v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
-        if (face.v2.vn > 0)
+        if (!mesh.normals.empty() && face.v2.vn > 0)
             v2.normal = mesh.normals[face.v2.vn - 1];
         // std::cout << "hello2" << std::endl;
         
         v3.position = mesh.vertices[face.v3.v - 1];
-        if (face.v3.vn > 0)
+        if (!mesh.normals.empty() && face.v3.vn > 0)
             v3.normal = mesh.normals[face.v3.vn - 1];
         // std::cout << "hello3" << std::endl;
-
+        
         vertexBuffer.push_back(v1);
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
@@ -44,7 +44,6 @@ Model::Model(std::string modelName) {
         max.z = std::max(max.z, vec.z);
     }
     center = (min + max) / 2.0f;
-
     shader = new Shader();
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
@@ -86,7 +85,7 @@ Model::~Model(void) {
 }
 
 void    Model::parseModel(std::string &modelName) {
-    std::string filePath = "/assets/models/" + modelName + ".obj";
+    std::string filePath = "./assets/models/" + modelName + ".obj";
 
     std::ifstream file(filePath.c_str());
 
@@ -184,7 +183,7 @@ std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
 }
 
 void    Model::parseMaterial(void) {
-    std::string filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + material.name;
+    std::string filePath = "./assets/materials/" + material.name;
 
     std::ifstream file(filePath.c_str());
 

@@ -9,7 +9,7 @@ endif
 
 ifeq ($(UNAME_S),Darwin)
     PLATFORM_DEFINES = -DMACOS
-    LIBS = -framework OpenGL -L$(SDL2_PATH)/lib -lSDL2 -L$(SDL2_image_PATH)/lib -lSDL2_image
+    LIBS = -framework OpenGL -L$(SDL2_PATH)/lib -lSDL2 -L$(SDL2_image_PATH)/lib -lSDL2_image -fsanitize=address -g
 endif
 
 CXX = g++
@@ -35,3 +35,6 @@ $(GLAD_OBJ): ext/glad/src/glad.c
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+fclean: clean
+	rm -f $(TARGET)
