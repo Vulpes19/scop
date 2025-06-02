@@ -2,8 +2,16 @@
 
 Shader::Shader(void)
 {
-    loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", GL_VERTEX_SHADER);
-    loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl", GL_FRAGMENT_SHADER);
+    #ifdef _WIN32
+        loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", GL_VERTEX_SHADER);
+        loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl", GL_FRAGMENT_SHADER);
+    #elif __APPLE__
+        loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
+        loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
+    #elif __linux__
+        loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
+        loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
+    #endif
 }
 
 Shader::~Shader(void)

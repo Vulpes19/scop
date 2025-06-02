@@ -27,9 +27,7 @@ App::App(void) {
 
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
 	// triangle = new Object();
-	model = new Model("42", camera->getPosition());
-	// model = new Model("42");
-	// model = new Model("teapot");
+	model = new Model("42");
 	input = new InputManager();
 
 	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);

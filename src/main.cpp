@@ -1,8 +1,10 @@
 #include <iostream>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "App.hpp"
 
 int main (int ac, char **av) {
+    (void)ac;
+    (void)av;
     try {
         App *app = new App();
         while (app->isRunning())

@@ -24,7 +24,7 @@ void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime)
 	for (auto observer : observers)
 	{
 		if (observer)
-			observer->keyDown(key, deltaTime, this);
+			observer->keyDown(key, deltaTime);
 	}
 }
 

@@ -3,7 +3,7 @@
 Model::Model(std::string modelName, Vector cameraPos) {
     parseModel(modelName);
     if (material.isMaterial)
-        parseMaterial();
+    parseMaterial();
     
     std::cout << "helloooo" << std::endl;
     for (const Face &face : mesh.faces) {
@@ -14,7 +14,7 @@ Model::Model(std::string modelName, Vector cameraPos) {
         v3.position = mesh.vertices[face.v3.v - 1];
 
         std::cout << "wassup" << std::endl;
-        if (face.v1.isText)
+        if (!mesh.textureCoord.empty() && face.v1.isText)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
         if (face.v2.isText)
             v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
@@ -31,7 +31,7 @@ Model::Model(std::string modelName, Vector cameraPos) {
             v2.normal = normal;
             v3.normal = normal;
         }
-        else {
+        else if (!mesh.normals.empty()){
             std::cout << "wsupp22" << std::endl;
             v1.normal = mesh.normals[face.v1.vn - 1];
             v2.normal = mesh.normals[face.v2.vn - 1];
@@ -54,7 +54,6 @@ Model::Model(std::string modelName, Vector cameraPos) {
         max.z = std::max(max.z, vec.z);
     }
     center = (min + max) / 2.0f;
-
     shader = new Shader();
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
@@ -105,7 +104,11 @@ Model::~Model(void) {
 }
 
 void    Model::parseModel(std::string &modelName) {
-    std::string filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    std::string filePath = "assets/models/" + modelName + ".obj";
+
+    #ifdef _WIN32
+        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    #endif
 
     std::ifstream file(filePath.c_str());
 
@@ -168,7 +171,7 @@ void    Model::parseModel(std::string &modelName) {
     }
 }
 
-std::vector<VertexIndex>    Model::parseFaceVertex(std::string &line) {
+std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
     std::vector <VertexIndex> result;
 
     std::istringstream iss(line);
@@ -212,7 +215,11 @@ std::vector<VertexIndex>    Model::parseFaceVertex(std::string &line) {
 }
 
 void    Model::parseMaterial(void) {
-    std::string filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + material.name;
+    std::string filePath = "./assets/materials/" + material.name;
+
+    #ifdef _WIN32
+        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
+    #endif
 
     std::ifstream file(filePath.c_str());
 
@@ -265,7 +272,8 @@ void    Model::update() {
 
 }
 
-void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) {
+void    Model::keyDown(SDL_Scancode key, float deltaTime) {
+    (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             std::cout << "rotating on X" << std::endl;

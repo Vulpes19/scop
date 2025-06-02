@@ -61,7 +61,7 @@ Matrix4x4   &Matrix4x4::scale(Vector vec) {
 
 Matrix4x4   &Matrix4x4::rotate(Vector vec, enum AXIS axis, float angle) {
     //passed vector is not use until future implementation
-    
+    (void)vec;
     switch (axis)
     {
         case X_AXIS:
@@ -155,7 +155,7 @@ float   *Matrix4x4::data(void) {
     return &mat[0][0];
 }
 
-Matrix4x4   &Matrix4x4::operator*(const Matrix4x4 &other) const {
+Matrix4x4   Matrix4x4::operator*(const Matrix4x4 &other) const {
     Matrix4x4   result;
 
     for (int row = 0; row < 4; row++) {
