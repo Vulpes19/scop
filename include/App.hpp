@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "ErrorHandler.hpp"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "Object.hpp"
 #include "./glad/glad.h"
 #include "Model.hpp"
@@ -22,7 +22,6 @@ class App {
 		SDL_Window* window = nullptr;
         SDL_GLContext context = nullptr;
 		SDL_Event	event;
-        Object  *triangle;
         Model  *model;
         Camera  *camera;
         InputManager    *input;

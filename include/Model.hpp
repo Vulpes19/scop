@@ -11,6 +11,7 @@
 #include "InputDetector.hpp"
 #include <sstream>
 #include <algorithm>
+#include <string>
 
 
 struct VertexIndex {
@@ -53,11 +54,11 @@ class Model : public InputObserver {
         Model(std::string);
         ~Model(void);
         void    parseModel(std::string&);
-        std::vector<VertexIndex>    parseFaceVertex(std::string&);
+        std::vector<VertexIndex>    parseFaceVertex(std::string);
         void    parseMaterial(void);
         void    render(Vulpes3D::Matrix4x4 view);
         void    update(void);
-        void	keyDown(SDL_Scancode, float, InputManager * = nullptr) override;
+        void	keyDown(SDL_Scancode, float) override;
         void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
         struct Mesh mesh;
@@ -67,8 +68,8 @@ class Model : public InputObserver {
         unsigned int VAO;
         unsigned int EBO;
         Shader      *shader;
-        unsigned int texture1;
-        unsigned int texture2;
+        // unsigned int texture1;
+        // unsigned int texture2;
         Vulpes3D::Matrix4x4   model;;
         Vulpes3D::Matrix4x4   projection;
         unsigned int          modelLoc;

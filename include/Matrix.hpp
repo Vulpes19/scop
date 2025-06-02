@@ -36,7 +36,7 @@ namespace Vulpes3D {
             Matrix4x4   &lookAt(Vector position, Vector direction, Vector up);
 
             // operations
-            Matrix4x4  &operator*(const Matrix4x4 &other) const;
+            Matrix4x4  operator*(const Matrix4x4 &other) const;
 
             float *data(void);
 
