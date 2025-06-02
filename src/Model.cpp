@@ -85,7 +85,11 @@ Model::~Model(void) {
 }
 
 void    Model::parseModel(std::string &modelName) {
-    std::string filePath = "./assets/models/" + modelName + ".obj";
+    std::string filePath = "assets/models/" + modelName + ".obj";
+
+    #ifdef _WIN32
+        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    #endif
 
     std::ifstream file(filePath.c_str());
 
@@ -184,6 +188,10 @@ std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
 
 void    Model::parseMaterial(void) {
     std::string filePath = "./assets/materials/" + material.name;
+
+    #ifdef _WIN32
+        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
+    #endif
 
     std::ifstream file(filePath.c_str());
 
