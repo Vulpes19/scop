@@ -3,6 +3,8 @@
 #include "App.hpp"
 
 int main (int ac, char **av) {
+    (void)ac;
+    (void)av;
     try {
         App *app = new App();
         while (app->isRunning())

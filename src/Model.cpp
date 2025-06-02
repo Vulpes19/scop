@@ -243,7 +243,8 @@ void    Model::update() {
 
 }
 
-void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager *input) {
+void    Model::keyDown(SDL_Scancode key, float deltaTime) {
+    (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             std::cout << "rotating on X" << std::endl;

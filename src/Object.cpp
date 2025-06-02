@@ -192,7 +192,7 @@ void    Object::render(Vulpes3D::Matrix4x4 view) {
     glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
    
     glBindVertexArray(VAO);
-    for (int i = 0; i < cubePositions.size(); i++) {
+    for (size_t i = 0; i < cubePositions.size(); i++) {
         model = Vulpes3D::Matrix4x4::identity();
         float angle = i * 20.0f;
         model.translate(cubePositions[i]);
