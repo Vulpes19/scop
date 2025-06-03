@@ -3,17 +3,17 @@
 Model::Model(std::string modelName, Vector cameraPos) {
     parseModel(modelName);
     if (material.isMaterial)
-    parseMaterial();
+        parseMaterial();
     
-    std::cout << "helloooo" << std::endl;
+        std::cout << "faces" << std::endl;
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
+        std::cout << face.v1.v << " " << face.v2.v << " " << face.v3.v << std::endl;
         v1.position = mesh.vertices[face.v1.v - 1];
         v2.position = mesh.vertices[face.v2.v - 1];
         v3.position = mesh.vertices[face.v3.v - 1];
 
-        std::cout << "wassup" << std::endl;
         if (!mesh.textureCoord.empty() && face.v1.isText)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
         if (face.v2.isText)
@@ -22,7 +22,6 @@ Model::Model(std::string modelName, Vector cameraPos) {
         std:: cout << face.v1.vn << std::endl;
         if (!face.v1.isNormal || !face.v2.isNormal || !face.v3.isNormal)
         {
-            std::cout << "im just entering" << std::endl;
             Vector normal = (v2.position - v1.position).crossProduct(v3.position - v1.position);
             std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
             normal.normalize();
@@ -32,7 +31,6 @@ Model::Model(std::string modelName, Vector cameraPos) {
             v3.normal = normal;
         }
         else if (!mesh.normals.empty()){
-            std::cout << "wsupp22" << std::endl;
             v1.normal = mesh.normals[face.v1.vn - 1];
             v2.normal = mesh.normals[face.v2.vn - 1];
             v3.normal = mesh.normals[face.v3.vn - 1];
@@ -41,6 +39,10 @@ Model::Model(std::string modelName, Vector cameraPos) {
         vertexBuffer.push_back(v1);
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
+    }
+    std::cout << "vertex buffer" << std::endl;
+    for (const Vertex v : vertexBuffer) {
+        std::cout << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;
     }
     // Getting model's center
     Vector min = mesh.vertices[0];
@@ -66,8 +68,8 @@ Model::Model(std::string modelName, Vector cameraPos) {
     glBindVertexArray(VAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(vertexBuffer), vertexBuffer.data(), GL_STATIC_DRAW);
-    
+    glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(Vertex), vertexBuffer.data(), GL_STATIC_DRAW);
+
     projection = Vulpes3D::Matrix4x4::identity();
     model = Vulpes3D::Matrix4x4::identity();
     
@@ -94,7 +96,7 @@ Model::Model(std::string modelName, Vector cameraPos) {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
     glEnableVertexAttribArray(1);
 
-    // Normal
+    // // Normal
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(2);
 }
@@ -116,16 +118,13 @@ void    Model::parseModel(std::string &modelName) {
         throw(ErrorHandler("Failed to open model file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
     
     std::string line;
+    std::cout << "parsed verticies" << std::endl;
     while (std::getline(file, line))
     {
         if (material.name.empty()) {
             std::string first = line.substr(0, line.find(" "));
-            std::cout << "first => " << first << std::endl;
             if (first == "mtllib")
-            {
                 material.name = line.substr(line.find(" ") + 1);
-                std::cout << "material name => " << material.name << std::endl;
-            }
         }
         if (line.substr(0, line.find(" ")) == "v") {
             std::istringstream iss(line.substr(1));
@@ -133,6 +132,7 @@ void    Model::parseModel(std::string &modelName) {
             iss >> x;
             iss >> y;
             iss >> z;
+            std::cout << x << " " << y << " " << z << std::endl;
             mesh.vertices.push_back(Vector(x, y, z));
         }
         if (line.substr(0, line.find(" ")) == "vt") {
@@ -161,10 +161,7 @@ void    Model::parseModel(std::string &modelName) {
                     face.v1 = result[0];
                     face.v2 = result[index];
                     face.v3 = result[index + 1];
-                    // std::cout << face.v1.v << " " << face.v2.v << " " << face.v3.v << std::endl;
                     mesh.faces.push_back(face);
-                    // if (mesh.faces.size() > 3)
-                    //     exit(1);
                 }
             }
         }
@@ -257,6 +254,7 @@ void    Model::parseMaterial(void) {
 }
 void    Model::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->useShader();

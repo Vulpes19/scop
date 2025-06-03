@@ -20,13 +20,9 @@ struct Material {
 uniform Material material;
 uniform vec3 lightColor;
 uniform vec3 lightDir;
-// uniform vec3 lightPos;
 uniform vec3 viewPos;
 void main()
 {
-    // FragColor = vec4(vertexColor, 1.0);
-    // FragColor = vec4(1.0, 0.5, 0.2, 1.0);
-    // FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5);
     
     vec3 ambient = lightColor * material.ambient;
 
