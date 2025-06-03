@@ -25,10 +25,10 @@ App::App(void) {
     }
     glViewport( 0, 0, WIDTH, HEIGHT );
 
-	// triangle = new Object();
-	model = new Model("42");
-	input = new InputManager();
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
+	// triangle = new Object();
+	model = new Model("teapot", camera->getPosition());
+	input = new InputManager();
 
 	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);
 	InputObserver* modelObserver = dynamic_cast<InputObserver*>(model);

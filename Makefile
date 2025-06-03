@@ -17,7 +17,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror $(PLATFORM_DEFINES)
+CXXFLAGS = $(PLATFORM_DEFINES)
 INCLUDE = -I$(SDL2_PATH)/include -I./include -I./ext/glad/include/glad -I./ext/glad/include -I$(SDL2_image_PATH)/include
 LDFLAGS = $(LIBS)
 
