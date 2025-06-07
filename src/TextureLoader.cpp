@@ -6,10 +6,28 @@ TextureLoader::TextureLoader(void) {
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
         throw(ErrorHandler("Error failed to init SDL_image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
     }
+    readTextureDir();
 }
 
 TextureLoader::~TextureLoader(void) {
     
+}
+
+void TextureLoader::readTextureDir(void) {
+    DIR *directory = opendir("./assets/textures");
+    struct dirent *dir;
+
+    if (directory == NULL) {
+        throw(ErrorHandler("Error opening directory /assets/textures to load textures", __FILE__, __LINE__));
+    }
+    while ((dir = readdir(directory)) != NULL) {
+        if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
+            std::string fullPath = "/assets/textures/" + std::string(dir->d_name);
+            std::cout << fullPath << std::endl;
+            loadImage(fullPath.c_str());
+        }
+    }
+    (void)closedir(directory);
 }
 
 TextureLoader* TextureLoader::getInstance(void)
@@ -22,24 +40,24 @@ TextureLoader* TextureLoader::getInstance(void)
 void    TextureLoader::loadImage(const char *path) {
     SDL_Surface* image = IMG_Load(path);
     if (!image) {
-        throw(ErrorHandler("Error failed to load image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
+        throw(ErrorHandler("Error failed to load image in path (" + std::string(path) + "): " + std::string(IMG_GetError()), __FILE__, __LINE__));
     }
 
     std::string strPath = std::string(path);
     size_t index = strPath.find("assets");
+
     if (index == std::string::npos)
         throw(ErrorHandler("Error failed to load image: can't name the texture the path should have 'assets'", __FILE__, __LINE__));   
     
-    std::string ID = strPath.substr(index + 7, strPath.length() - 40);
-
-    textures[ID] = image;
+    textures.push_back(image);
 }
 
-SDL_Surface *TextureLoader::getImage(std::string ID) {
-    auto image = textures.find(ID);
-
-    if (image != textures.end())
-        return (textures[ID]);
-    else
-        throw(ErrorHandler("Error failed to load image: unable to find image with the name: " + ID, __FILE__, __LINE__));
+SDL_Surface *TextureLoader::getImage(size_t &index) {
+    index += 1;
+    if (textures.empty())
+        return NULL;
+    if (index == textures.size()) {
+        index = 0;
+    }
+    return textures[index];
 }

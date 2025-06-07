@@ -96,7 +96,8 @@ float vertices[] = {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
     
-    SDL_Surface *image = TextureLoader::getInstance()->getImage("brick");
+    size_t i = 0;
+    SDL_Surface *image = TextureLoader::getInstance()->getImage(i);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
              GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -113,7 +114,7 @@ float vertices[] = {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Magnification
     
     SDL_FreeSurface(image);
-    image = TextureLoader::getInstance()->getImage("cracks");
+    image = TextureLoader::getInstance()->getImage(i);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, 
              GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);

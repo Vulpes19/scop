@@ -59,24 +59,28 @@ class Model : public InputObserver {
         std::vector<VertexIndex>    parseFaceVertex(std::string);
         void    parseMaterial(void);
         void    render(Vulpes3D::Matrix4x4 view);
-        void    update(void);
+        void    update(float deltaTime);
         void	keyDown(SDL_Scancode, float) override;
         void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
         struct Mesh mesh;
         struct Material material;
         std::vector<Vertex> vertexBuffer;
+        std::vector<Vector> colors;
         unsigned int VBO; //vertex buffer object we need to store verticies in GPU memory
         unsigned int VAO;
         unsigned int EBO;
         Shader      *shader;
-        // unsigned int texture1;
-        // unsigned int texture2;
         Vulpes3D::Matrix4x4   model;;
         Vulpes3D::Matrix4x4   projection;
         unsigned int          modelLoc;
         unsigned int          projectionLoc;
         unsigned int          viewLoc;
+        unsigned int          texture1;
+        size_t                textureIndex = -1;
+        bool                  textureToggle = false;
+        int                   blend = 1.0f;
+        size_t                colorIndex = 0;
         float                 angle = 0.0f;
         Vector                center;
 };

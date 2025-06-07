@@ -7,8 +7,7 @@ in vec2 TexCoord;
 in vec3 FragPos;
 in vec3 Normal;
 
-uniform sampler2D texture1; // built-in data-type for texture objects
-uniform sampler2D texture2;
+uniform sampler2D texture1;
 
 struct Material {
     vec3 ambient;
@@ -21,22 +20,28 @@ uniform Material material;
 uniform vec3 lightColor;
 uniform vec3 lightDir;
 uniform vec3 viewPos;
+uniform vec3 flatColor;
+uniform float blend;
 void main()
 {
-    
-    vec3 ambient = lightColor * material.ambient;
+    vec3 textureColor = texture(texture1, TexCoord).rgb;
+    vec3 baseColor = mix(flatColor, textureColor, blend);
+
+    vec3 ambient = baseColor * material.ambient;
 
     vec3 norm = normalize(Normal);
     // lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = lightColor * (diff * material.diffuse);
+    vec3 diffuse = baseColor * (diff * material.diffuse);
 
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = lightColor * (spec * material.specular);
+    vec3 specular = baseColor * (spec * material.specular);
 
     vec3 result = ambient + diffuse + specular;
+
+    //vec4 finalColor = mix(result, textureColor, blend);
 
     FragColor = vec4(result, 1.0);
 } 
