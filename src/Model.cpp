@@ -5,25 +5,33 @@ Model::Model(std::string modelName, Vector cameraPos) {
     if (material.isMaterial)
         parseMaterial();
     
-        std::cout << "faces" << std::endl;
+    colors.push_back(Vector(255.0f, 0.0f, 0.0f));
+    colors.push_back(Vector(0.0f, 255.0f, 0.0f));
+    colors.push_back(Vector(0.0f, 0.0f, 255.0f));
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
-        std::cout << face.v1.v << " " << face.v2.v << " " << face.v3.v << std::endl;
         v1.position = mesh.vertices[face.v1.v - 1];
         v2.position = mesh.vertices[face.v2.v - 1];
         v3.position = mesh.vertices[face.v3.v - 1];
 
         if (!mesh.textureCoord.empty() && face.v1.isText)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
+        else
+            v1.texCoord = Vector2(0.0f, 0.0f);
         if (face.v2.isText)
             v2.texCoord = mesh.textureCoord[face.v2.vt - 1];
+        else
+            v2.texCoord = Vector2(1.0f, 0.0f);
+        if (face.v3.isText)
+            v3.texCoord = mesh.textureCoord[face.v3.vt - 1];
+        else
+            v3.texCoord = Vector2(1.0f, 1.0f);
+        
     
-        std:: cout << face.v1.vn << std::endl;
         if (!face.v1.isNormal || !face.v2.isNormal || !face.v3.isNormal)
         {
             Vector normal = (v2.position - v1.position).crossProduct(v3.position - v1.position);
-            std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
             normal.normalize();
 
             v1.normal = normal;
@@ -40,9 +48,7 @@ Model::Model(std::string modelName, Vector cameraPos) {
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
     }
-    std::cout << "vertex buffer" << std::endl;
     for (const Vertex v : vertexBuffer) {
-        std::cout << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;
     }
     // Getting model's center
     Vector min = mesh.vertices[0];
@@ -70,11 +76,23 @@ Model::Model(std::string modelName, Vector cameraPos) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(Vertex), vertexBuffer.data(), GL_STATIC_DRAW);
 
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    SDL_Surface *image = TextureLoader::getInstance()->getImage(textureIndex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
+             GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
     projection = Vulpes3D::Matrix4x4::identity();
-    model = Vulpes3D::Matrix4x4::identity();
-    
+    model = Vulpes3D::Matrix4x4::identity(); 
     projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
-    model.translate(center);
+    
+    model.translate(center / 4);
 
     shader->setUniform("material.ambient", material.Ka);
     shader->setUniform("material.diffuse", material.Kd);
@@ -82,8 +100,11 @@ Model::Model(std::string modelName, Vector cameraPos) {
     shader->setUniform("material.shininess", material.Ns);
     shader->setUniform("lightColor", Vector(1.0f, 1.0f, 1.0f));
     shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    shader->setUniform("flatColor", colors[0]);
+    shader->setUniform("blend", blend);
     // shader->setUniform("lightPos", Vector(1.2f, 1.0f, 2.0f));
     shader->setUniform("viewPos", cameraPos);
+    shader->setUniform("texture1", 0);
 
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
@@ -118,7 +139,6 @@ void    Model::parseModel(std::string &modelName) {
         throw(ErrorHandler("Failed to open model file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
     
     std::string line;
-    std::cout << "parsed verticies" << std::endl;
     while (std::getline(file, line))
     {
         if (material.name.empty()) {
@@ -132,7 +152,6 @@ void    Model::parseModel(std::string &modelName) {
             iss >> x;
             iss >> y;
             iss >> z;
-            std::cout << x << " " << y << " " << z << std::endl;
             mesh.vertices.push_back(Vector(x, y, z));
         }
         if (line.substr(0, line.find(" ")) == "vt") {
@@ -257,6 +276,8 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
     shader->useShader();
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
@@ -266,15 +287,19 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
     glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 }
 
-void    Model::update() {
-
+void    Model::update(float deltaTime) {
+    float speed = 9.0f;
+    float target = textureToggle ? 1.0f : 0.0f;
+    if (abs(blend - target) > 0.01f) {
+        blend += (target - blend) * deltaTime * speed;
+}
 }
 
 void    Model::keyDown(SDL_Scancode key, float deltaTime) {
     (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
-            std::cout << "rotating on X" << std::endl;
+            // std::cout << "rotating on X" << std::endl;
             angle += 5.0f;
             model.translate(-center);
             model.identity();
@@ -283,19 +308,41 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
         }
         if (key == SDL_SCANCODE_O) {
             angle += 5.0f;
-            std::cout << "rotating on Y" << std::endl;
+            // std::cout << "rotating on Y" << std::endl;
             model.translate(-center);
             model.identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
         if (key == SDL_SCANCODE_P) {
-            std::cout << "rotating on Z" << std::endl;
+            // std::cout << "rotating on Z" << std::endl;
             angle += 5.0f;
             model.translate(-center);
             model.identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
+        }
+        if (key == SDL_SCANCODE_T) {
+            textureToggle = !textureToggle;
+            blend = textureToggle ? 0.0f : 1.0f;
+        }
+        // Change texture to one of the textures under /assets/textures or change colors
+        if (key == SDL_SCANCODE_K) {
+            if (textureToggle) {
+                SDL_Surface *image = TextureLoader::getInstance()->getImage(textureIndex);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
+                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+                glGenerateMipmap(GL_TEXTURE_2D);
+                blend = 1.0f;
+                shader->setUniform("blend", blend);
+            }
+            else {
+                colorIndex += 1;
+                if (colorIndex == colors.size()) colorIndex = 0;
+                shader->setUniform("flatColor", colors[colorIndex]);
+                blend = 0.0f;
+                shader->setUniform("blend", blend);
+            }
         }
     }
 }

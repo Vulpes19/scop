@@ -4,7 +4,6 @@ SDL2_image_PATH = $(HOME)/SDL2_image
 GLAD_INCLUDE = ./ext/glad/include/glad
 EXT_INCLUDE = ./ext/glad/include
 F_SANITIZE_ADDRESS = -fsanitize=address -g
-EXPORT_SDL := $(shell export DYLD_LIBRARY_PATH="~/SDL2/lib:$DYLD_LIBRARY_PATH")
 
 ifeq ($(UNAME_S),Linux)
     PLATFORM_DEFINES = -DLINUX
@@ -27,7 +26,7 @@ GLAD_OBJ = ext/glad/src/glad.o
 TARGET = scop
 
 all: $(TARGET)
-	echo $(EXPORT_SDL)
+	export DYLD_LIBRARY_PATH="~/SDL2/lib:$DYLD_LIBRARY_PATH"
 
 re: fclean all
 

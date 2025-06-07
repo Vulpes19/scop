@@ -27,7 +27,7 @@ App::App(void) {
 
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
 	// triangle = new Object();
-	model = new Model("teapot", camera->getPosition());
+	model = new Model("42", camera->getPosition());
 	input = new InputManager();
 
 	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);
@@ -67,16 +67,14 @@ void    App::handleInput(void) {
 }
 
 void    App::update(void) {
-	// triangle->update();
 	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-	// camera->update();
+	model->update(deltaTime);
 }
 
 void    App::render(void) {
-	// triangle->render(camera->getView());
 	model->render(camera->getView());
 	SDL_GL_SwapWindow(window);
 }
