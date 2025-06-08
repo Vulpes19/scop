@@ -8,6 +8,7 @@ Shader::Shader(void)
     #elif __APPLE__
         loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
         loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
+        // loadShader("./shaders/TextureFragmentShader.glsl", GL_FRAGMENT_SHADER);
     #elif __linux__
         loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
         loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
@@ -89,6 +90,11 @@ void    Shader::setUniform(const char *uniform, GLint id) {
 void    Shader::setUniform(const char *uniform, const Vector &vec) {
     GLint location = glGetUniformLocation(shaderProgram, uniform);
     glUniform3f(location, vec.x, vec.y, vec.z);
+}
+
+void    Shader::setUniform(const char *uniform, const float value) {
+    GLint location = glGetUniformLocation(shaderProgram, uniform);
+    glUniform1f(location, value);
 }
 
 unsigned int Shader::getUniformLoc(const char *uniform) {

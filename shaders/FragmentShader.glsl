@@ -30,7 +30,6 @@ void main()
     vec3 ambient = baseColor * material.ambient;
 
     vec3 norm = normalize(Normal);
-    // lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = baseColor * (diff * material.diffuse);
 
@@ -41,7 +40,5 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
-    //vec4 finalColor = mix(result, textureColor, blend);
-
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(baseColor, 1.0);
 } 
