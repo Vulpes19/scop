@@ -288,15 +288,16 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
 }
 
 void    Model::update(float deltaTime) {
-    // float speed = 9.0f;
-    // float target = textureToggle ? 1.0f : 0.0f;
-    // if (abs(blend - target) > 0.01f) {
-    //     blend += (target - blend) * deltaTime * speed;
-    // }
+    float speed = 5.0f;
+    float target = textureToggle ? 1.0f : 0.0f;
+    if (abs(blend - target) > 0.01f) {
+        blend += (target - blend) * deltaTime * speed;
+        shader->setUniform("blend", blend);
+    }
 }
 
 void    Model::keyDown(SDL_Scancode key, float deltaTime) {
-    (void)deltaTime;
+    // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             // std::cout << "rotating on X" << std::endl;
@@ -322,15 +323,24 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
+        if (key == SDL_SCANCODE_UP) {
+            model.translate(Vector(0.0f, deltaTime * 10.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_DOWN) {
+            model.translate(Vector(0.0f, -deltaTime * 10.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_RIGHT) {
+            model.translate(Vector(deltaTime * 10.0f, 0.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_LEFT) {
+            model.translate(Vector(-deltaTime * 10.0f, 0.0f, 0.0f));
+        }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
-            blend = textureToggle ? 1.0f : 0.0f;
-            shader->setUniform("blend", blend);
         }
         // Change texture to one of the textures under /assets/textures or change colors
         if (key == SDL_SCANCODE_K) {
             if (textureToggle) {
-                std::cout << "toggle ON for texture" << std::endl;
                 SDL_Surface *image = TextureLoader::getInstance()->getImage(textureIndex);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
                         GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
@@ -338,7 +348,6 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
                 std::cout << blend << std::endl;
             }
             else {
-                std::cout << "toggle OFF for texture" << std::endl;
                 colorIndex += 1;
                 if (colorIndex == colors.size()) colorIndex = 0;
                 shader->setUniform("flatColor", colors[colorIndex]);
