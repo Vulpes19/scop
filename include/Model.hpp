@@ -79,7 +79,7 @@ class Model : public InputObserver {
         unsigned int          texture1;
         size_t                textureIndex = -1;
         bool                  textureToggle = false;
-        int                   blend = 1.0f;
+        float                 blend = 0.0f;
         size_t                colorIndex = 0;
         float                 angle = 0.0f;
         Vector                center;

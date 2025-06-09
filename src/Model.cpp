@@ -92,7 +92,7 @@ Model::Model(std::string modelName, Vector cameraPos) {
     model = Vulpes3D::Matrix4x4::identity(); 
     projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     
-    model.translate(center / 4);
+    model.translate(center);
 
     shader->setUniform("material.ambient", material.Ka);
     shader->setUniform("material.diffuse", material.Kd);
@@ -288,15 +288,16 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
 }
 
 void    Model::update(float deltaTime) {
-    float speed = 9.0f;
+    float speed = 5.0f;
     float target = textureToggle ? 1.0f : 0.0f;
     if (abs(blend - target) > 0.01f) {
         blend += (target - blend) * deltaTime * speed;
-}
+        shader->setUniform("blend", blend);
+    }
 }
 
 void    Model::keyDown(SDL_Scancode key, float deltaTime) {
-    (void)deltaTime;
+    // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             // std::cout << "rotating on X" << std::endl;
@@ -322,9 +323,20 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
+        if (key == SDL_SCANCODE_UP) {
+            model.translate(Vector(0.0f, deltaTime * 10.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_DOWN) {
+            model.translate(Vector(0.0f, -deltaTime * 10.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_RIGHT) {
+            model.translate(Vector(deltaTime * 10.0f, 0.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_LEFT) {
+            model.translate(Vector(-deltaTime * 10.0f, 0.0f, 0.0f));
+        }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
-            blend = textureToggle ? 0.0f : 1.0f;
         }
         // Change texture to one of the textures under /assets/textures or change colors
         if (key == SDL_SCANCODE_K) {
@@ -333,15 +345,13 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
                         GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
                 glGenerateMipmap(GL_TEXTURE_2D);
-                blend = 1.0f;
-                shader->setUniform("blend", blend);
+                std::cout << blend << std::endl;
             }
             else {
                 colorIndex += 1;
                 if (colorIndex == colors.size()) colorIndex = 0;
                 shader->setUniform("flatColor", colors[colorIndex]);
-                blend = 0.0f;
-                shader->setUniform("blend", blend);
+                std::cout << blend << std::endl;
             }
         }
     }
