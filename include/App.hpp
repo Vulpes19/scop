@@ -6,6 +6,8 @@
 #include "Object.hpp"
 #include "./glad/glad.h"
 #include "Model.hpp"
+#include "StatesManager.hpp"
+#include "MainMenu.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640

@@ -32,6 +32,8 @@ namespace Vulpes3D {
             //perspective projection matrix
             Matrix4x4   &perspective(float fov, float aspect, float near_plane, float far_plane);
 
+            Matrix4x4&  ortho(float left, float right, float bottom, float top, float near, float far);
+
             // This matrix transforms all thr world coordinates to the view space
             Matrix4x4   &lookAt(Vector position, Vector direction, Vector up);
 

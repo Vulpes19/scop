@@ -1,18 +1,9 @@
 #include "Shader.hpp"
 
-Shader::Shader(void)
+Shader::Shader(const char *vertexShader, const char *fragShader)
 {
-    #ifdef _WIN32
-        loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", GL_VERTEX_SHADER);
-        loadShader("C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl", GL_FRAGMENT_SHADER);
-    #elif __APPLE__
-        loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
-        loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
-        // loadShader("./shaders/TextureFragmentShader.glsl", GL_FRAGMENT_SHADER);
-    #elif __linux__
-        loadShader("./shaders/VertexShader.glsl", GL_VERTEX_SHADER);
-        loadShader("./shaders/FragmentShader.glsl", GL_FRAGMENT_SHADER);
-    #endif
+    loadShader(vertexShader, GL_VERTEX_SHADER);
+    loadShader(fragShader, GL_FRAGMENT_SHADER);
 }
 
 Shader::~Shader(void)

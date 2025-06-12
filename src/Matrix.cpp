@@ -119,6 +119,19 @@ Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float near_plane, f
     return *this;
 }
 
+Matrix4x4& Matrix4x4::ortho(float left, float right, float bottom, float top, float near, float far) {
+
+    mat[0][0] = 2.0f / (right - left);
+    mat[1][1] = 2.0f / (top - bottom);
+    mat[2][2] = -2.0f / (far - near);
+    mat[3][0] = -(right + left) / (right - left);
+    mat[3][1] = -(top + bottom) / (top - bottom);
+    mat[3][2] = -(far + near) / (far - near);
+    mat[3][3] = 1.0f;
+
+    return *this;
+}
+
 Matrix4x4   &Matrix4x4::lookAt(Vector position, Vector target, Vector up) {
     Vector zAxis = (position - target).normalize();
 

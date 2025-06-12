@@ -10,7 +10,7 @@
 
 class Shader {
     public:
-        Shader(void);
+        Shader(const char *, const char *);
         ~Shader(void);
         void    loadShader(const char *, GLenum);
         void    compileShader(GLenum);

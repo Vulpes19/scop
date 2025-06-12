@@ -62,7 +62,13 @@ Model::Model(std::string modelName, Vector cameraPos) {
         max.z = std::max(max.z, vec.z);
     }
     center = (min + max) / 2.0f;
-    shader = new Shader();
+    #ifdef _WIN32
+        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
+    #elif __APPLE__
+        shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
+    #elif __linux__
+        shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
+    #endif
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
     shader->createShader();

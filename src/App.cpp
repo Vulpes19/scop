@@ -26,18 +26,21 @@ App::App(void) {
     glViewport( 0, 0, WIDTH, HEIGHT );
 
 	camera = new Camera(Vector(0.0f, 0.0f, 3.0f), Vector(0.0f, 0.0f, -1.0f), Vector(0.0f, 1.0f, 0.0f));
-	// triangle = new Object();
-	model = new Model("42", camera->getPosition());
+
+	// model = new Model("42", camera->getPosition());
 	input = new InputManager();
+	State *mainMenu = new MainMenu();
+	StatesManager::getInstance()->addState(mainMenu);
 
 	InputObserver* cameraObserver = dynamic_cast<InputObserver*>(camera);
-	InputObserver* modelObserver = dynamic_cast<InputObserver*>(model);
+	InputObserver* stateObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
+	// InputObserver* modelObserver = dynamic_cast<InputObserver*>(model);
 	if (cameraObserver)
 		 input->addObserver(cameraObserver);
 	 else
 		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
-	if (modelObserver)
-		 input->addObserver(modelObserver);
+	if (stateObserver)
+		 input->addObserver(stateObserver);
 	 else
 		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
 	
@@ -67,15 +70,19 @@ void    App::handleInput(void) {
 }
 
 void    App::update(void) {
+	if (StatesManager::getInstance()->getCurrentState() == NoState)
+	{
+		running = false;
+	}
 	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-	model->update(deltaTime);
+	StatesManager::getInstance()->getCurrentStateInstance()->update(deltaTime);
 }
 
 void    App::render(void) {
-	model->render(camera->getView());
+	StatesManager::getInstance()->getCurrentStateInstance()->render(camera->getView());
 	SDL_GL_SwapWindow(window);
 }
 
