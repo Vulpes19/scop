@@ -1,6 +1,5 @@
 UNAME_S := $(shell uname -s)
-SDL2_PATH = $(HOME)/SDL2
-SDL2_image_PATH = $(HOME)/SDL2_image
+HOMEBREW_PATH = /opt/homebrew
 GLAD_INCLUDE = ./ext/glad/include/glad
 EXT_INCLUDE = ./ext/glad/include
 F_SANITIZE_ADDRESS = -fsanitize=address -g
@@ -12,12 +11,12 @@ endif
 
 ifeq ($(UNAME_S),Darwin)
     PLATFORM_DEFINES = -DMACOS
-    LIBS = -framework OpenGL -L$(SDL2_PATH)/lib -lSDL2 -L$(SDL2_image_PATH)/lib -lSDL2_image -fsanitize=address -g
+    LIBS = -framework OpenGL -L$(HOMEBREW_PATH)/lib -lSDL2 -L$(HOMEBREW_PATH)/lib -lSDL2_image -fsanitize=address -g
 endif
 
 CXX = g++
 CXXFLAGS = $(PLATFORM_DEFINES)
-INCLUDE = -I$(SDL2_PATH)/include -I./include -I./ext/glad/include/glad -I./ext/glad/include -I$(SDL2_image_PATH)/include
+INCLUDE = -I$(HOMEBREW_PATH)/include/SDL2 -I./include -I./ext/glad/include/glad -I./ext/glad/include
 LDFLAGS = $(LIBS)
 
 SRCS = $(wildcard src/*.cpp)
