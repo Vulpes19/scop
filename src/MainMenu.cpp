@@ -2,6 +2,20 @@
 
 MainMenu::MainMenu(void)
 {
+    std::cout << "currently Main Menu state" << std::endl;
+
+	float vertices[] = {
+		// x, y, z         u, v
+		740.0f, 300.0f, 0.0f,   1.0f, 1.0f,
+		740.0f, 250.0f, 0.0f,   1.0f, 0.0f,
+		500.0f, 250.0f, 0.0f,   0.0f, 0.0f,
+		500.0f, 300.0f, 0.0f,   0.0f, 1.0f,
+	};
+
+	unsigned int indices[] = {  
+		0, 1, 3,  // first triangle
+		1, 2, 3   // second triangle
+	};
 	stateName = MainMenuState;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
@@ -9,6 +23,7 @@ MainMenu::MainMenu(void)
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
     #elif __linux__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
+	#endif
 	// label.addButtonType("MainMenu", 80, 200, { 136, 8, 8, 255 });
 	// buttonsState["Play"] = FOCUS_ON;
 	// buttonsState["Quit"] = FOCUS_OFF;
@@ -17,14 +32,62 @@ MainMenu::MainMenu(void)
     shader->compileShader(GL_FRAGMENT_SHADER);
     shader->createShader();
 
-     glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
+	glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
+	glBindVertexArray(VAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+    glGenTextures(1, &text1);
+    glBindTexture(GL_TEXTURE_2D, text1);
+    
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  
+	
+	// exit(1);
+	SDL_Surface *text = FontLoader::getInstance()->getFont("Prisma", "Start");
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, text->w, text->h, 0, 
+		GL_RGB, GL_UNSIGNED_BYTE, text->pixels);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		
+	glGenTextures(1, &text2);
+	glBindTexture(GL_TEXTURE_2D, text2);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	SDL_Surface *text2 = FontLoader::getInstance()->getFont("Prisma", "Exit");
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, text2->w, text2->h, 0, 
+             GL_RGB, GL_UNSIGNED_BYTE, text2->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+	shader->useShader();
+	shader->setUniform("baseColor", Vector(1.0f, 0.0f, 0.0));
+    // shader->setUniform("useTexture", 0.0f);
+
+	projection = Vulpes3D::Matrix4x4::identity();
+    model = Vulpes3D::Matrix4x4::identity(); 
+	// projection.ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	projection.ortho(0.0f, WIDTH, HEIGHT, 0.0f, -1.0f, 1.0f);
+
+	modelLoc = shader->getUniformLoc("model");
+    projectionLoc = shader->getUniformLoc("projection");
+
 }
 
 MainMenu::~MainMenu(void)
@@ -99,7 +162,26 @@ void	MainMenu::update(float)
 
 void	MainMenu::render(Vulpes3D::Matrix4x4)
 {
-    std::cout << "currently Main Menu state" << std::endl;
-	// label.render(540, 300, "MainMenu", "Play", "Bangers", renderer, buttonsState["Play"]);
-	// label.render(540, 400, "MainMenu", "Quit", "Bangers", renderer, buttonsState["Quit"]);
+	glDisable(GL_DEPTH_TEST);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0);
+    shader->useShader();
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
+    glBindVertexArray(VAO);
+	
+	// first button
+	model = model.identity();
+	model.translate(Vector(0.0f, 0.0f, 0.0f));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
+	glBindTexture(GL_TEXTURE_2D, text1);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	// SECOND BUTTON
+	model2 = Vulpes3D::Matrix4x4::identity();
+	model2.translate(Vector(0.0f, -100.0f, 0.0f));
+	// exit(1);
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
+	glBindTexture(GL_TEXTURE_2D, text2);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

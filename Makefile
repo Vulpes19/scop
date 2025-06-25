@@ -11,7 +11,7 @@ endif
 
 ifeq ($(UNAME_S),Darwin)
     PLATFORM_DEFINES = -DMACOS
-    LIBS = -framework OpenGL -L$(HOMEBREW_PATH)/lib -lSDL2 -L$(HOMEBREW_PATH)/lib -lSDL2_image -fsanitize=address -g
+    LIBS = -framework OpenGL -L$(HOMEBREW_PATH)/lib -lSDL2 -L$(HOMEBREW_PATH)/lib -lSDL2_image -L$(HOMEBREW_PATH)/lib -lSDL2_ttf -fsanitize=address -g
 endif
 
 CXX = g++

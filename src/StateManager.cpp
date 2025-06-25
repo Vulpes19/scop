@@ -17,9 +17,10 @@ StatesManager::~StatesManager(void)
 
 void	StatesManager::addState(State* state)
 {
-	std::cout << "adding state " << state->getStateName() << " " << states.size() << std::endl;
+	std::cout << "adding state: " << state->getStateName() << std::endl;
+	std::cout << "states size: " << states.size() << std::endl;
 	states.push_back(state);
-	std::cout << "after adding " << states.size() << std::endl;
+	std::cout << "after adding states size: " << states.size() << std::endl;
 }
 
 void	StatesManager::removeState(InputManager *input)

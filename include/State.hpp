@@ -22,6 +22,14 @@ class State
 		// UILabel		label;
         Shader  *shader;
 		enum STATES stateName = NoState;
-        Vulpes3D::Matrix4x4   model;;
+        Vulpes3D::Matrix4x4   model;
+        Vulpes3D::Matrix4x4   model2;
         Vulpes3D::Matrix4x4   projection;
+        Vulpes3D::Matrix4x4   view;
+		unsigned int          modelLoc;
+        unsigned int          projectionLoc;
+        unsigned int          viewLoc;
+		unsigned int VAO;
+		unsigned int VBO;
+        unsigned int EBO;
 };

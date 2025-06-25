@@ -4,6 +4,10 @@
 #include "InputObserver.hpp"
 #include "InputDetector.hpp"
 #include "Matrix.hpp"
+#include "FontLoader.hpp"
+
+#define WIDTH 1280
+#define HEIGHT 640
 
 class MainMenu : public State, public InputObserver
 {
@@ -16,5 +20,7 @@ class MainMenu : public State, public InputObserver
 		void update(float = 0) override;
 		void render(Vulpes3D::Matrix4x4 view) override;
 	private:
+        unsigned int          text1;
+        unsigned int          text2;
 		// std::map<std::string, BUTTON_STATE> buttonsState;
 };

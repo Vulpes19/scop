@@ -9,9 +9,6 @@
 #include "StatesManager.hpp"
 #include "MainMenu.hpp"
 
-#define WIDTH 1280
-#define HEIGHT 640
-
 class App {
     public:
         App(void);

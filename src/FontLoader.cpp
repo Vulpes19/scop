@@ -3,14 +3,15 @@
 FontLoader *FontLoader::instance = nullptr;
 
 FontLoader::FontLoader(void) {
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        throw(ErrorHandler("Error failed to init SDL_image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
+    if (TTF_Init() == -1) {
+        throw(ErrorHandler("Error failed to init SDL_TTF: " + std::string(TTF_GetError()), __FILE__, __LINE__));
     }
-    readTextureDir();
+    readFontDir();
 }
 
 FontLoader::~FontLoader(void) {
-    
+    // TTF_CloseFont(font);
+    TTF_Quit();
 }
 
 void FontLoader::readFontDir(void) {
@@ -44,18 +45,21 @@ void    FontLoader::loadFont(const char *path) {
     }
 
     std::string strPath = std::string(path);
-    std::string ID = strPath.substr(14, 14 - strPath.find('.') - 1);
+    std::string ID = strPath.substr(14);
+    ID.erase(ID.find(".ttf"));
     std::cout << ID << std::endl;
 
     fonts[ID] = font;
 }
 
-SDL_Surface *FontLoader::getFont(std::string &ID, const char *text) {
+SDL_Surface *FontLoader::getFont(std::string ID, const char *text) {
     auto it = fonts.find(ID);
 
     if (it != fonts.end()) {
         SDL_Color color = {255, 255, 255};
         SDL_Surface* surface = TTF_RenderText_Blended(fonts[ID], text, color);
+        if (surface == NULL)
+            throw(ErrorHandler("Error loading text from font <" + ID + ">" + std::string(TTF_GetError()), __FILE__, __LINE__));
         return (surface);
     }
 

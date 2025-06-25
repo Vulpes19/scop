@@ -66,7 +66,7 @@ float vertices[] = {
        1, 2, 3    // second triangle
    };
 
-   shader = new Shader();
+   shader = new Shader("test", "test");
    shader->compileShader(GL_VERTEX_SHADER);
    shader->compileShader(GL_FRAGMENT_SHADER);
    shader->createShader();

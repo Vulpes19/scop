@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SDL_image.h"
+#include "SDL_ttf.h"
+#include <iostream>
 #include <map>
 #include "ErrorHandler.hpp"
 #ifdef __APPLE__
@@ -17,7 +19,7 @@ class FontLoader {
         static FontLoader* getInstance(void);
         void readFontDir(void);
         void loadFont(const char *);
-        SDL_Surface *getFont(std::string &, const char *);
+        SDL_Surface *getFont(std::string, const char *);
     private:
         static FontLoader* instance;
         FontLoader(void);
