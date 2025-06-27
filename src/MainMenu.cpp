@@ -53,28 +53,41 @@ MainMenu::MainMenu(void)
     glGenTextures(1, &text1);
     glBindTexture(GL_TEXTURE_2D, text1);
     
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Repeat vertically
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	// exit(1);
-	SDL_Surface *text = FontLoader::getInstance()->getFont("Prisma", "Start");
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, text->w, text->h, 0, 
-		GL_RGB, GL_UNSIGNED_BYTE, text->pixels);
+	SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
+    if (image == NULL)
+		throw(ErrorHandler("Error failed to get button texture `start`", __FILE__, __LINE__));
+	std::cout << "Image format: " << image->format->format << std::endl;
+	std::cout << "Image dimensions: " << image->w << "x" << image->h << std::endl;
+	std::cout << "Bytes per pixel: " << (int)image->format->BytesPerPixel << std::endl;
+
+	// Convert to a consistent format
+	SDL_Surface* converted = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
+	if (!converted) {
+		throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted->w, converted->h, 0, 
+             GL_RGB, GL_UNSIGNED_BYTE, converted->pixels);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		
 	glGenTextures(1, &text2);
 	glBindTexture(GL_TEXTURE_2D, text2);
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat horizontally
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat vertically
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Minification
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Horizontal clamp
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Vertical clamp
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    // Smooth minify
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	
-	SDL_Surface *text2 = FontLoader::getInstance()->getFont("Prisma", "Exit");
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, text2->w, text2->h, 0, 
-             GL_RGB, GL_UNSIGNED_BYTE, text2->pixels);
+	SDL_Surface *image2 = TextureLoader::getInstance()->getButton("exit");
+	if (image2 == NULL)
+		throw(ErrorHandler("Error failed to get button texture `exit`", __FILE__, __LINE__));
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image2->w, image2->h, 0, 
+             GL_RGB, GL_UNSIGNED_BYTE, image2->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
 	shader->useShader();
 	shader->setUniform("baseColor", Vector(1.0f, 0.0f, 0.0));
@@ -166,21 +179,21 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, text1);
     shader->useShader();
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
     glBindVertexArray(VAO);
 	
-	// first button
+	// start button
 	model = model.identity();
 	model.translate(Vector(0.0f, 0.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
-	glBindTexture(GL_TEXTURE_2D, text1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	// SECOND BUTTON
+    glActiveTexture(GL_TEXTURE1);
+	// exit button
 	model2 = Vulpes3D::Matrix4x4::identity();
-	model2.translate(Vector(0.0f, -100.0f, 0.0f));
-	// exit(1);
+	model2.translate(Vector(0.0f, 100.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
 	glBindTexture(GL_TEXTURE_2D, text2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

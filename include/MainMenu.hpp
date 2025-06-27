@@ -4,7 +4,7 @@
 #include "InputObserver.hpp"
 #include "InputDetector.hpp"
 #include "Matrix.hpp"
-#include "FontLoader.hpp"
+#include "TextureLoader.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640

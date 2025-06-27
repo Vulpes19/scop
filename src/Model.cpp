@@ -309,7 +309,7 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             // std::cout << "rotating on X" << std::endl;
             angle += 5.0f;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
@@ -317,7 +317,7 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             angle += 5.0f;
             // std::cout << "rotating on Y" << std::endl;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
@@ -325,7 +325,7 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             // std::cout << "rotating on Z" << std::endl;
             angle += 5.0f;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
