@@ -25,7 +25,6 @@ GLAD_OBJ = ext/glad/src/glad.o
 TARGET = scop
 
 all: $(TARGET)
-	export DYLD_LIBRARY_PATH="~/SDL2/lib:$DYLD_LIBRARY_PATH"
 
 re: fclean all
 

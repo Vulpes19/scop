@@ -5,6 +5,7 @@
 #include "InputDetector.hpp"
 #include "Matrix.hpp"
 #include "TextureLoader.hpp"
+#include "StatesManager.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640

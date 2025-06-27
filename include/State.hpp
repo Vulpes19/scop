@@ -26,6 +26,8 @@ class State
         Vulpes3D::Matrix4x4   model2;
         Vulpes3D::Matrix4x4   projection;
         Vulpes3D::Matrix4x4   view;
+		int 				  numButtons;
+		int					  selectedIndex;
 		unsigned int          modelLoc;
         unsigned int          projectionLoc;
         unsigned int          viewLoc;

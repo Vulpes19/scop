@@ -4,6 +4,8 @@ MainMenu::MainMenu(void)
 {
     std::cout << "currently Main Menu state" << std::endl;
 
+	numButtons = 2;
+	selectedIndex = 1;
 	float vertices[] = {
 		// x, y, z         u, v
 		740.0f, 300.0f, 0.0f,   1.0f, 1.0f,
@@ -12,6 +14,13 @@ MainMenu::MainMenu(void)
 		500.0f, 300.0f, 0.0f,   0.0f, 1.0f,
 	};
 
+	float exitVertices[] = {
+		// Position for exit button with UV coordinates
+		740.0f, 400.0f, 0.0f,   1.0f, 1.0f,  // Different Y positions
+		740.0f, 350.0f, 0.0f,   1.0f, 0.0f,
+		500.0f, 350.0f, 0.0f,   0.0f, 0.0f,
+		500.0f, 400.0f, 0.0f,   0.0f, 1.0f,
+	};
 	unsigned int indices[] = {  
 		0, 1, 3,  // first triangle
 		1, 2, 3   // second triangle
@@ -60,13 +69,10 @@ MainMenu::MainMenu(void)
 	
 	// exit(1);
 	SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
-    if (image == NULL)
+    if (!image)
 		throw(ErrorHandler("Error failed to get button texture `start`", __FILE__, __LINE__));
-	std::cout << "Image format: " << image->format->format << std::endl;
-	std::cout << "Image dimensions: " << image->w << "x" << image->h << std::endl;
-	std::cout << "Bytes per pixel: " << (int)image->format->BytesPerPixel << std::endl;
 
-	// Convert to a consistent format
+	// Convert to a consistent format RGB
 	SDL_Surface* converted = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
 	if (!converted) {
 		throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
@@ -84,13 +90,21 @@ MainMenu::MainMenu(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	
 	SDL_Surface *image2 = TextureLoader::getInstance()->getButton("exit");
-	if (image2 == NULL)
+	if (!image2)
 		throw(ErrorHandler("Error failed to get button texture `exit`", __FILE__, __LINE__));
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image2->w, image2->h, 0, 
-             GL_RGB, GL_UNSIGNED_BYTE, image2->pixels);
+	// Convert to a consistent format RGB
+	SDL_Surface* converted2 = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
+	if (!converted2) {
+		throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
+	}
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted2->w, converted2->h, 0, 
+             GL_RGB, GL_UNSIGNED_BYTE, converted2->pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
 	shader->useShader();
-	shader->setUniform("baseColor", Vector(1.0f, 0.0f, 0.0));
+	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
+	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
+	shader->setUniform("selectedIndex", selectedIndex);
+	shader->setUniform("button", 1);
     // shader->setUniform("useTexture", 0.0f);
 
 	projection = Vulpes3D::Matrix4x4::identity();
@@ -101,6 +115,9 @@ MainMenu::MainMenu(void)
 	modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
 
+	std::cout << "text1 -> " << text1 << std::endl;
+	std::cout << "text2 -> " << text2 << std::endl;
+
 }
 
 MainMenu::~MainMenu(void)
@@ -108,13 +125,22 @@ MainMenu::~MainMenu(void)
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime)
 {
-	// if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
-	// {
-	// 	if (key == SDL_SCANCODE_DOWN)
-	// 	{
-	// 		buttonsState["Play"] = FOCUS_OFF;
-	// 		buttonsState["Quit"] = FOCUS_ON;
-	// 	}
+	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
+	{
+		if (key == SDL_SCANCODE_UP)
+		{
+			// selectedIndex = (selectedIndex - 1 + numButtons) % numButtons;
+			selectedIndex = 1;
+			shader->setUniform("selectedIndex", selectedIndex);
+			std::cout << "UP" << std::endl;
+		}
+		if (key == SDL_SCANCODE_DOWN)
+		{
+			std::cout << "DOWN" << std::endl;
+			// selectedIndex = (selectedIndex + 1) % numButtons;
+			selectedIndex = 2;
+			shader->setUniform("selectedIndex", selectedIndex);
+		}
 	// 	if (key == SDL_SCANCODE_UP)
 	// 	{
 	// 		buttonsState["Play"] = FOCUS_ON;
@@ -132,7 +158,7 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime)
 	// 	}
 	// 	if (key == SDL_SCANCODE_RETURN && buttonsState["Quit"] == FOCUS_ON)
 	// 		StatesManager::getInstance()->removeState(input);
-	// }
+	}
 }
 
 void	MainMenu::mouseMove(Uint8 mouseButton, InputManager* input)
@@ -175,26 +201,30 @@ void	MainMenu::update(float)
 
 void	MainMenu::render(Vulpes3D::Matrix4x4)
 {
+	// std::cout << "selected index: " << selectedIndex << std::endl;
 	glDisable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, text1);
+    // glActiveTexture(GL_TEXTURE0);
+	// glBindTexture(GL_TEXTURE_2D, text1);
     shader->useShader();
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
     glBindVertexArray(VAO);
 	
 	// start button
+	shader->setUniform("button", 1);
 	model = model.identity();
 	model.translate(Vector(0.0f, 0.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glActiveTexture(GL_TEXTURE1);
 	// exit button
+	shader->useShader();
+	shader->setUniform("button", 2);
+    // glActiveTexture(GL_TEXTURE0);
+	// glBindTexture(GL_TEXTURE_2D, text2);
 	model2 = Vulpes3D::Matrix4x4::identity();
 	model2.translate(Vector(0.0f, 100.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
-	glBindTexture(GL_TEXTURE_2D, text2);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
