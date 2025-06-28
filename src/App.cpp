@@ -60,7 +60,7 @@ void    App::handleInput(void) {
 		switch (event.type)
 		{
 			case SDL_KEYDOWN:
-				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime);
+				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime, input);
 				break;
 			case SDL_QUIT:
 				running = false;
@@ -73,6 +73,7 @@ void    App::update(void) {
 	if (StatesManager::getInstance()->getCurrentState() == NoState)
 	{
 		running = false;
+		return ;
 	}
 	float currentFrame =(float)SDL_GetTicks() / 1000.0f; // SDL_GetTicks() returns milliseconds, so divide by 1000 to get seconds
 
@@ -82,8 +83,10 @@ void    App::update(void) {
 }
 
 void    App::render(void) {
-	StatesManager::getInstance()->getCurrentStateInstance()->render(camera->getView());
-	SDL_GL_SwapWindow(window);
+	if (StatesManager::getInstance()->getCurrentState() != NoState) {
+		StatesManager::getInstance()->getCurrentStateInstance()->render(camera->getView());
+		SDL_GL_SwapWindow(window);
+	}
 }
 
 bool    App::isRunning(void) const {

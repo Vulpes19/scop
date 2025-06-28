@@ -60,7 +60,7 @@ class Model : public InputObserver {
         void    parseMaterial(void);
         void    render(Vulpes3D::Matrix4x4 view);
         void    update(float deltaTime);
-        void	keyDown(SDL_Scancode, float) override;
+        void	keyDown(SDL_Scancode, float, InputManager*) override;
         void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
         struct Mesh mesh;

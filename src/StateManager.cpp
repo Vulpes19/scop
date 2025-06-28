@@ -53,7 +53,10 @@ enum STATES	StatesManager::getCurrentState(void) const
 
 State	*StatesManager::getCurrentStateInstance(void) const
 {
-	return (states.back());
+	if (!states.empty())
+		return (states.back());
+	else
+		return (NULL);
 }
 
 void	StatesManager::handleInput(void)

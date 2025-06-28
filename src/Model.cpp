@@ -302,7 +302,7 @@ void    Model::update(float deltaTime) {
     }
 }
 
-void    Model::keyDown(SDL_Scancode key, float deltaTime) {
+void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullptr) {
     // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {

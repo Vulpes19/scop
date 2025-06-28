@@ -1,6 +1,6 @@
-#include "MainMenu.hpp"
+#include "ListScenesMenu.hpp"
 
-MainMenu::MainMenu(void)
+ListScenesMenu::ListScenesMenu(void)
 {
     std::cout << "currently Main Menu state" << std::endl;
 
@@ -13,19 +13,11 @@ MainMenu::MainMenu(void)
 		500.0f, 250.0f, 0.0f,   0.0f, 0.0f,
 		500.0f, 300.0f, 0.0f,   0.0f, 1.0f,
 	};
-
-	float exitVertices[] = {
-		// Position for exit button with UV coordinates
-		740.0f, 400.0f, 0.0f,   1.0f, 1.0f,  // Different Y positions
-		740.0f, 350.0f, 0.0f,   1.0f, 0.0f,
-		500.0f, 350.0f, 0.0f,   0.0f, 0.0f,
-		500.0f, 400.0f, 0.0f,   0.0f, 1.0f,
-	};
 	unsigned int indices[] = {  
 		0, 1, 3,  // first triangle
 		1, 2, 3   // second triangle
 	};
-	stateName = MainMenuState;
+	stateName = ListScenesMenuState;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
@@ -33,7 +25,7 @@ MainMenu::MainMenu(void)
     #elif __linux__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
 	#endif
-	// label.addButtonType("MainMenu", 80, 200, { 136, 8, 8, 255 });
+	// label.addButtonType("ListScenesMenu", 80, 200, { 136, 8, 8, 255 });
 	// buttonsState["Play"] = FOCUS_ON;
 	// buttonsState["Quit"] = FOCUS_OFF;
 
@@ -117,12 +109,12 @@ MainMenu::MainMenu(void)
 
 }
 
-MainMenu::~MainMenu(void)
+ListScenesMenu::~ListScenesMenu(void)
 {}
 
-void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
+void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
 {
-	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
+	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	{
 		if (key == SDL_SCANCODE_UP)
 		{
@@ -155,11 +147,11 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
 	}
 }
 
-void	MainMenu::mouseMove(Uint8 mouseButton, InputManager* input)
+void	ListScenesMenu::mouseMove(Uint8 mouseButton, InputManager* input)
 {
 	// int x, y;
 	// SDL_GetMouseState(&x, &y);
-	// if (x >= 540 && x <= 740 && y >= 300 && y <= 380 && StatesManager::getInstance()->getCurrentState() == MainMenuState)
+	// if (x >= 540 && x <= 740 && y >= 300 && y <= 380 && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	// {
 	// 	buttonsState["Play"] = FOCUS_ON;
 	// 	buttonsState["Quit"] = FOCUS_OFF;
@@ -183,17 +175,17 @@ void	MainMenu::mouseMove(Uint8 mouseButton, InputManager* input)
 	// }
 }
 
-void	MainMenu::handleInput(void)
+void	ListScenesMenu::handleInput(void)
 {
 
 }
 
-void	MainMenu::update(float)
+void	ListScenesMenu::update(float)
 {
 
 }
 
-void	MainMenu::render(Vulpes3D::Matrix4x4)
+void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 {
 	glDisable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
