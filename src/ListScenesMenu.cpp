@@ -109,7 +109,7 @@ ListScenesMenu::ListScenesMenu(void)
 ListScenesMenu::~ListScenesMenu(void)
 {}
 
-void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
+void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
 {
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	{
@@ -127,20 +127,24 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 				selectedIndex = 5;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
-		// if (key == SDL_SCANCODE_RETURN && selectedIndex == 1)
-		// {
-		// 	std::cout << "scenes menu is pushed" << std::endl;
-		// 	StatesManager::getInstance()->addState(new LevelMenu());
-		// 	InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
-		// 	if (levelObserver)
-		// 		input->addObserver(levelObserver);
-		// 	else
-		// 		throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
-		// }
-		// if (key == SDL_SCANCODE_RETURN && selectedIndex == 2) {
-		// 	StatesManager::getInstance()->removeState(input);
-		// 	return ;
-		// }
+		if (key == SDL_SCANCODE_RETURN)
+		{
+			std::cout << "scenes menu is pushed" << std::endl;
+			std::string strPath = modelPaths[selectedIndex];
+			std::string ID = strPath.substr(16);
+			ID.erase(ID.find(".obj"));
+			StatesManager::getInstance()->addState(new Scene(ID, camera->getPosition()));
+			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
+			if (levelObserver)
+				input->addObserver(levelObserver);
+			else
+				throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
+		}
+		if (key == SDL_SCANCODE_ESCAPE) {
+			std::cout << "ESC" << std::endl;
+			StatesManager::getInstance()->removeState(input);
+			return ;
+		}
 	}
 }
 

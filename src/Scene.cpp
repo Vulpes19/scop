@@ -1,6 +1,8 @@
-#include "Model.hpp"
+#include "Scene.hpp"
 
-Model::Model(std::string modelName, Vector cameraPos) {
+Scene::Scene(std::string modelName, Vector cameraPos) {
+	stateName = SceneState;
+    
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
@@ -128,11 +130,11 @@ Model::Model(std::string modelName, Vector cameraPos) {
     glEnableVertexAttribArray(2);
 }
 
-Model::~Model(void) {
+Scene::~Scene(void) {
     delete shader;
 }
 
-void    Model::parseModel(std::string &modelName) {
+void    Scene::parseModel(std::string &modelName) {
     std::string filePath = "assets/models/" + modelName + ".obj";
 
     #ifdef _WIN32
@@ -193,7 +195,7 @@ void    Model::parseModel(std::string &modelName) {
     }
 }
 
-std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
+std::vector<VertexIndex>    Scene::parseFaceVertex(std::string line) {
     std::vector <VertexIndex> result;
 
     std::istringstream iss(line);
@@ -236,7 +238,7 @@ std::vector<VertexIndex>    Model::parseFaceVertex(std::string line) {
     return result;
 }
 
-void    Model::parseMaterial(void) {
+void    Scene::parseMaterial(void) {
     std::string filePath = "./assets/materials/" + material.name;
 
     #ifdef _WIN32
@@ -277,7 +279,7 @@ void    Model::parseMaterial(void) {
         }
     }
 }
-void    Model::render(Vulpes3D::Matrix4x4 view) {
+void    Scene::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -287,13 +289,13 @@ void    Model::render(Vulpes3D::Matrix4x4 view) {
     shader->useShader();
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.data()); //OpenGL expects matrix in Column major "GL_TRUE"
-    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data()); //OpenGL expects matrix in Column major "GL_TRUE"
     glBindVertexArray(VAO);
 
     glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 }
 
-void    Model::update(float deltaTime) {
+void    Scene::update(float deltaTime) {
     float speed = 5.0f;
     float target = textureToggle ? 1.0f : 0.0f;
     if (abs(blend - target) > 0.01f) {
@@ -302,7 +304,7 @@ void    Model::update(float deltaTime) {
     }
 }
 
-void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullptr) {
+void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullptr, Camera *camera) {
     // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
@@ -363,6 +365,10 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullpt
     }
 }
 
-void    Model::mouseMove(Uint8, InputManager*) {
+void    Scene::mouseMove(Uint8, InputManager*) {
+
+}
+
+void    Scene::handleInput(void) {
 
 }

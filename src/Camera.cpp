@@ -1,4 +1,5 @@
 #include "Camera.hpp"
+#include "InputManager.hpp"
 
 Camera::Camera(Vector position, Vector front, Vector up) {
     cameraPosition = position;
@@ -41,7 +42,7 @@ Vulpes3D::Matrix4x4   Camera::getView(void) {
     return (view.lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp));
 }
 
-void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager *) {
+void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager*, Camera* ) {
     float velocity = movementSpeed * deltaTime;
 
     if (InputDetector::getInstance()->isKeyPressed(key)) {

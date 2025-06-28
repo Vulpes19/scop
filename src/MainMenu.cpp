@@ -3,6 +3,7 @@
 MainMenu::MainMenu(void)
 {
     std::cout << "currently Main Menu state" << std::endl;
+	stateName = MainMenuState;
 
 	numButtons = 2;
 	selectedIndex = 1;
@@ -18,7 +19,6 @@ MainMenu::MainMenu(void)
 		0, 1, 3,  // first triangle
 		1, 2, 3   // second triangle
 	};
-	stateName = MainMenuState;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
@@ -113,7 +113,7 @@ MainMenu::MainMenu(void)
 MainMenu::~MainMenu(void)
 {}
 
-void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
+void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
 {
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
 	{

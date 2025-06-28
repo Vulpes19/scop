@@ -2,7 +2,7 @@
 
 #include "State.hpp"
 #include <vector>
-#include "InputObserver.hpp"
+#include "InputManager.hpp"
 
 class StatesManager
 {
