@@ -13,6 +13,10 @@ Matrix4x4::~Matrix4x4(void) {
 Matrix4x4    Matrix4x4::identity(void) {
     Matrix4x4 matrix;
 
+    // std::cout << "=================" << std::endl;
+    // std::cout << "IDENTITY" << std::endl;
+    // std::cout << "=================" << std::endl;
+
     for (int row = 0; row < 4; row++) {
         for (int col = 0; col < 4; col++) {
             matrix.mat[row][col] = (col == row) ? 1.0f : 0.0f;
@@ -24,10 +28,12 @@ Matrix4x4    Matrix4x4::identity(void) {
 }
 
 Matrix4x4   &Matrix4x4::translate(Vector vec) {
-    mat[0][3] += vec.x;
-    mat[1][3] += vec.y;
-    mat[2][3] += vec.z;
-    // matrix.mat[3][3] = 1.0f;
+    // mat[0][3] += vec.x;
+    // mat[1][3] += vec.y;
+    // mat[2][3] += vec.z;
+    mat[3][0] += vec.x;  // Changed from mat[0][3]
+    mat[3][1] += vec.y;  // Changed from mat[1][3]
+    mat[3][2] += vec.z;
     // std::cout << "=================" << std::endl;
     // std::cout << "TRANSLATION" << std::endl;
     // std::cout << "=================" << std::endl;
@@ -116,6 +122,19 @@ Matrix4x4   &Matrix4x4::perspective(float fov, float aspect, float near_plane, f
     //     }
     //     std::cout << std::endl;
     // }
+    return *this;
+}
+
+Matrix4x4& Matrix4x4::ortho(float left, float right, float bottom, float top, float near, float far) {
+
+    mat[0][0] = 2.0f / (right - left);
+    mat[1][1] = 2.0f / (top - bottom);
+    mat[2][2] = -2.0f / (far - near);
+    mat[3][0] = -(right + left) / (right - left);
+    mat[3][1] = -(top + bottom) / (top - bottom);
+    mat[3][2] = -(far + near) / (far - near);
+    mat[3][3] = 1.0f;
+
     return *this;
 }
 

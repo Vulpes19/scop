@@ -62,7 +62,13 @@ Model::Model(std::string modelName, Vector cameraPos) {
         max.z = std::max(max.z, vec.z);
     }
     center = (min + max) / 2.0f;
-    shader = new Shader();
+    #ifdef _WIN32
+        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
+    #elif __APPLE__
+        shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
+    #elif __linux__
+        shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
+    #endif
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
     shader->createShader();
@@ -296,14 +302,14 @@ void    Model::update(float deltaTime) {
     }
 }
 
-void    Model::keyDown(SDL_Scancode key, float deltaTime) {
+void    Model::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullptr) {
     // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             // std::cout << "rotating on X" << std::endl;
             angle += 5.0f;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
@@ -311,7 +317,7 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             angle += 5.0f;
             // std::cout << "rotating on Y" << std::endl;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
@@ -319,7 +325,7 @@ void    Model::keyDown(SDL_Scancode key, float deltaTime) {
             // std::cout << "rotating on Z" << std::endl;
             angle += 5.0f;
             model.translate(-center);
-            model.identity();
+            model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
