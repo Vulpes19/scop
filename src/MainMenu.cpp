@@ -3,6 +3,7 @@
 MainMenu::MainMenu(void)
 {
     std::cout << "currently Main Menu state" << std::endl;
+	stateName = MainMenuState;
 
 	numButtons = 2;
 	selectedIndex = 1;
@@ -14,18 +15,10 @@ MainMenu::MainMenu(void)
 		500.0f, 300.0f, 0.0f,   0.0f, 1.0f,
 	};
 
-	float exitVertices[] = {
-		// Position for exit button with UV coordinates
-		740.0f, 400.0f, 0.0f,   1.0f, 1.0f,  // Different Y positions
-		740.0f, 350.0f, 0.0f,   1.0f, 0.0f,
-		500.0f, 350.0f, 0.0f,   0.0f, 0.0f,
-		500.0f, 400.0f, 0.0f,   0.0f, 1.0f,
-	};
 	unsigned int indices[] = {  
 		0, 1, 3,  // first triangle
 		1, 2, 3   // second triangle
 	};
-	stateName = MainMenuState;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
@@ -120,7 +113,7 @@ MainMenu::MainMenu(void)
 MainMenu::~MainMenu(void)
 {}
 
-void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
+void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
 {
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
 	{
@@ -141,10 +134,10 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input)
 		if (key == SDL_SCANCODE_RETURN && selectedIndex == 1)
 		{
 			std::cout << "scenes menu is pushed" << std::endl;
-			StatesManager::getInstance()->addState(new LevelMenu());
-			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
-			if (levelObserver)
-				input->addObserver(levelObserver);
+			StatesManager::getInstance()->addState(new ListScenesMenu());
+			InputObserver* scenesObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
+			if (scenesObserver)
+				input->addObserver(scenesObserver);
 			else
 				throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
 		}

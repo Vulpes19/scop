@@ -19,12 +19,12 @@ void	InputManager::eraseObserver(InputObserver* observer)
 	std::cout << "after : observers nbr " << observers.size() << std::endl;
 }
 
-void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManager *input)
+void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
 {
 	for (auto observer : observers)
 	{
 		if (observer)
-			observer->keyDown(key, deltaTime, input);
+			observer->keyDown(key, deltaTime, input, camera);
 	}
 }
 

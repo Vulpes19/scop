@@ -7,11 +7,13 @@
 #include "TextureLoader.hpp"
 #include "Matrix.hpp"
 #include <vector>
-#include "InputObserver.hpp"
+#include "Camera.hpp"
 #include "InputDetector.hpp"
 #include <sstream>
 #include <algorithm>
 #include <string>
+#include "State.hpp"
+#include "StatesManager.hpp"
 
 
 struct VertexIndex {
@@ -51,16 +53,17 @@ struct Material {
     int     illum; // Illumination model
 };
 
-class Model : public InputObserver {
+class Scene : public State, public InputObserver {
     public:
-        Model(std::string, Vector);
-        ~Model(void);
+        Scene(std::string, Vector);
+        ~Scene(void);
         void    parseModel(std::string&);
         std::vector<VertexIndex>    parseFaceVertex(std::string);
         void    parseMaterial(void);
-        void    render(Vulpes3D::Matrix4x4 view);
-        void    update(float deltaTime);
-        void	keyDown(SDL_Scancode, float, InputManager*) override;
+		void    handleInput(void) override;
+        void    render(Vulpes3D::Matrix4x4 view) override;
+        void    update(float deltaTime) override;
+        void	keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr) override;
         void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
         struct Mesh mesh;

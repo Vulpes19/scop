@@ -6,7 +6,7 @@
 enum STATES {
 	NoState,
 	MainMenuState,
-	ListObjectsState,
+	ListScenesMenuState,
 	SceneState
 };
 

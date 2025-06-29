@@ -78,7 +78,7 @@ void    Shader::setUniform(const char *uniform, GLint id) {
     glUniform1i(glGetUniformLocation(shaderProgram, uniform), id);
 }
 
-void    Shader::setUniform(const char *uniform, const Vector &vec) {
+void    Shader::setUniform(const char *uniform, const Vector vec) {
     GLint location = glGetUniformLocation(shaderProgram, uniform);
     glUniform3f(location, vec.x, vec.y, vec.z);
 }

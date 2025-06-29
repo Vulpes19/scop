@@ -60,7 +60,7 @@ void    App::handleInput(void) {
 		switch (event.type)
 		{
 			case SDL_KEYDOWN:
-				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime, input);
+				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime, input, camera);
 				break;
 			case SDL_QUIT:
 				running = false;
