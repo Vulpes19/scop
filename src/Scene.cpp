@@ -298,13 +298,18 @@ void    Scene::render(Vulpes3D::Matrix4x4 view) {
 void    Scene::update(float deltaTime) {
     float speed = 5.0f;
     float target = textureToggle ? 1.0f : 0.0f;
+    float epsilon = 0.01f;
     if (abs(blend - target) > 0.01f) {
         blend += (target - blend) * deltaTime * speed;
+        if (std::abs(blend - target) <= epsilon) {
+            blend = target;
+        }
+        std::cout << "blend: " << blend << std::endl;
         shader->setUniform("blend", blend);
     }
 }
 
-void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullptr, Camera *camera) {
+void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, Camera *camera) {
     // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
@@ -362,6 +367,10 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* = nullpt
                 std::cout << blend << std::endl;
             }
         }
+        if (key == SDL_SCANCODE_ESCAPE) {
+			StatesManager::getInstance()->removeState(input);
+			return ;
+		}
     }
 }
 

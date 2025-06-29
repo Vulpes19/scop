@@ -141,7 +141,6 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 				throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
 		}
 		if (key == SDL_SCANCODE_ESCAPE) {
-			std::cout << "ESC" << std::endl;
 			StatesManager::getInstance()->removeState(input);
 			return ;
 		}

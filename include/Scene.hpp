@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <string>
 #include "State.hpp"
+#include "StatesManager.hpp"
 
 
 struct VertexIndex {
