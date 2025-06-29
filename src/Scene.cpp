@@ -7,15 +7,26 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     if (material.isMaterial)
         parseMaterial();
     
-    colors.push_back(Vector(255.0f, 0.0f, 0.0f));
-    colors.push_back(Vector(0.0f, 255.0f, 0.0f));
-    colors.push_back(Vector(0.0f, 0.0f, 255.0f));
+    colors.push_back(Vector(1.0f, 0.0f, 0.0f)); // Red
+    colors.push_back(Vector(0.0f, 1.0f, 0.0f)); // Green
+    colors.push_back(Vector(0.0f, 0.0f, 1.0f)); // Blue
+    colors.push_back(Vector(1.0f, 1.0f, 0.0f)); // Yellow
+    colors.push_back(Vector(1.0f, 0.0f, 1.0f)); // Magenta
+    colors.push_back(Vector(0.0f, 1.0f, 1.0f)); // Cyan
+    colors.push_back(Vector(1.0f, 0.5f, 0.0f)); // Orange
+
+    int colorIndex = 0;
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
         v1.position = mesh.vertices[face.v1.v - 1];
         v2.position = mesh.vertices[face.v2.v - 1];
         v3.position = mesh.vertices[face.v3.v - 1];
+
+        Vector faceColor = colors[colorIndex % colors.size()];
+        v1.color = faceColor;
+        v2.color = faceColor;
+        v3.color = faceColor;
 
         if (!mesh.textureCoord.empty() && face.v1.isText)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
@@ -49,6 +60,8 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
         vertexBuffer.push_back(v1);
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
+        
+        colorIndex++;
     }
     for (const Vertex v : vertexBuffer) {
     }
@@ -118,6 +131,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
 
+    // Verticies
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
 
@@ -125,9 +139,13 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
     glEnableVertexAttribArray(1);
 
-    // // Normal
+    // Normal
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(2);
+
+    // Color
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(3);
 }
 
 Scene::~Scene(void) {

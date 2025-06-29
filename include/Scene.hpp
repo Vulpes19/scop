@@ -29,9 +29,10 @@ struct Face {
 };
 
 struct Vertex {
-    Vector position;
-    Vector normal;
+    Vector  position;
+    Vector  normal;
     Vector2 texCoord;
+    Vector  color;
 };
 
 struct Mesh {

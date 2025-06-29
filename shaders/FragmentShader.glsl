@@ -6,6 +6,7 @@ in vec3 vertexColor; // the input variable from the vertex shader (same name and
 in vec2 TexCoord;
 in vec3 FragPos;
 in vec3 Normal;
+in vec3 Color;
 
 uniform sampler2D texture1;
 
@@ -40,5 +41,6 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
-    FragColor = vec4(result, 1.0);
+    //FragColor = vec4(result, 1.0);
+    FragColor = vec4(Color, 1.0);
 } 
