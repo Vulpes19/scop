@@ -87,4 +87,5 @@ class Scene : public State, public InputObserver {
         size_t                colorIndex = 0;
         float                 angle = 0.0f;
         Vector                center;
+        int                   normalColoring = 0;
 };

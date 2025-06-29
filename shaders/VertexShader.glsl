@@ -15,7 +15,7 @@ uniform mat4 view;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos, 1.0); // passing vec3 to vec4's constructor
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(model * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TexCoord = aTexCoord;

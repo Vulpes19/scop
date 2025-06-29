@@ -123,7 +123,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
     shader->setUniform("flatColor", colors[0]);
     shader->setUniform("blend", blend);
-    // shader->setUniform("lightPos", Vector(1.2f, 1.0f, 2.0f));
+    shader->setUniform("normalColoring", normalColoring);
     shader->setUniform("viewPos", cameraPos);
     shader->setUniform("texture1", 0);
 
@@ -368,6 +368,10 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
         }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
+        }
+        if (key == SDL_SCANCODE_N) {
+            normalColoring = normalColoring == 0 ? 1 : 0;
+            shader->setUniform("normalColoring", normalColoring);
         }
         // Change texture to one of the textures under /assets/textures or change colors
         if (key == SDL_SCANCODE_K) {
