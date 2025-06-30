@@ -120,7 +120,8 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     shader->setUniform("material.specular", material.Ks);
     shader->setUniform("material.shininess", material.Ns);
     shader->setUniform("lightColor", Vector(1.0f, 1.0f, 1.0f));
-    shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    // shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    shader->setUniform("lightDir", Vector(0.5f, -0.5f, 0.7f));
     shader->setUniform("flatColor", colors[0]);
     shader->setUniform("blend", blend);
     shader->setUniform("normalColoring", normalColoring);
@@ -300,7 +301,7 @@ void    Scene::parseMaterial(void) {
 void    Scene::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
@@ -355,16 +356,16 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
             model.translate(center);
         }
         if (key == SDL_SCANCODE_UP) {
-            model.translate(Vector(0.0f, deltaTime * 10.0f, 0.0f));
+            model.translate(Vector(0.0f, deltaTime * 20.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_DOWN) {
-            model.translate(Vector(0.0f, -deltaTime * 10.0f, 0.0f));
+            model.translate(Vector(0.0f, -deltaTime * 20.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_RIGHT) {
-            model.translate(Vector(deltaTime * 10.0f, 0.0f, 0.0f));
+            model.translate(Vector(deltaTime * 20.0f, 0.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_LEFT) {
-            model.translate(Vector(-deltaTime * 10.0f, 0.0f, 0.0f));
+            model.translate(Vector(-deltaTime * 20.0f, 0.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;

@@ -116,15 +116,16 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 		if (key == SDL_SCANCODE_RIGHT)
 		{
 			selectedIndex += 1;
-			if (selectedIndex == 6)
+			if (selectedIndex == modelPaths.size())
 				selectedIndex = 0;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
 		if (key == SDL_SCANCODE_LEFT)
 		{
 			selectedIndex -= 1;
+			// if (selectedIndex > modelPaths.size() - 1)
 			if (selectedIndex == -1)
-				selectedIndex = 5;
+				selectedIndex = modelPaths.size() - 1;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
 		if (key == SDL_SCANCODE_RETURN)
@@ -208,7 +209,11 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			buttonId += 1;
+			if (modelPaths.size() - 1 < buttonId)
+				break;
 		}
+		// if (modelPaths.size() < buttonId)
+		// 	break;
 	}
 	// // start button
 	// shader->setUniform("button", 1);
