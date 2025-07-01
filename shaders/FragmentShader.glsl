@@ -1,11 +1,11 @@
 #version 330 core
 
 out vec4 FragColor;
-  
-in vec3 vertexColor; // the input variable from the vertex shader (same name and same type)  
+
 in vec2 TexCoord;
 in vec3 FragPos;
 in vec3 Normal;
+in vec3 Color;
 
 uniform sampler2D texture1;
 
@@ -22,6 +22,7 @@ uniform vec3 lightDir;
 uniform vec3 viewPos;
 uniform vec3 flatColor;
 uniform float blend;
+uniform int normalColoring;
 void main()
 {
     vec3 textureColor = texture(texture1, TexCoord).rgb;
@@ -39,6 +40,7 @@ void main()
     vec3 specular = baseColor * (spec * material.specular);
 
     vec3 result = ambient + diffuse + specular;
+    result = max(result, baseColor * 0.3); 
 
-    FragColor = vec4(result, 1.0);
+    FragColor = (normalColoring == 1) ? vec4(result, 1.0) : vec4(Color, 1.0);
 } 

@@ -29,9 +29,10 @@ struct Face {
 };
 
 struct Vertex {
-    Vector position;
-    Vector normal;
+    Vector  position;
+    Vector  normal;
     Vector2 texCoord;
+    Vector  color;
 };
 
 struct Mesh {
@@ -86,4 +87,5 @@ class Scene : public State, public InputObserver {
         size_t                colorIndex = 0;
         float                 angle = 0.0f;
         Vector                center;
+        int                   normalColoring = 0;
 };

@@ -7,15 +7,26 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     if (material.isMaterial)
         parseMaterial();
     
-    colors.push_back(Vector(255.0f, 0.0f, 0.0f));
-    colors.push_back(Vector(0.0f, 255.0f, 0.0f));
-    colors.push_back(Vector(0.0f, 0.0f, 255.0f));
+    colors.push_back(Vector(1.0f, 0.0f, 0.0f)); // Red
+    colors.push_back(Vector(0.0f, 1.0f, 0.0f)); // Green
+    colors.push_back(Vector(0.0f, 0.0f, 1.0f)); // Blue
+    colors.push_back(Vector(1.0f, 1.0f, 0.0f)); // Yellow
+    colors.push_back(Vector(1.0f, 0.0f, 1.0f)); // Magenta
+    colors.push_back(Vector(0.0f, 1.0f, 1.0f)); // Cyan
+    colors.push_back(Vector(1.0f, 0.5f, 0.0f)); // Orange
+
+    int colorIndex = 0;
     for (const Face &face : mesh.faces) {
         Vertex v1, v2, v3;
         
         v1.position = mesh.vertices[face.v1.v - 1];
         v2.position = mesh.vertices[face.v2.v - 1];
         v3.position = mesh.vertices[face.v3.v - 1];
+
+        Vector faceColor = colors[colorIndex % colors.size()];
+        v1.color = faceColor;
+        v2.color = faceColor;
+        v3.color = faceColor;
 
         if (!mesh.textureCoord.empty() && face.v1.isText)
             v1.texCoord = mesh.textureCoord[face.v1.vt - 1];
@@ -49,6 +60,8 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
         vertexBuffer.push_back(v1);
         vertexBuffer.push_back(v2);
         vertexBuffer.push_back(v3);
+        
+        colorIndex++;
     }
     for (const Vertex v : vertexBuffer) {
     }
@@ -107,10 +120,11 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     shader->setUniform("material.specular", material.Ks);
     shader->setUniform("material.shininess", material.Ns);
     shader->setUniform("lightColor", Vector(1.0f, 1.0f, 1.0f));
-    shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    // shader->setUniform("lightDir", Vector(-0.2f, -1.0f, -0.3f));
+    shader->setUniform("lightDir", Vector(0.5f, -0.5f, 0.7f));
     shader->setUniform("flatColor", colors[0]);
     shader->setUniform("blend", blend);
-    // shader->setUniform("lightPos", Vector(1.2f, 1.0f, 2.0f));
+    shader->setUniform("normalColoring", normalColoring);
     shader->setUniform("viewPos", cameraPos);
     shader->setUniform("texture1", 0);
 
@@ -118,6 +132,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
 
+    // Verticies
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
 
@@ -125,9 +140,13 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
     glEnableVertexAttribArray(1);
 
-    // // Normal
+    // Normal
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(2);
+
+    // Color
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(3);
 }
 
 Scene::~Scene(void) {
@@ -282,7 +301,7 @@ void    Scene::parseMaterial(void) {
 void    Scene::render(Vulpes3D::Matrix4x4 view) {
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
@@ -337,19 +356,23 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
             model.translate(center);
         }
         if (key == SDL_SCANCODE_UP) {
-            model.translate(Vector(0.0f, deltaTime * 10.0f, 0.0f));
+            model.translate(Vector(0.0f, deltaTime * 20.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_DOWN) {
-            model.translate(Vector(0.0f, -deltaTime * 10.0f, 0.0f));
+            model.translate(Vector(0.0f, -deltaTime * 20.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_RIGHT) {
-            model.translate(Vector(deltaTime * 10.0f, 0.0f, 0.0f));
+            model.translate(Vector(deltaTime * 20.0f, 0.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_LEFT) {
-            model.translate(Vector(-deltaTime * 10.0f, 0.0f, 0.0f));
+            model.translate(Vector(-deltaTime * 20.0f, 0.0f, 0.0f));
         }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
+        }
+        if (key == SDL_SCANCODE_N) {
+            normalColoring = normalColoring == 0 ? 1 : 0;
+            shader->setUniform("normalColoring", normalColoring);
         }
         // Change texture to one of the textures under /assets/textures or change colors
         if (key == SDL_SCANCODE_K) {
