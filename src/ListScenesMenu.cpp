@@ -63,7 +63,9 @@ ListScenesMenu::ListScenesMenu(void)
 }
 
 ListScenesMenu::~ListScenesMenu(void)
-{}
+{
+	delete shader;
+}
 
 void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
 {

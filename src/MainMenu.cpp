@@ -113,6 +113,7 @@ MainMenu::~MainMenu(void)
 {
 	glDeleteTextures(1, &text1);
 	glDeleteTextures(1, &text2);
+	delete shader;
 }
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)

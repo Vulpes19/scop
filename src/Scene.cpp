@@ -76,6 +76,10 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
         max.y = std::max(max.y, vec.y);
         max.z = std::max(max.z, vec.z);
     }
+    Vector size = max - min;
+    float desiredSize = 2.0f;
+    float maxExtent = std::max({ size.x, size.y, size.z });
+    float scaleFactor = desiredSize / maxExtent; // e.g., desiredSize = 2.0f
     center = (min + max) / 2.0f;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
@@ -113,6 +117,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     model = Vulpes3D::Matrix4x4::identity(); 
     projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     
+    model.scale(Vector(scaleFactor, scaleFactor, scaleFactor));
     model.translate(-center);
     
     shader->setUniform("material.ambient", material.Ka);
