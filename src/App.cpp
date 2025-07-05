@@ -44,13 +44,14 @@ App::App(void) {
 	 else
 		 throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__)); 
 	
-	 //init App stuff
 	running = true;
 }
 
 App::~App(void) {
 	SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
+	delete camera;
+	delete input;
     SDL_Quit();
 }
 

@@ -74,7 +74,6 @@ class Scene : public State, public InputObserver {
         unsigned int VBO; //vertex buffer object we need to store verticies in GPU memory
         unsigned int VAO;
         unsigned int EBO;
-        Shader      *shader;
         Vulpes3D::Matrix4x4   model;;
         Vulpes3D::Matrix4x4   projection;
         unsigned int          modelLoc;

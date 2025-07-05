@@ -24,7 +24,6 @@ void FontLoader::readFontDir(void) {
     while ((dir = readdir(directory)) != NULL) {
         if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
             std::string fullPath = "/assets/fonts/" + std::string(dir->d_name);
-            std::cout << fullPath << std::endl;
             loadFont(fullPath.c_str());
         }
     }
@@ -47,7 +46,6 @@ void    FontLoader::loadFont(const char *path) {
     std::string strPath = std::string(path);
     std::string ID = strPath.substr(14);
     ID.erase(ID.find(".ttf"));
-    std::cout << ID << std::endl;
 
     fonts[ID] = font;
 }
