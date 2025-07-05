@@ -2,8 +2,6 @@
 
 ListScenesMenu::ListScenesMenu(void)
 {
-    std::cout << "currently ListScenesMenu state" << std::endl;
-
 	getModels();
 	selectedIndex = 0;
 	float vertices[] = {
@@ -48,48 +46,6 @@ ListScenesMenu::ListScenesMenu(void)
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-    // // glGenTextures(1, &text1);
-    // // glBindTexture(GL_TEXTURE_2D, text1);
-    
-	// // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Repeat horizontally
-    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Repeat vertically
-    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // Minification
-    // // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	// // // exit(1);
-	// // SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
-    // // if (!image)
-	// // 	throw(ErrorHandler("Error failed to get button texture `start`", __FILE__, __LINE__));
-
-	// // // Convert to a consistent format RGB
-	// // SDL_Surface* converted = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
-	// // if (!converted) {
-	// // 	throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
-	// // }
-	// // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted->w, converted->h, 0, 
-    // //          GL_RGB, GL_UNSIGNED_BYTE, converted->pixels);
-	// // 	glGenerateMipmap(GL_TEXTURE_2D);
-		
-	// // glGenTextures(1, &text2);
-	// // glBindTexture(GL_TEXTURE_2D, text2);
-	
-	// // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Horizontal clamp
-	// // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Vertical clamp
-	// // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    // Smooth minify
-	// // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
-	
-	// // SDL_Surface *image2 = TextureLoader::getInstance()->getButton("exit");
-	// // if (!image2)
-	// // 	throw(ErrorHandler("Error failed to get button texture `exit`", __FILE__, __LINE__));
-	// // // Convert to a consistent format RGB
-	// // SDL_Surface* converted2 = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
-	// // if (!converted2) {
-	// // 	throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
-	// // }
-    // // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted2->w, converted2->h, 0, 
-    // //          GL_RGB, GL_UNSIGNED_BYTE, converted2->pixels);
-    // // glGenerateMipmap(GL_TEXTURE_2D);
-
 	shader->useShader();
 	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
 	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
@@ -116,21 +72,19 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 		if (key == SDL_SCANCODE_RIGHT)
 		{
 			selectedIndex += 1;
-			if (selectedIndex == modelPaths.size())
+			if (selectedIndex == modelPaths.size() || selectedIndex == 6)
 				selectedIndex = 0;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
 		if (key == SDL_SCANCODE_LEFT)
 		{
 			selectedIndex -= 1;
-			// if (selectedIndex > modelPaths.size() - 1)
 			if (selectedIndex == -1)
 				selectedIndex = modelPaths.size() - 1;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
 		if (key == SDL_SCANCODE_RETURN)
 		{
-			std::cout << "scenes menu is pushed" << std::endl;
 			std::string strPath = modelPaths[selectedIndex];
 			std::string ID = strPath.substr(16);
 			ID.erase(ID.find(".obj"));
@@ -149,32 +103,7 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 }
 
 void	ListScenesMenu::mouseMove(Uint8 mouseButton, InputManager* input)
-{
-	// int x, y;
-	// SDL_GetMouseState(&x, &y);
-	// if (x >= 540 && x <= 740 && y >= 300 && y <= 380 && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
-	// {
-	// 	buttonsState["Play"] = FOCUS_ON;
-	// 	buttonsState["Quit"] = FOCUS_OFF;
-	// 	if (mouseButton == SDL_BUTTON_LEFT)
-	// 	{
-	// 		std::cout << "level menu is pushed" << std::endl;
-	// 		StatesManager::getInstance()->addState(new LevelMenu());
-	// 		InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
-	// 		if (levelObserver)
-	// 			input->addObserver(levelObserver);
-	// 		else
-	// 			throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
-	// 	}
-	// }
-	// if (x >= 540 && x <= 740 && y >= 400 && y <= 480)
-	// {
-	// 	buttonsState["Play"] = FOCUS_OFF;
-	// 	buttonsState["Quit"] = FOCUS_ON;
-	// 	if (mouseButton == SDL_BUTTON_LEFT)
-	// 		StatesManager::getInstance()->removeState(input);
-	// }
-}
+{}
 
 void	ListScenesMenu::handleInput(void)
 {
@@ -191,8 +120,6 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 	glDisable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // // glActiveTexture(GL_TEXTURE0);
-	// // glBindTexture(GL_TEXTURE_2D, text1);
     shader->useShader();
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
     glBindVertexArray(VAO);
@@ -209,27 +136,10 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			buttonId += 1;
-			if (modelPaths.size() - 1 < buttonId)
+			if (modelPaths.size() - 1 < buttonId || 5 < buttonId)
 				break;
 		}
-		// if (modelPaths.size() < buttonId)
-		// 	break;
 	}
-	// // start button
-	// shader->setUniform("button", 1);
-	// model = model.identity();
-	// model.translate(Vector(0.0f, 0.0f, 0.0f));
-	// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	// // exit button
-	// shader->useShader();
-	// shader->setUniform("button", 2);
-    // // glActiveTexture(GL_TEXTURE0);
-	// // glBindTexture(GL_TEXTURE_2D, text2);
-	// model2 = Vulpes3D::Matrix4x4::identity();
-	// model2.translate(Vector(0.0f, 100.0f, 0.0f));
-	// glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
-	// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void ListScenesMenu::getModels(void) {
@@ -242,7 +152,6 @@ void ListScenesMenu::getModels(void) {
     while ((dir = readdir(directory)) != NULL) {
         if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
             std::string fullPath = "./assets/models/" + std::string(dir->d_name);
-            std::cout << fullPath << std::endl;
             modelPaths.push_back(fullPath);
         }
     }

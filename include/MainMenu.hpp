@@ -23,5 +23,4 @@ class MainMenu : public State, public InputObserver
 	private:
         unsigned int          text1;
         unsigned int          text2;
-		// std::map<std::string, BUTTON_STATE> buttonsState;
 };

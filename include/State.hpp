@@ -13,7 +13,7 @@ enum STATES {
 class State
 {
 	public:
-		virtual ~State() {};
+		virtual ~State();
 		virtual void	handleInput(void) = 0;
 		virtual void	update(float = 0) = 0;
 		virtual void	render(Vulpes3D::Matrix4x4 = Vulpes3D::Matrix4x4()) = 0;

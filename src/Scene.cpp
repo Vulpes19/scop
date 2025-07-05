@@ -113,8 +113,8 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     model = Vulpes3D::Matrix4x4::identity(); 
     projection.perspective(Vulpes3D::to_radians(45.0f), 1280.0f / 640.0f, 0.1f, 100.0f);
     
-    model.translate(center);
-
+    model.translate(-center);
+    
     shader->setUniform("material.ambient", material.Ka);
     shader->setUniform("material.diffuse", material.Kd);
     shader->setUniform("material.specular", material.Ks);
@@ -127,30 +127,32 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     shader->setUniform("normalColoring", normalColoring);
     shader->setUniform("viewPos", cameraPos);
     shader->setUniform("texture1", 0);
-
+    
     modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
     viewLoc = shader->getUniformLoc("view");
-
+    
     // Verticies
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
-
+    
     // TexCoord
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
     glEnableVertexAttribArray(1);
-
+    
     // Normal
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(2);
-
+    
     // Color
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
     glEnableVertexAttribArray(3);
+
+    // SDL_FreeSurface(image);
 }
 
 Scene::~Scene(void) {
-    delete shader;
+    glDeleteTextures(1, &texture1);
 }
 
 void    Scene::parseModel(std::string &modelName) {
@@ -258,6 +260,7 @@ std::vector<VertexIndex>    Scene::parseFaceVertex(std::string line) {
 }
 
 void    Scene::parseMaterial(void) {
+    material.name.erase(material.name.find_last_not_of("\r\n") + 1);
     std::string filePath = "./assets/materials/" + material.name;
 
     #ifdef _WIN32
@@ -323,7 +326,6 @@ void    Scene::update(float deltaTime) {
         if (std::abs(blend - target) <= epsilon) {
             blend = target;
         }
-        std::cout << "blend: " << blend << std::endl;
         shader->setUniform("blend", blend);
     }
 }
@@ -332,25 +334,22 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
     // (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
-            // std::cout << "rotating on X" << std::endl;
             angle += 5.0f;
-            model.translate(-center);
+            // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
         if (key == SDL_SCANCODE_O) {
             angle += 5.0f;
-            // std::cout << "rotating on Y" << std::endl;
-            model.translate(-center);
+            // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
         }
         if (key == SDL_SCANCODE_P) {
-            // std::cout << "rotating on Z" << std::endl;
             angle += 5.0f;
-            model.translate(-center);
+            // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
             model.translate(center);
@@ -381,13 +380,11 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
                         GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
                 glGenerateMipmap(GL_TEXTURE_2D);
-                std::cout << blend << std::endl;
             }
             else {
                 colorIndex += 1;
                 if (colorIndex == colors.size()) colorIndex = 0;
                 shader->setUniform("flatColor", colors[colorIndex]);
-                std::cout << blend << std::endl;
             }
         }
         if (key == SDL_SCANCODE_ESCAPE) {

@@ -2,7 +2,6 @@
 
 MainMenu::MainMenu(void)
 {
-    std::cout << "currently Main Menu state" << std::endl;
 	stateName = MainMenuState;
 
 	numButtons = 2;
@@ -26,9 +25,6 @@ MainMenu::MainMenu(void)
     #elif __linux__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
 	#endif
-	// label.addButtonType("MainMenu", 80, 200, { 136, 8, 8, 255 });
-	// buttonsState["Play"] = FOCUS_ON;
-	// buttonsState["Quit"] = FOCUS_OFF;
 
     shader->compileShader(GL_VERTEX_SHADER);
     shader->compileShader(GL_FRAGMENT_SHADER);
@@ -60,7 +56,6 @@ MainMenu::MainMenu(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // Minification
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	// exit(1);
 	SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
     if (!image)
 		throw(ErrorHandler("Error failed to get button texture `start`", __FILE__, __LINE__));
@@ -108,10 +103,17 @@ MainMenu::MainMenu(void)
 	modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
 
+	SDL_FreeSurface(image);
+	SDL_FreeSurface(image2);
+	SDL_FreeSurface(converted);
+	SDL_FreeSurface(converted2);
 }
 
 MainMenu::~MainMenu(void)
-{}
+{
+	glDeleteTextures(1, &text1);
+	glDeleteTextures(1, &text2);
+}
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
 {
@@ -122,18 +124,14 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, C
 			// selectedIndex = (selectedIndex - 1 + numButtons) % numButtons;
 			selectedIndex = 1;
 			shader->setUniform("selectedIndex", selectedIndex);
-			std::cout << "UP" << std::endl;
 		}
 		if (key == SDL_SCANCODE_DOWN)
 		{
-			std::cout << "DOWN" << std::endl;
-			// selectedIndex = (selectedIndex + 1) % numButtons;
 			selectedIndex = 2;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
 		if (key == SDL_SCANCODE_RETURN && selectedIndex == 1)
 		{
-			std::cout << "scenes menu is pushed" << std::endl;
 			StatesManager::getInstance()->addState(new ListScenesMenu());
 			InputObserver* scenesObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
 			if (scenesObserver)
@@ -150,30 +148,6 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, C
 
 void	MainMenu::mouseMove(Uint8 mouseButton, InputManager* input)
 {
-	// int x, y;
-	// SDL_GetMouseState(&x, &y);
-	// if (x >= 540 && x <= 740 && y >= 300 && y <= 380 && StatesManager::getInstance()->getCurrentState() == MainMenuState)
-	// {
-	// 	buttonsState["Play"] = FOCUS_ON;
-	// 	buttonsState["Quit"] = FOCUS_OFF;
-	// 	if (mouseButton == SDL_BUTTON_LEFT)
-	// 	{
-	// 		std::cout << "level menu is pushed" << std::endl;
-	// 		StatesManager::getInstance()->addState(new LevelMenu());
-	// 		InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
-	// 		if (levelObserver)
-	// 			input->addObserver(levelObserver);
-	// 		else
-	// 			throw(ErrorHandler("Can't cast state to an observer, causes the input to not work: ", __FILE__, __LINE__));
-	// 	}
-	// }
-	// if (x >= 540 && x <= 740 && y >= 400 && y <= 480)
-	// {
-	// 	buttonsState["Play"] = FOCUS_OFF;
-	// 	buttonsState["Quit"] = FOCUS_ON;
-	// 	if (mouseButton == SDL_BUTTON_LEFT)
-	// 		StatesManager::getInstance()->removeState(input);
-	// }
 }
 
 void	MainMenu::handleInput(void)

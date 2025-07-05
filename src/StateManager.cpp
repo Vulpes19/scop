@@ -17,17 +17,13 @@ StatesManager::~StatesManager(void)
 
 void	StatesManager::addState(State* state)
 {
-	std::cout << "adding state: " << state->getStateName() << std::endl;
-	std::cout << "states size: " << states.size() << std::endl;
 	states.push_back(state);
-	std::cout << "after adding states size: " << states.size() << std::endl;
 }
 
 void	StatesManager::removeState(InputManager *input)
 {
 	if (!states.empty())
 	{
-		std::cout << "states number " << states.size() << std::endl;
 		InputObserver* observer = dynamic_cast<InputObserver*>(states.back());
 		if (observer) {
 			input->eraseObserver(observer);

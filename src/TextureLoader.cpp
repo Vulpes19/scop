@@ -11,7 +11,7 @@ TextureLoader::TextureLoader(void) {
 }
 
 TextureLoader::~TextureLoader(void) {
-    
+    textures.clear();
 }
 
 void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
@@ -24,7 +24,6 @@ void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
     while ((dir = readdir(directory)) != NULL) {
         if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
             std::string fullPath = std::string(dirPath) + std::string(dir->d_name);
-            std::cout << fullPath << std::endl;
             if (type == TEXTURE)
                 loadImage(fullPath.c_str());
             else
@@ -71,7 +70,7 @@ void    TextureLoader::loadButtons(const char *path) {
         throw(ErrorHandler("Error failed to extract image name from path", __FILE__, __LINE__));
 
     std::string ID = strPath.substr(lastSlash + 1, lastDot - lastSlash - 1); // "start"
-    std::cout << ID << std::endl;
+
     buttons[ID] = image;
 }
 

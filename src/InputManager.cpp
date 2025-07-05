@@ -13,10 +13,8 @@ void	InputManager::addObserver(InputObserver* newObserver)
 
 void	InputManager::eraseObserver(InputObserver* observer)
 {
-	std::cout << "before : observers nbr " << observers.size() << std::endl;
 	auto it = std::find(observers.begin(), observers.end(), observer);
 	observers.erase(it);
-	std::cout << "after : observers nbr " << observers.size() << std::endl;
 }
 
 void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
