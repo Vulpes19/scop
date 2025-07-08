@@ -32,7 +32,3 @@ void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager*, Camera
             cameraPosition += cameraFront.crossProduct(cameraUp).normalize() * velocity;
     }
 }
-
-void    Camera::mouseMove(Uint8, InputManager* ) {
-
-}

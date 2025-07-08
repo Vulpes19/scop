@@ -65,7 +65,6 @@ class Scene : public State, public InputObserver {
         void    render(Vulpes3D::Matrix4x4 view) override;
         void    update(float deltaTime) override;
         void	keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr) override;
-        void	mouseMove(Uint8, InputManager* = nullptr) override;
     private:
         struct Mesh mesh;
         struct Material material;
