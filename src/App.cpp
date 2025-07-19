@@ -50,7 +50,7 @@ App::App(void) {
 App::~App(void) {
 	SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
-	delete camera;
+	// delete camera;
 	delete input;
     SDL_Quit();
 }

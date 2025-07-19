@@ -25,11 +25,3 @@ void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManag
 			observer->keyDown(key, deltaTime, input, camera);
 	}
 }
-
-void	InputManager::notifyOnMouseMove(Uint8 mouseButton)
-{
-	for (auto observer : observers)
-	{
-		observer->mouseMove(mouseButton, this);
-	}
-}

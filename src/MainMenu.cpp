@@ -94,6 +94,7 @@ MainMenu::MainMenu(void)
 	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
 	shader->setUniform("selectedIndex", selectedIndex);
 	shader->setUniform("button", 1);
+	shader->setUniform("textTexture", text2);
 
 	projection = Vulpes3D::Matrix4x4::identity();
     model = Vulpes3D::Matrix4x4::identity(); 
@@ -117,6 +118,7 @@ MainMenu::~MainMenu(void)
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
 {
+	(void)deltaTime;
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == MainMenuState)
 	{
 		if (key == SDL_SCANCODE_UP)
@@ -146,9 +148,6 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, C
 	}
 }
 
-void	MainMenu::mouseMove(Uint8 mouseButton, InputManager* input)
-{
-}
 
 void	MainMenu::handleInput(void)
 {
@@ -165,16 +164,17 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	glDisable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_2D, text1);
     shader->useShader();
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
     glBindVertexArray(VAO);
 	
 	// start button
 	shader->setUniform("button", 1);
+    // glActiveTexture(GL_TEXTURE0);
+	// glBindTexture(GL_TEXTURE_2D, text1);
+	// shader->setUniform("textTexture", 0);
 	model = model.identity();
-	model.translate(Vector(0.0f, 0.0f, 0.0f));
+	model.translate(Vector(0.0f, 50.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -183,8 +183,9 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	shader->setUniform("button", 2);
     // glActiveTexture(GL_TEXTURE0);
 	// glBindTexture(GL_TEXTURE_2D, text2);
+	// shader->setUniform("textTexture", 0);
 	model2 = Vulpes3D::Matrix4x4::identity();
-	model2.translate(Vector(0.0f, 100.0f, 0.0f));
+	model2.translate(Vector(0.0f, 200.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

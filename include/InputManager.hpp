@@ -17,7 +17,6 @@ class InputManager
 		void	addObserver(InputObserver*);
 		void	eraseObserver(InputObserver*);
 		void	notifyOnKeyDown(SDL_Scancode, float, InputManager* = nullptr, Camera* = nullptr);
-		void	notifyOnMouseMove(Uint8);
 	private:
 		std::vector<InputObserver*> observers;
 };

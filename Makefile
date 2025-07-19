@@ -15,7 +15,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 CXX = g++
-CXXFLAGS = $(PLATFORM_DEFINES)
+CXXFLAGS = -Wall -Wextra -Werror $(PLATFORM_DEFINES)
 INCLUDE = -I$(HOMEBREW_PATH)/include/SDL2 -I./include -I./ext/glad/include/glad -I./ext/glad/include
 LDFLAGS = $(LIBS)
 

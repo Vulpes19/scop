@@ -63,8 +63,6 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
         
         colorIndex++;
     }
-    for (const Vertex v : vertexBuffer) {
-    }
     // Getting model's center
     Vector min = mesh.vertices[0];
     Vector max = mesh.vertices[0];
@@ -76,7 +74,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
         max.y = std::max(max.y, vec.y);
         max.z = std::max(max.z, vec.z);
     }
-    center = (min + max) / 2.0f;
+    Vector size = max - min;
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
     #elif __APPLE__
@@ -267,11 +265,14 @@ void    Scene::parseMaterial(void) {
         filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
     #endif
 
+    std::cout << filePath << std::endl;
     std::ifstream file(filePath.c_str());
 
     if (!file.is_open())
-        throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
+        return ;
+        // throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
     
+    std::cout << "im here lmao" << std::endl;
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
@@ -331,28 +332,28 @@ void    Scene::update(float deltaTime) {
 }
 
 void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, Camera *camera) {
-    // (void)deltaTime;
+    (void)camera;
+    (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
             angle += 5.0f;
             // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
-            model.translate(center);
         }
         if (key == SDL_SCANCODE_O) {
             angle += 5.0f;
             // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
-            model.translate(center);
+            // model.translate(center);
         }
         if (key == SDL_SCANCODE_P) {
             angle += 5.0f;
             // model.translate(-center);
             model = Vulpes3D::Matrix4x4::identity();
             model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
-            model.translate(center);
+            // model.translate(center);
         }
         if (key == SDL_SCANCODE_UP) {
             model.translate(Vector(0.0f, deltaTime * 20.0f, 0.0f));
@@ -365,6 +366,12 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
         }
         if (key == SDL_SCANCODE_LEFT) {
             model.translate(Vector(-deltaTime * 20.0f, 0.0f, 0.0f));
+        }
+        if (key == SDL_SCANCODE_B) {
+            model.scale(Vector(1.1f, 1.1f, 1.1f));
+        }
+        if (key == SDL_SCANCODE_V) {
+            model.scale(Vector(0.9f, 0.9f, 0.9f));
         }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
@@ -394,9 +401,6 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
     }
 }
 
-void    Scene::mouseMove(Uint8, InputManager*) {
-
-}
 
 void    Scene::handleInput(void) {
 

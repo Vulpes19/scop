@@ -67,12 +67,13 @@ ListScenesMenu::~ListScenesMenu(void)
 
 void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
 {
+	(void)deltaTime;
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	{
 		if (key == SDL_SCANCODE_RIGHT)
 		{
 			selectedIndex += 1;
-			if (selectedIndex == modelPaths.size() || selectedIndex == 6)
+			if ((size_t)selectedIndex == modelPaths.size() || selectedIndex == 6)
 				selectedIndex = 0;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
@@ -102,8 +103,6 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 	}
 }
 
-void	ListScenesMenu::mouseMove(Uint8 mouseButton, InputManager* input)
-{}
 
 void	ListScenesMenu::handleInput(void)
 {
@@ -136,7 +135,7 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			buttonId += 1;
-			if (modelPaths.size() - 1 < buttonId || 5 < buttonId)
+			if (modelPaths.size() - 1 < (size_t)buttonId || 5 < (size_t)buttonId)
 				break;
 		}
 	}

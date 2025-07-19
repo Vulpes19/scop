@@ -16,7 +16,6 @@ class Camera : public InputObserver {
         ~Camera(void);
         Vulpes3D::Matrix4x4 getView(void);
         void	keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr) override;
-        void	mouseMove(Uint8, InputManager* = nullptr) override;
         Vector  getPosition(void) const { return cameraPosition; };
     private:
         Vector cameraPosition; 
