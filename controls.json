@@ -1,0 +1,64 @@
+{
+  "controls": [
+    {
+      "key": "I",
+      "action": "Rotate model around X-axis"
+    },
+    {
+      "key": "O",
+      "action": "Rotate model around Y-axis"
+    },
+    {
+      "key": "P",
+      "action": "Rotate model around Z-axis"
+    },
+    {
+      "key": "UP",
+      "action": "Move model upward"
+    },
+    {
+      "key": "DOWN",
+      "action": "Move model downward"
+    },
+    {
+      "key": "RIGHT",
+      "action": "Move model right"
+    },
+    {
+      "key": "LEFT",
+      "action": "Move model left"
+    },
+    {
+      "key": "B",
+      "action": "Scale model up"
+    },
+    {
+      "key": "V",
+      "action": "Scale model down"
+    },
+    {
+      "key": "T",
+      "action": "Toggle texture display"
+    },
+    {
+      "key": "N",
+      "action": "Toggle normal coloring mode"
+    },
+    {
+      "key": "K",
+      "action": "Switch texture or color"
+    },
+    {
+      "key": "ESCAPE",
+      "action": "Return to main menu / exit scene"
+    },
+    {
+      "key": "W",
+      "action": "Move camera forward"
+    },
+    {
+      "key": "S",
+      "action": "Move camera backwards"
+    }
+  ]
+}

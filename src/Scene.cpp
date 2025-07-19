@@ -371,7 +371,7 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
             model.scale(Vector(1.1f, 1.1f, 1.1f));
         }
         if (key == SDL_SCANCODE_V) {
-            model.scale(Vector(0.1f, 0.1f, 0.1f));
+            model.scale(Vector(0.9f, 0.9f, 0.9f));
         }
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
