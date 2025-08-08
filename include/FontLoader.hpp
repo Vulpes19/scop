@@ -19,7 +19,7 @@ class FontLoader {
         static FontLoader* getInstance(void);
         void readFontDir(void);
         void loadFont(const char *);
-        SDL_Surface *getFont(std::string, const char *);
+        SDL_Surface *getFont(std::string, const char *, SDL_Color);
     private:
         static FontLoader* instance;
         FontLoader(void);

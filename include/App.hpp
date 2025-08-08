@@ -19,6 +19,7 @@ class App {
         bool	isRunning(void) const;
     private:
 		SDL_Window* window = nullptr;
+        SDL_Renderer* renderer = nullptr;
         SDL_GLContext context = nullptr;
 		SDL_Event	event;
         Camera  *camera;

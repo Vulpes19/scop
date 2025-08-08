@@ -3,6 +3,7 @@
 Scene::Scene(std::string modelName, Vector cameraPos) {
 	stateName = SceneState;
     
+    std::cout << modelName << std::endl;
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
@@ -302,7 +303,7 @@ void    Scene::parseMaterial(void) {
         }
     }
 }
-void    Scene::render(Vulpes3D::Matrix4x4 view) {
+void    Scene::render(Vulpes3D::Matrix4x4 view, SDL_Renderer*) {
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

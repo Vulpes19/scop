@@ -34,15 +34,15 @@ Matrix4x4   &Matrix4x4::translate(Vector vec) {
     mat[3][0] += vec.x;  // Changed from mat[0][3]
     mat[3][1] += vec.y;  // Changed from mat[1][3]
     mat[3][2] += vec.z;
-    std::cout << "=================" << std::endl;
-    std::cout << "TRANSLATION" << std::endl;
-    std::cout << "=================" << std::endl;
-    for (int row = 0; row < 4; row++) {
-        for (int col = 0; col < 4; col++) {
-            std::cout << mat[row][col] << " ";
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "=================" << std::endl;
+    // std::cout << "TRANSLATION" << std::endl;
+    // std::cout << "=================" << std::endl;
+    // for (int row = 0; row < 4; row++) {
+    //     for (int col = 0; col < 4; col++) {
+    //         std::cout << mat[row][col] << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     
     return *this;
 }

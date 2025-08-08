@@ -2,6 +2,7 @@
 
 #include "Matrix.hpp"
 #include "Shader.hpp"
+#include "Label.hpp"
 
 enum STATES {
 	NoState,
@@ -16,12 +17,13 @@ class State
 		virtual ~State();
 		virtual void	handleInput(void) = 0;
 		virtual void	update(float = 0) = 0;
-		virtual void	render(Vulpes3D::Matrix4x4 = Vulpes3D::Matrix4x4()) = 0;
+		virtual void	render(Vulpes3D::Matrix4x4 = Vulpes3D::Matrix4x4(), SDL_Renderer *renderer = nullptr) = 0;
 		enum STATES		getStateName(void) const { return (stateName); }
 	protected:
 		// UILabel		label;
         Shader  *shader;
 		enum STATES stateName = NoState;
+		Label	label;
         Vulpes3D::Matrix4x4   model;
         Vulpes3D::Matrix4x4   model2;
         Vulpes3D::Matrix4x4   projection;

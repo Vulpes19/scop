@@ -50,11 +50,10 @@ void    FontLoader::loadFont(const char *path) {
     fonts[ID] = font;
 }
 
-SDL_Surface *FontLoader::getFont(std::string ID, const char *text) {
+SDL_Surface *FontLoader::getFont(std::string ID, const char *text, SDL_Color color) {
     auto it = fonts.find(ID);
 
     if (it != fonts.end()) {
-        SDL_Color color = {255, 255, 255, 0};
         SDL_Surface* surface = TTF_RenderText_Blended(fonts[ID], text, color);
         if (surface == NULL)
             throw(ErrorHandler("Error loading text from font <" + ID + ">" + std::string(TTF_GetError()), __FILE__, __LINE__));

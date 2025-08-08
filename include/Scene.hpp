@@ -62,7 +62,7 @@ class Scene : public State, public InputObserver {
         std::vector<VertexIndex>    parseFaceVertex(std::string);
         void    parseMaterial(void);
 		void    handleInput(void) override;
-        void    render(Vulpes3D::Matrix4x4 view) override;
+        void    render(Vulpes3D::Matrix4x4 view, SDL_Renderer *) override;
         void    update(float deltaTime) override;
         void	keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr) override;
     private:

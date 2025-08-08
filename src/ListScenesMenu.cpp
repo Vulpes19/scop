@@ -114,8 +114,9 @@ void	ListScenesMenu::update(float)
 
 }
 
-void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
+void	ListScenesMenu::render(Vulpes3D::Matrix4x4, SDL_Renderer *renderer)
 {
+	(void)renderer;
 	glDisable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
