@@ -16,7 +16,7 @@ class MainMenu : public State, public InputObserver
 		MainMenu(void);
 		~MainMenu(void);
 		void handleInput(void) override;
-		void keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr) override;
+		void keyDown(SDL_Scancode, float, InputManager*, Camera* = nullptr, SDL_Renderer* = nullptr) override;
 		void update(float = 0) override;
 		void render(Vulpes3D::Matrix4x4 view, SDL_Renderer *renderer) override;
 	private:

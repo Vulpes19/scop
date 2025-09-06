@@ -3,6 +3,7 @@
 Scene::Scene(std::string modelName, Vector cameraPos) {
 	stateName = SceneState;
     
+    std::cout << "entering scene state" << std::endl;
     std::cout << modelName << std::endl;
     parseModel(modelName);
     if (material.isMaterial)
@@ -273,7 +274,6 @@ void    Scene::parseMaterial(void) {
         return ;
         // throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
     
-    std::cout << "im here lmao" << std::endl;
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
@@ -303,7 +303,8 @@ void    Scene::parseMaterial(void) {
         }
     }
 }
-void    Scene::render(Vulpes3D::Matrix4x4 view, SDL_Renderer*) {
+void    Scene::render(Vulpes3D::Matrix4x4 view, SDL_Renderer* renderer) {
+    std::cout << "im rendering now" << std::endl;
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -332,7 +333,7 @@ void    Scene::update(float deltaTime) {
     }
 }
 
-void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, Camera *camera) {
+void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, Camera *camera, SDL_Renderer *) {
     (void)camera;
     (void)deltaTime;
     if (InputDetector::getInstance()->isKeyPressed(key)) {

@@ -18,7 +18,7 @@ Vulpes3D::Matrix4x4   Camera::getView(void) {
     return (view.lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp));
 }
 
-void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager*, Camera* ) {
+void    Camera::keyDown(SDL_Scancode key, float deltaTime, InputManager*, Camera*, SDL_Renderer* ) {
     float velocity = movementSpeed * deltaTime;
 
     if (InputDetector::getInstance()->isKeyPressed(key)) {

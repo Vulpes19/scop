@@ -2,93 +2,60 @@
 
 ListScenesMenu::ListScenesMenu(void)
 {
-	getModels();
-	selectedIndex = 0;
-	float vertices[] = {
-		// pos         // texCoord
-		300.0f, 150.0f, 0.0f,  1.0f, 1.0f,
-		300.0f, 0.0f,   0.0f,  1.0f, 0.0f,
-		0.0f,   0.0f,   0.0f,  0.0f, 0.0f,
-		0.0f,   150.0f, 0.0f,  0.0f, 1.0f,
-	};
-	unsigned int indices[] = {  
-		0, 1, 3,  // first triangle
-		1, 2, 3   // second triangle
-	};
 	stateName = ListScenesMenuState;
-    #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
-    #elif __APPLE__
-        shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
-    #elif __linux__
-        shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
-	#endif
 
-    shader->compileShader(GL_VERTEX_SHADER);
-    shader->compileShader(GL_FRAGMENT_SHADER);
-    shader->createShader();
+	getModels();
+	label.addButtonType("ScenesMenu", 250, 150, { 242, 213, 248, 255 }, { 255, 255, 255, 255 });
 
-	glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	shader->useShader();
-	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
-	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
-	shader->setUniform("selectedIndex", selectedIndex);
-	shader->setUniform("button", 1);
-
-	projection = Vulpes3D::Matrix4x4::identity();
-    model = Vulpes3D::Matrix4x4::identity(); 
-
-	projection.ortho(0.0f, WIDTH, HEIGHT, 0.0f, -1.0f, 1.0f);
-
-	modelLoc = shader->getUniformLoc("model");
-    projectionLoc = shader->getUniformLoc("projection");
-
+	selectedIndex = 0;
+	for (int i = 0; i < modelPaths.size(); i++) {
+        buttonsState[i] = (i == 0) ? HOVER_ON : HOVER_OFF;
+    }
 }
 
 ListScenesMenu::~ListScenesMenu(void)
 {}
 
-void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
+void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera, SDL_Renderer *renderer)
 {
 	(void)deltaTime;
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	{
+		std::cout << "YOLO" << std::endl;
 		if (key == SDL_SCANCODE_RIGHT)
 		{
-			selectedIndex += 1;
-			if ((size_t)selectedIndex == modelPaths.size() || selectedIndex == 6)
+			std::cout << "hello" << std::endl;
+			buttonsState[selectedIndex] = HOVER_OFF;
+			auto it = buttonsState.find(selectedIndex + 1);
+			if (it != buttonsState.end())
+				selectedIndex += 1;
+			else {
 				selectedIndex = 0;
-			shader->setUniform("selectedIndex", selectedIndex);
+			}
+			buttonsState[selectedIndex] = HOVER_ON;
 		}
 		if (key == SDL_SCANCODE_LEFT)
 		{
-			selectedIndex -= 1;
-			if (selectedIndex == -1)
+			buttonsState[selectedIndex] = HOVER_OFF;
+			auto it = buttonsState.find(selectedIndex - 1);
+			if (it != buttonsState.end())
+				selectedIndex -= 1;
+			else {
 				selectedIndex = modelPaths.size() - 1;
-			shader->setUniform("selectedIndex", selectedIndex);
+			}
+			buttonsState[selectedIndex] = HOVER_ON;
 		}
 		if (key == SDL_SCANCODE_RETURN)
 		{
+			std::cout << "ENTER " << selectedIndex << std::endl;
+			// exit(1);
 			std::string strPath = modelPaths[selectedIndex];
 			std::string ID = strPath.substr(16);
 			ID.erase(ID.find(".obj"));
+			std::cout << "loading: " << ID << std::endl;
+			std::cout << "entering 2" << std::endl;
+			// SDL_RenderClear(renderer);
+			// SDL_DestroyRenderer(renderer);
 			StatesManager::getInstance()->addState(new Scene(ID, camera->getPosition()));
 			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
 			if (levelObserver)
@@ -116,30 +83,31 @@ void	ListScenesMenu::update(float)
 
 void	ListScenesMenu::render(Vulpes3D::Matrix4x4, SDL_Renderer *renderer)
 {
-	(void)renderer;
-	glDisable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shader->useShader();
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
-    glBindVertexArray(VAO);
-	
-	int buttonId = 0;
-	for (int j = 0; j < 2; j++) {
-		for (int i = 0; i < 3; ++i) {
-			model = Vulpes3D::Matrix4x4::identity();
-			float yPadding = (j == 0) ? 50.0f : 400.0f;
-			model.translate(Vector(i * 500.0f, yPadding, 0.0f));
-			// shader->setUniform("model", model);
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
-			shader->setUniform("button", buttonId);
-			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			buttonId += 1;
-			if (modelPaths.size() - 1 < (size_t)buttonId || 5 < (size_t)buttonId)
-				break;
-		}
-	}
+	// SDL_RenderClear(renderer);
+
+	// int modelIndex = 0;
+	// for (int j = 0; j < 2; j++) {
+	// 	for (int i = 0; i < 3; ++i) {
+	// 		float yPadding = (j == 0) ? 50.0f : 400.0f;
+	// 		std::string modelName = modelPaths[modelIndex].substr(16);
+    // 		modelName.erase(modelName.find(".obj"));
+	// 		// std::cout << modelName << std::endl;
+	// 		label.render(
+	// 			i * 500,           // X pos
+	// 			yPadding,    	   // Y pos
+	// 			2,                 // Text size
+	// 			"ScenesMenu",      // Button type
+	// 			modelName,         // Button text
+	// 			{2, 52, 54, 255},  // text color
+	// 			"Prisma",          // font name
+	// 			renderer, 
+	// 			buttonsState[modelIndex]); // State of button (Hover_on or Hover_off)
+	// 		modelIndex += 1;
+	// 		if (modelPaths.size() - 1 < (size_t)modelIndex || 5 < (size_t)modelIndex)
+	// 			break;
+	// 	}
+	// }
+	// SDL_SetRenderDrawColor(renderer, 2, 52, 54, 255);
 }
 
 void ListScenesMenu::getModels(void) {

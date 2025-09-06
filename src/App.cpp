@@ -65,7 +65,7 @@ void    App::handleInput(void) {
 		switch (event.type)
 		{
 			case SDL_KEYDOWN:
-				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime, input, camera);
+				input->notifyOnKeyDown(event.key.keysym.scancode, deltaTime, input, camera, renderer);
 				break;
 			case SDL_QUIT:
 				running = false;
@@ -94,8 +94,8 @@ void    App::render(void) {
 			StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 			SDL_RenderPresent(renderer);
 		else {
+			// std::cout << "swapping windows" << std::endl;
 			SDL_GL_SwapWindow(window);
-			std::cout << "im here" << std::endl;
 		}
 	}
 }

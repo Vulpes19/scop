@@ -17,11 +17,11 @@ void	InputManager::eraseObserver(InputObserver* observer)
 	observers.erase(it);
 }
 
-void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
+void	InputManager::notifyOnKeyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera, SDL_Renderer *renderer)
 {
 	for (auto observer : observers)
 	{
 		if (observer)
-			observer->keyDown(key, deltaTime, input, camera);
+			observer->keyDown(key, deltaTime, input, camera, renderer);
 	}
 }
