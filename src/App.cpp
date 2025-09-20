@@ -94,6 +94,13 @@ void    App::render(void) {
 			StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 			SDL_RenderPresent(renderer);
 		else {
+			if (renderer) {
+				std::cout << "hello, renderer destroyed" << std::endl;
+				SDL_DestroyRenderer(renderer);
+				renderer = nullptr;
+				SDL_GL_MakeCurrent(window, context);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			}
 			// std::cout << "swapping windows" << std::endl;
 			SDL_GL_SwapWindow(window);
 		}

@@ -2,6 +2,7 @@
 
 ListScenesMenu::ListScenesMenu(void)
 {
+    std::cout << "im rendering now menu" << std::endl;
 	stateName = ListScenesMenuState;
 
 	getModels();
@@ -21,10 +22,8 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 	(void)deltaTime;
 	if (InputDetector::getInstance()->isKeyPressed(key) && StatesManager::getInstance()->getCurrentState() == ListScenesMenuState)
 	{
-		std::cout << "YOLO" << std::endl;
 		if (key == SDL_SCANCODE_RIGHT)
 		{
-			std::cout << "hello" << std::endl;
 			buttonsState[selectedIndex] = HOVER_OFF;
 			auto it = buttonsState.find(selectedIndex + 1);
 			if (it != buttonsState.end())
@@ -48,14 +47,13 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 		if (key == SDL_SCANCODE_RETURN)
 		{
 			std::cout << "ENTER " << selectedIndex << std::endl;
-			// exit(1);
 			std::string strPath = modelPaths[selectedIndex];
 			std::string ID = strPath.substr(16);
 			ID.erase(ID.find(".obj"));
 			std::cout << "loading: " << ID << std::endl;
 			std::cout << "entering 2" << std::endl;
-			// SDL_RenderClear(renderer);
-			// SDL_DestroyRenderer(renderer);
+			SDL_DestroyRenderer(renderer);
+			renderer = nullptr;
 			StatesManager::getInstance()->addState(new Scene(ID, camera->getPosition()));
 			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
 			if (levelObserver)
@@ -83,31 +81,31 @@ void	ListScenesMenu::update(float)
 
 void	ListScenesMenu::render(Vulpes3D::Matrix4x4, SDL_Renderer *renderer)
 {
-	// SDL_RenderClear(renderer);
+	SDL_RenderClear(renderer);
 
-	// int modelIndex = 0;
-	// for (int j = 0; j < 2; j++) {
-	// 	for (int i = 0; i < 3; ++i) {
-	// 		float yPadding = (j == 0) ? 50.0f : 400.0f;
-	// 		std::string modelName = modelPaths[modelIndex].substr(16);
-    // 		modelName.erase(modelName.find(".obj"));
-	// 		// std::cout << modelName << std::endl;
-	// 		label.render(
-	// 			i * 500,           // X pos
-	// 			yPadding,    	   // Y pos
-	// 			2,                 // Text size
-	// 			"ScenesMenu",      // Button type
-	// 			modelName,         // Button text
-	// 			{2, 52, 54, 255},  // text color
-	// 			"Prisma",          // font name
-	// 			renderer, 
-	// 			buttonsState[modelIndex]); // State of button (Hover_on or Hover_off)
-	// 		modelIndex += 1;
-	// 		if (modelPaths.size() - 1 < (size_t)modelIndex || 5 < (size_t)modelIndex)
-	// 			break;
-	// 	}
-	// }
-	// SDL_SetRenderDrawColor(renderer, 2, 52, 54, 255);
+	int modelIndex = 0;
+	for (int j = 0; j < 2; j++) {
+		for (int i = 0; i < 3; ++i) {
+			float yPadding = (j == 0) ? 50.0f : 400.0f;
+			std::string modelName = modelPaths[modelIndex].substr(16);
+    		modelName.erase(modelName.find(".obj"));
+			// std::cout << modelName << std::endl;
+			label.render(
+				i * 500,           // X pos
+				yPadding,    	   // Y pos
+				2,                 // Text size
+				"ScenesMenu",      // Button type
+				modelName,         // Button text
+				{2, 52, 54, 255},  // text color
+				"Prisma",          // font name
+				renderer, 
+				buttonsState[modelIndex]); // State of button (Hover_on or Hover_off)
+			modelIndex += 1;
+			if (modelPaths.size() - 1 < (size_t)modelIndex || 5 < (size_t)modelIndex)
+				break;
+		}
+	}
+	SDL_SetRenderDrawColor(renderer, 2, 52, 54, 255);
 }
 
 void ListScenesMenu::getModels(void) {

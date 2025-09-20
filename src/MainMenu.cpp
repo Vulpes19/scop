@@ -2,6 +2,7 @@
 
 MainMenu::MainMenu(void)
 {
+    std::cout << "im rendering now main menu" << std::endl;
 	stateName = MainMenuState;
 
 	label.addButtonType("MainMenu", 200, 80, { 242, 213, 248, 255 }, { 255, 255, 255, 255 });
@@ -59,19 +60,19 @@ void	MainMenu::update(float)
 
 void	MainMenu::render(Vulpes3D::Matrix4x4, SDL_Renderer *renderer)
 {
-	// SDL_RenderClear(renderer);
+	SDL_RenderClear(renderer);
 
-	// label.render(
-	// 	(WIDTH - 200) / 2, // X pos
-	// 	300,    		   // Y pos
-	// 	2,                 // Text size
-	// 	"MainMenu",        // Button type
-	// 	"Start",           // Button text
-	// 	{2, 52, 54, 255},  // text color
-	// 	"Prisma",          // font name
-	// 	renderer, 
-	// 	buttonsState["Start"]); // State of button (Hover_on or Hover_off)
-	// label.render((WIDTH - 200) / 2, 400, 2, "MainMenu", "Quit", {2, 52, 54, 255}, "Prisma", renderer, buttonsState["Quit"]);
+	label.render(
+		(WIDTH - 200) / 2, // X pos
+		300,    		   // Y pos
+		2,                 // Text size
+		"MainMenu",        // Button type
+		"Start",           // Button text
+		{2, 52, 54, 255},  // text color
+		"Prisma",          // font name
+		renderer, 
+		buttonsState["Start"]); // State of button (Hover_on or Hover_off)
+	label.render((WIDTH - 200) / 2, 400, 2, "MainMenu", "Quit", {2, 52, 54, 255}, "Prisma", renderer, buttonsState["Quit"]);
 
-	// SDL_SetRenderDrawColor(renderer, 2, 52, 54, 255);
+	SDL_SetRenderDrawColor(renderer, 2, 52, 54, 255);
 }

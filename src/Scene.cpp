@@ -3,6 +3,7 @@
 Scene::Scene(std::string modelName, Vector cameraPos) {
 	stateName = SceneState;
     
+    std::cout << "im rendering now scene" << std::endl;
     std::cout << "entering scene state" << std::endl;
     std::cout << modelName << std::endl;
     parseModel(modelName);
@@ -304,7 +305,6 @@ void    Scene::parseMaterial(void) {
     }
 }
 void    Scene::render(Vulpes3D::Matrix4x4 view, SDL_Renderer* renderer) {
-    std::cout << "im rendering now" << std::endl;
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
