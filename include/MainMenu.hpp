@@ -6,6 +6,7 @@
 #include "TextureLoader.hpp"
 #include "StatesManager.hpp"
 #include "ListScenesMenu.hpp"
+#include "FontLoader.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640

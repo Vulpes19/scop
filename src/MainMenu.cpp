@@ -13,6 +13,20 @@ MainMenu::MainMenu(void)
 		500.0f, 250.0f, 0.0f,   0.0f, 0.0f,
 		500.0f, 300.0f, 0.0f,   0.0f, 1.0f,
 	};
+// 	float vertices[] = {
+//     // x, y, z         u, v
+//     740.0f, 300.0f, 0.0f,   1.0f, 0.0f,  // top-right -> u=1, v=0 (flipped)
+//     740.0f, 250.0f, 0.0f,   1.0f, 1.0f,  // bottom-right -> u=1, v=1 (flipped)
+//     500.0f, 250.0f, 0.0f,   0.0f, 1.0f,  // bottom-left -> u=0, v=1 (flipped)
+//     500.0f, 300.0f, 0.0f,   0.0f, 0.0f,  // top-left -> u=0, v=0 (flipped)
+// };
+// float vertices[] = {
+//     // Position your 71x34 text at (500,250)
+//     571.0f, 284.0f, 0.0f,   1.0f, 0.0f,  // (500+71, 250+34)
+//     571.0f, 250.0f, 0.0f,   1.0f, 1.0f,
+//     500.0f, 250.0f, 0.0f,   0.0f, 1.0f,
+//     500.0f, 284.0f, 0.0f,   0.0f, 0.0f,
+// };
 
 	unsigned int indices[] = {  
 		0, 1, 3,  // first triangle
@@ -48,46 +62,18 @@ MainMenu::MainMenu(void)
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-    glGenTextures(1, &text1);
-    glBindTexture(GL_TEXTURE_2D, text1);
     
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Repeat horizontally
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Repeat vertically
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // Minification
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
-    if (!image)
-		throw(ErrorHandler("Error failed to get button texture `start`", __FILE__, __LINE__));
-
-	// Convert to a consistent format RGB
-	SDL_Surface* converted = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
-	if (!converted) {
-		throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
+	// SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
+	text1 = FontLoader::getInstance()->getText("Prisma", "Start");
+    if (text1 == UINT_MAX) {
+		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
 	}
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted->w, converted->h, 0, 
-             GL_RGB, GL_UNSIGNED_BYTE, converted->pixels);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		
-	glGenTextures(1, &text2);
-	glBindTexture(GL_TEXTURE_2D, text2);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Horizontal clamp
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Vertical clamp
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);    // Smooth minify
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
-	
-	SDL_Surface *image2 = TextureLoader::getInstance()->getButton("exit");
-	if (!image2)
-		throw(ErrorHandler("Error failed to get button texture `exit`", __FILE__, __LINE__));
-	// Convert to a consistent format RGB
-	SDL_Surface* converted2 = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGB24, 0);
-	if (!converted2) {
-		throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
+	// glGenerateMipmap(GL_TEXTURE_2D);
+	text2 = FontLoader::getInstance()->getText("Prisma", "Exit");
+    if (text2 == UINT_MAX) {
+		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
 	}
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, converted2->w, converted2->h, 0, 
-             GL_RGB, GL_UNSIGNED_BYTE, converted2->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
+//   glGenerateMipmap(GL_TEXTURE_2D);
 
 	shader->useShader();
 	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
@@ -103,11 +89,6 @@ MainMenu::MainMenu(void)
 
 	modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
-
-	SDL_FreeSurface(image);
-	SDL_FreeSurface(image2);
-	SDL_FreeSurface(converted);
-	SDL_FreeSurface(converted2);
 }
 
 MainMenu::~MainMenu(void)
@@ -162,6 +143,8 @@ void	MainMenu::update(float)
 void	MainMenu::render(Vulpes3D::Matrix4x4)
 {
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->useShader();
@@ -170,22 +153,22 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	
 	// start button
 	shader->setUniform("button", 1);
-    // glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_2D, text1);
-	// shader->setUniform("textTexture", 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, text1);
+	shader->setUniform("textTexture", 0);
 	model = model.identity();
 	model.translate(Vector(0.0f, 50.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	// exit button
-	shader->useShader();
-	shader->setUniform("button", 2);
-    // glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_2D, text2);
-	// shader->setUniform("textTexture", 0);
-	model2 = Vulpes3D::Matrix4x4::identity();
-	model2.translate(Vector(0.0f, 200.0f, 0.0f));
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	// shader->useShader();
+	// shader->setUniform("button", 2);
+    // // glActiveTexture(GL_TEXTURE0);
+	// // glBindTexture(GL_TEXTURE_2D, text2);
+	// // shader->setUniform("textTexture", 0);
+	// model2 = Vulpes3D::Matrix4x4::identity();
+	// model2.translate(Vector(0.0f, 200.0f, 0.0f));
+	// glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
+	// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
