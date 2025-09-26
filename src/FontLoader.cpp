@@ -61,7 +61,7 @@ unsigned int FontLoader::nextPowerOfTwo(unsigned int n) {
     return p;
 }
 
-unsigned int    FontLoader::getText(std::string ID, const char *text) {
+unsigned int    FontLoader::getText(std::string ID, const char *text, int &textW, int &textH) {
     auto it = fonts.find(ID);
 
     if (it != fonts.end()) {
@@ -81,36 +81,21 @@ unsigned int    FontLoader::getText(std::string ID, const char *text) {
         int w = nextPowerOfTwo(surface->w);
         int h = nextPowerOfTwo(surface->h);
 
+        textW = surface->w;
+        textH = surface->h;
+        
         SDL_Surface *intermediary = SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
-        SDL_BlitSurface(surface, 0, intermediary, 0);
+
+        SDL_Rect destRect;
+        destRect.x = (w - surface->w) / 2;  // Center horizontally
+        destRect.y = (h - surface->h) / 2;  // Center vertically
+        destRect.w = surface->w;
+        destRect.h = surface->h;
+
+        SDL_BlitSurface(surface, 0, intermediary, &destRect);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, intermediary->pixels);
-        // GLenum format;
-        // if (surface->format->BytesPerPixel == 4) {
-        //     // Check byte order for RGBA vs BGRA
-        //     if (surface->format->Rmask == 0x000000ff) {
-        //         format = GL_RGBA;
-        //     } else {
-        //         format = GL_BGRA;
-        //     }
-        // } else if (surface->format->BytesPerPixel == 3) {
-        //     if (surface->format->Rmask == 0x000000ff) {
-        //         format = GL_RGB;
-        //     } else {
-        //         format = GL_BGR;
-        //     }
-        // } else {
-        //     std::cout << "Unsupported pixel format" << std::endl;
-        //     SDL_FreeSurface(surface);
-        //     return UINT_MAX;
-        // }
-        // if (surface == NULL)
-        //     throw(ErrorHandler("Error loading text from font <" + ID + ">" + std::string(TTF_GetError()), __FILE__, __LINE__));
-        // SDL_Surface* converted = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA32, 0);
-        // if (!converted)
-        //     throw(ErrorHandler("Failed to convert surface format", __FILE__, __LINE__));
-        // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, 
-        //      format, GL_UNSIGNED_BYTE, surface->pixels);
+    
         SDL_FreeSurface(surface);
 	    SDL_FreeSurface(intermediary);
         

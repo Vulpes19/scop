@@ -64,15 +64,15 @@ MainMenu::MainMenu(void)
 
     
 	// SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
-	text1 = FontLoader::getInstance()->getText("Prisma", "Start");
+	text1 = FontLoader::getInstance()->getText("Prisma", "Start", textW, textH);
     if (text1 == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
 	}
 	// glGenerateMipmap(GL_TEXTURE_2D);
-	text2 = FontLoader::getInstance()->getText("Prisma", "Exit");
-    if (text2 == UINT_MAX) {
-		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
-	}
+	// text2 = FontLoader::getInstance()->getText("Prisma", "Exit", textW, textH);
+    // if (text2 == UINT_MAX) {
+	// 	throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
+	// }
 //   glGenerateMipmap(GL_TEXTURE_2D);
 
 	shader->useShader();
@@ -89,6 +89,9 @@ MainMenu::MainMenu(void)
 
 	modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
+
+	offsetX = (300 - textW) / 2.0f;
+	offsetY = (80 - textH) / 2.0f;
 }
 
 MainMenu::~MainMenu(void)
