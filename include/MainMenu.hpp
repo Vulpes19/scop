@@ -25,6 +25,4 @@ class MainMenu : public State, public InputObserver
         unsigned int          text2;
 		int textW;
 		int textH;
-		float offsetX;
-		float offsetY;
 };

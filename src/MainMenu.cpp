@@ -68,6 +68,11 @@ MainMenu::MainMenu(void)
     if (text1 == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
 	}
+
+	text2 = FontLoader::getInstance()->getText("Prisma", "Exit", textW, textH);
+    if (text1 == UINT_MAX) {
+		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
+	}
 	// glGenerateMipmap(GL_TEXTURE_2D);
 	// text2 = FontLoader::getInstance()->getText("Prisma", "Exit", textW, textH);
     // if (text2 == UINT_MAX) {
@@ -90,8 +95,6 @@ MainMenu::MainMenu(void)
 	modelLoc = shader->getUniformLoc("model");
     projectionLoc = shader->getUniformLoc("projection");
 
-	offsetX = (300 - textW) / 2.0f;
-	offsetY = (80 - textH) / 2.0f;
 }
 
 MainMenu::~MainMenu(void)
@@ -165,13 +168,13 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
-	// shader->useShader();
-	// shader->setUniform("button", 2);
-    // // glActiveTexture(GL_TEXTURE0);
-	// // glBindTexture(GL_TEXTURE_2D, text2);
-	// // shader->setUniform("textTexture", 0);
-	// model2 = Vulpes3D::Matrix4x4::identity();
-	// model2.translate(Vector(0.0f, 200.0f, 0.0f));
-	// glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
-	// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	shader->useShader();
+	shader->setUniform("button", 2);
+    glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, text2);
+	shader->setUniform("textTexture", 0);
+	model2 = Vulpes3D::Matrix4x4::identity();
+	model2.translate(Vector(0.0f, 200.0f, 0.0f));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

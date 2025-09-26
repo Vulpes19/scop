@@ -38,7 +38,7 @@ FontLoader* FontLoader::getInstance(void)
 }
 
 void    FontLoader::loadFont(const char *path) {
-    TTF_Font* font = TTF_OpenFont(path, 24);
+    TTF_Font* font = TTF_OpenFont(path, 18);
     if (!font) {
         throw(ErrorHandler("Error failed to load font in path (" + std::string(path) + "): " + std::string(TTF_GetError()), __FILE__, __LINE__));
     }
@@ -72,8 +72,8 @@ unsigned int    FontLoader::getText(std::string ID, const char *text, int &textW
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
         SDL_Color color = {255, 255, 255, 0};
         SDL_Surface* surface = TTF_RenderText_Blended(fonts[ID], text, color);
