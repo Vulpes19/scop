@@ -61,7 +61,7 @@ unsigned int FontLoader::nextPowerOfTwo(unsigned int n) {
     return p;
 }
 
-unsigned int    FontLoader::getText(std::string ID, const char *text, int &textW, int &textH) {
+unsigned int    FontLoader::getText(std::string ID, const char *text) {
     auto it = fonts.find(ID);
 
     if (it != fonts.end()) {
@@ -80,9 +80,6 @@ unsigned int    FontLoader::getText(std::string ID, const char *text, int &textW
 
         int w = nextPowerOfTwo(surface->w);
         int h = nextPowerOfTwo(surface->h);
-
-        textW = surface->w;
-        textH = surface->h;
         
         SDL_Surface *intermediary = SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
 

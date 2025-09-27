@@ -126,7 +126,12 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 	int buttonId = 0;
 	for (int j = 0; j < 2; j++) {
 		for (int i = 0; i < 3; ++i) {
+			glActiveTexture(GL_TEXTURE0);
+			auto it = buttonTexts.find(modelPaths[buttonId]);
+			GLint text = it->second;
+			glBindTexture(GL_TEXTURE_2D, text);
 			model = Vulpes3D::Matrix4x4::identity();
+			std::cout << modelPaths[i] << " - " << i << " - " << it->first << std::endl;
 			float yPadding = (j == 0) ? 50.0f : 400.0f;
 			model.translate(Vector(i * 500.0f, yPadding, 0.0f));
 			// shader->setUniform("model", model);
@@ -150,7 +155,16 @@ void ListScenesMenu::getModels(void) {
     }
     while ((dir = readdir(directory)) != NULL) {
         if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
-            std::string fullPath = "./assets/models/" + std::string(dir->d_name);
+			std::string modelName = std::string(dir->d_name);
+			/* get full path of .obj model file */
+            std::string fullPath = "./assets/models/" + modelName;
+			/* load text texture for each button */
+			unsigned int text = FontLoader::getInstance()->getText("Prisma", modelName.c_str());
+			if (text == UINT_MAX) {
+				throw(ErrorHandler("Failed to get texture for: " + modelName + " - " + std::string(TTF_GetError()), __FILE__, __LINE__));
+			}
+			buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str());
+
             modelPaths.push_back(fullPath);
         }
     }

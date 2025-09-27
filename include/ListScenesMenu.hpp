@@ -7,6 +7,7 @@
 #include "TextureLoader.hpp"
 #include "StatesManager.hpp"
 #include "Scene.hpp"
+#include "FontLoader.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640
@@ -23,4 +24,5 @@ class ListScenesMenu : public State, public InputObserver
 		void getModels(void);
 	private:
 		std::vector<std::string> modelPaths;
+		std::map<std::string, GLint> buttonTexts;
 };

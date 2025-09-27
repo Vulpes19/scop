@@ -64,21 +64,15 @@ MainMenu::MainMenu(void)
 
     
 	// SDL_Surface *image = TextureLoader::getInstance()->getButton("start");
-	text1 = FontLoader::getInstance()->getText("Prisma", "Start", textW, textH);
+	text1 = FontLoader::getInstance()->getText("Prisma", "Start");
     if (text1 == UINT_MAX) {
-		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
+		throw(ErrorHandler("Failed to get texture for: Start - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
-	text2 = FontLoader::getInstance()->getText("Prisma", "Exit", textW, textH);
-    if (text1 == UINT_MAX) {
-		throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
+	text2 = FontLoader::getInstance()->getText("Prisma", "Exit");
+    if (text2 == UINT_MAX) {
+		throw(ErrorHandler("Failed to get texture for: Exit - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
-	// glGenerateMipmap(GL_TEXTURE_2D);
-	// text2 = FontLoader::getInstance()->getText("Prisma", "Exit", textW, textH);
-    // if (text2 == UINT_MAX) {
-	// 	throw(ErrorHandler("Failed to get texture: ", __FILE__, __LINE__));
-	// }
-//   glGenerateMipmap(GL_TEXTURE_2D);
 
 	shader->useShader();
 	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
@@ -150,7 +144,7 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->useShader();
