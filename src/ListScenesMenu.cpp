@@ -159,7 +159,7 @@ void ListScenesMenu::getModels(void) {
 			/* get full path of .obj model file */
             std::string fullPath = "./assets/models/" + modelName;
 			/* load text texture for each button */
-			unsigned int text = FontLoader::getInstance()->getText("Prisma", modelName.c_str());
+			unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str());
 			if (text == UINT_MAX) {
 				throw(ErrorHandler("Failed to get texture for: " + modelName + " - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 			}
