@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include "ErrorHandler.hpp"
+#include "./glad/glad.h"
 #ifdef __APPLE__
     #include <dirent.h>
 #elif __linux__
@@ -19,7 +20,8 @@ class FontLoader {
         static FontLoader* getInstance(void);
         void readFontDir(void);
         void loadFont(const char *);
-        SDL_Surface *getFont(std::string, const char *);
+        unsigned int    nextPowerOfTwo(unsigned int);
+        unsigned int    getText(std::string, const char *, int &, int &);
     private:
         static FontLoader* instance;
         FontLoader(void);

@@ -6,6 +6,7 @@
 #include "TextureLoader.hpp"
 #include "StatesManager.hpp"
 #include "ListScenesMenu.hpp"
+#include "FontLoader.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 640
@@ -22,4 +23,6 @@ class MainMenu : public State, public InputObserver
 	private:
         unsigned int          text1;
         unsigned int          text2;
+		int textW;
+		int textH;
 };
