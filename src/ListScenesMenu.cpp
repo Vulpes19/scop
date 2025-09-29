@@ -117,7 +117,7 @@ void	ListScenesMenu::update(float)
 void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 {
 	glDisable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->useShader();
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
@@ -126,16 +126,19 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 	int buttonId = 0;
 	for (int j = 0; j < 2; j++) {
 		for (int i = 0; i < 3; ++i) {
+			/* load text texture for the button*/
 			glActiveTexture(GL_TEXTURE0);
 			auto it = buttonTexts.find(modelPaths[buttonId]);
 			GLint text = it->second;
 			glBindTexture(GL_TEXTURE_2D, text);
+
+			/* positioning the button */
 			model = Vulpes3D::Matrix4x4::identity();
-			std::cout << modelPaths[i] << " - " << i << " - " << it->first << std::endl;
 			float yPadding = (j == 0) ? 50.0f : 400.0f;
 			model.translate(Vector(i * 500.0f, yPadding, 0.0f));
-			// shader->setUniform("model", model);
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
+
+			/* set button id uniform and selectedIndex to highlight the selected button */
 			shader->setUniform("button", buttonId);
 			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
