@@ -74,7 +74,6 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, C
 	{
 		if (key == SDL_SCANCODE_UP)
 		{
-			// selectedIndex = (selectedIndex - 1 + numButtons) % numButtons;
 			selectedIndex = 1;
 			shader->setUniform("selectedIndex", selectedIndex);
 		}
@@ -176,8 +175,6 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	model.scale(Vector(titleWidth, titleHeight, 1.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	// model = model.identity();
-	// model.translate(Vector(0.0f, 50.0f, 0.0f));
 
 	
 	glBindVertexArray(VAO);
@@ -195,7 +192,6 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	model = model.identity();
     model.translate(Vector(x2, y2, 0.0f));
 	model.scale(Vector(btnWidth, btnHeight, 1.0f));
-	// model.translate(Vector(0.0f, 50.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -212,7 +208,6 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
     model2.translate(Vector(x3, y3, 0.0f));
 	model2.scale(Vector(btnWidth, btnHeight, 1.0f));
 
-	// model2.translate(Vector(0.0f, 200.0f, 0.0f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model2.data());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
