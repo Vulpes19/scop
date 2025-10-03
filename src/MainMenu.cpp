@@ -28,14 +28,19 @@ MainMenu::MainMenu(void)
     shader->createShader();
 
 	
-	text1 = FontLoader::getInstance()->getText("Prisma", "Start");
-    if (text1 == UINT_MAX) {
+	textStart = FontLoader::getInstance()->getText("Prisma", "Start");
+    if (textStart == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Start - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
-	text2 = FontLoader::getInstance()->getText("Prisma", "Exit");
-    if (text2 == UINT_MAX) {
+	textExit = FontLoader::getInstance()->getText("Prisma", "Exit");
+    if (textExit == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Exit - " + std::string(TTF_GetError()), __FILE__, __LINE__));
+	}
+
+	textTitle = FontLoader::getInstance()->getText("Prisma", "Scop");
+    if (textTitle == UINT_MAX) {
+		throw(ErrorHandler("Failed to get texture for: Title - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
 	shader->useShader();
@@ -44,7 +49,7 @@ MainMenu::MainMenu(void)
 	shader->setUniform("selectedIndex", selectedIndex);
 	shader->setUniform("button", 1);
 	shader->setUniform("isTitle", false);
-	shader->setUniform("textTexture", text2);
+	shader->setUniform("textTexture", textExit);
 
 	projection = Vulpes3D::Matrix4x4::identity();
     model = Vulpes3D::Matrix4x4::identity(); 
@@ -58,8 +63,8 @@ MainMenu::MainMenu(void)
 
 MainMenu::~MainMenu(void)
 {
-	glDeleteTextures(1, &text1);
-	glDeleteTextures(1, &text2);
+	glDeleteTextures(1, &textStart);
+	glDeleteTextures(1, &textExit);
 }
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
@@ -97,22 +102,6 @@ void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, C
 void	MainMenu::initVertexData(enum quadType type) {
 	unsigned int	vertexArrayObject;
 	unsigned int	vertexBufferObject;
-
-	// float titleVertices[] = {
-	// 	740.0f, 300.0f, 0.0f,   1.0f, 1.0f,
-	// 	740.0f, 250.0f, 0.0f,   1.0f, 0.0f,
-	// 	500.0f, 250.0f, 0.0f,   0.0f, 0.0f,
-	// 	500.0f, 300.0f, 0.0f,   0.0f, 1.0f
-	// };
-
-	// float buttonVertices[] = {
-	// 	800.0f, 400.0f, 0.0f,   1.0f, 1.0f,
-	// 	800.0f, 250.0f, 0.0f,   1.0f, 0.0f,
-	// 	500.0f, 250.0f, 0.0f,   0.0f, 0.0f,
-	// 	500.0f, 400.0f, 0.0f,   0.0f, 1.0f
-	// };
-
-	// float* vertices = (type == TITLE) ? titleVertices : buttonVertices;
 
 	float quadVertices[] = {
 		// positions   // texcoords
@@ -176,8 +165,10 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
     
 	glBindVertexArray(titleVAO);
 	shader->setUniform("isTitle", true);
-	float titleWidth = 240.0f;
-    float titleHeight = 50.0f;
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textTitle);
+	float titleWidth = 400.0f;
+    float titleHeight = 200.0f;
     float x = (WIDTH - titleWidth) / 2.0f;
     float y = 50.0f; // 50px from the top
 	model = model.identity();
@@ -194,7 +185,7 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	shader->setUniform("isTitle", false);
 	shader->setUniform("button", 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, text1);
+	glBindTexture(GL_TEXTURE_2D, textStart);
 	shader->setUniform("textTexture", 0);
 	float btnWidth = 200.0f;
     float btnHeight = 50.0f;
@@ -212,7 +203,7 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	shader->setUniform("isTitle", false);
 	shader->setUniform("button", 2);
     glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, text2);
+	glBindTexture(GL_TEXTURE_2D, textExit);
 	shader->setUniform("textTexture", 0);
     float x3 = (WIDTH - btnWidth) / 2.0f;
     float y3 = 400.0f; // place lower than title

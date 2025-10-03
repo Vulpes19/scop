@@ -12,12 +12,13 @@ uniform int selectedIndex; // selected button
 
 void main()
 {
-    if (isTitle) {
-        FragColor = vec4(baseColor, 1.0);
-        return ;
-    }
     vec4 texColor = texture(textTexture, TexCoord);
     vec4 finalColor = mix(vec4(baseColor, 1.0), texColor, 0.5);
+
+    if (isTitle) {
+        FragColor = texColor;
+        return ;
+    }
 
     vec4 c = mix(vec4(highlightColor, 1.0), texColor, 0.5);
    

@@ -38,7 +38,7 @@ FontLoader* FontLoader::getInstance(void)
 }
 
 void    FontLoader::loadFont(const char *path) {
-    TTF_Font* font = TTF_OpenFont(path, 18);
+    TTF_Font* font = TTF_OpenFont(path, 30);
     if (!font) {
         throw(ErrorHandler("Error failed to load font in path (" + std::string(path) + "): " + std::string(TTF_GetError()), __FILE__, __LINE__));
     }

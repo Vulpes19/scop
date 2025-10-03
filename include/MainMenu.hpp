@@ -26,8 +26,9 @@ class MainMenu : public State, public InputObserver
 		void update(float = 0) override;
 		void render(Vulpes3D::Matrix4x4 view) override;
 	private:
-        unsigned int          text1;
-        unsigned int          text2;
+        unsigned int          textStart;
+        unsigned int          textExit;
+        unsigned int          textTitle;
 		unsigned int		  titleVBO;
 		unsigned int		  titleVAO;
 };
