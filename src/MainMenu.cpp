@@ -28,24 +28,27 @@ MainMenu::MainMenu(void)
     shader->createShader();
 
 	
-	textStart = FontLoader::getInstance()->getText("Prisma", "Start");
+        // SDL_Color color = {255, 255, 255, 0};
+
+	textStart = FontLoader::getInstance()->getText("Roboto", "Start", SDL_Color {255, 255, 255, 0});
     if (textStart == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Start - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
-	textExit = FontLoader::getInstance()->getText("Prisma", "Exit");
+	textExit = FontLoader::getInstance()->getText("Roboto", "Exit", SDL_Color {255, 255, 255, 0});
     if (textExit == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Exit - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
-	textTitle = FontLoader::getInstance()->getText("Prisma", "Scop");
+	textTitle = FontLoader::getInstance()->getText("Orbitron", "Scop", SDL_Color {86, 156, 214, 255});
     if (textTitle == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Title - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 	}
 
 	shader->useShader();
-	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
-	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
+	shader->setUniform("baseColor", Vector(45.0f / 255.0f, 45.0f / 255.0f, 48.0f / 255.0f));
+	shader->setUniform("highlightColor", Vector(58.0f / 255.0f, 58.0f / 255.0f, 61.0f / 255.0f));
+	shader->setUniform("textHighlightColor", Vector(86.0f / 255.0f, 156.0f / 255.0f, 214.0f / 255.0f));
 	shader->setUniform("selectedIndex", selectedIndex);
 	shader->setUniform("button", 1);
 	shader->setUniform("isTitle", false);

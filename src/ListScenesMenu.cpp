@@ -47,8 +47,9 @@ ListScenesMenu::ListScenesMenu(void)
 	glEnableVertexAttribArray(1);
 
 	shader->useShader();
-	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
-	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
+	shader->setUniform("baseColor", Vector(45.0f / 255.0f, 45.0f / 255.0f, 48.0f / 255.0f));
+	shader->setUniform("highlightColor", Vector(58.0f / 255.0f, 58.0f / 255.0f, 61.0f / 255.0f));
+	shader->setUniform("textHighlightColor", Vector(86.0f / 255.0f, 156.0f / 255.0f, 214.0f / 255.0f));
 	shader->setUniform("selectedIndex", selectedIndex);
 	shader->setUniform("button", 1);
 
@@ -162,11 +163,11 @@ void ListScenesMenu::getModels(void) {
 			/* get full path of .obj model file */
             std::string fullPath = "./assets/models/" + modelName;
 			/* load text texture for each button */
-			unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str());
+			unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str(), SDL_Color {255, 255, 255, 0});
 			if (text == UINT_MAX) {
 				throw(ErrorHandler("Failed to get texture for: " + modelName + " - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 			}
-			buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str());
+			buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str(), SDL_Color {255, 255, 255, 0});
 
             modelPaths.push_back(fullPath);
         }

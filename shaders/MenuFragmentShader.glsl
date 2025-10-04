@@ -6,6 +6,7 @@ out vec4 FragColor;
 uniform sampler2D textTexture; // Optional texture (text or button)
 uniform vec3 baseColor;        // Fallback flat color
 uniform vec3 highlightColor;   // highlight flat color
+uniform vec3 textHighlightColor;   // highlight text color
 uniform int button; // button ID
 uniform bool isTitle; // Is Title
 uniform int selectedIndex; // selected button
@@ -13,14 +14,24 @@ uniform int selectedIndex; // selected button
 void main()
 {
     vec4 texColor = texture(textTexture, TexCoord);
-    vec4 finalColor = mix(vec4(baseColor, 1.0), texColor, 0.5);
-
     if (isTitle) {
         FragColor = texColor;
         return ;
     }
 
-    vec4 c = mix(vec4(highlightColor, 1.0), texColor, 0.5);
-   
-    FragColor = button == selectedIndex ? c : finalColor;
+    // Button bg color
+    vec3 bgColor = baseColor;
+    if (button == selectedIndex)
+        bgColor = highlightColor;
+    
+    // Button text color
+    vec3 textColor = texColor.rgb;
+    if (texColor.a > 0.1)
+    {
+        if (button == selectedIndex)
+            textColor = textHighlightColor;
+    }
+
+    vec3 finalRGB = mix(bgColor, textColor, texColor.a);
+    FragColor = vec4(finalRGB, 1.0);
 }

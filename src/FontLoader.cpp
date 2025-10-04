@@ -38,7 +38,7 @@ FontLoader* FontLoader::getInstance(void)
 }
 
 void    FontLoader::loadFont(const char *path) {
-    TTF_Font* font = TTF_OpenFont(path, 30);
+    TTF_Font* font = TTF_OpenFont(path, 28);
     if (!font) {
         throw(ErrorHandler("Error failed to load font in path (" + std::string(path) + "): " + std::string(TTF_GetError()), __FILE__, __LINE__));
     }
@@ -61,7 +61,7 @@ unsigned int FontLoader::nextPowerOfTwo(unsigned int n) {
     return p;
 }
 
-unsigned int    FontLoader::getText(std::string ID, const char *text) {
+unsigned int    FontLoader::getText(std::string ID, const char *text, SDL_Color color) {
     auto it = fonts.find(ID);
 
     if (it != fonts.end()) {
@@ -75,8 +75,7 @@ unsigned int    FontLoader::getText(std::string ID, const char *text) {
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
-        SDL_Color color = {255, 255, 255, 0};
-        SDL_Surface* surface = TTF_RenderText_Blended(fonts[ID], text, color);
+        SDL_Surface* surface = TTF_RenderText_Solid(fonts[ID], text, color);
 
         int w = nextPowerOfTwo(surface->w);
         int h = nextPowerOfTwo(surface->h);
@@ -91,7 +90,7 @@ unsigned int    FontLoader::getText(std::string ID, const char *text) {
 
         SDL_BlitSurface(surface, 0, intermediary, &destRect);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, intermediary->pixels);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA, GL_UNSIGNED_BYTE, intermediary->pixels);
     
         SDL_FreeSurface(surface);
 	    SDL_FreeSurface(intermediary);
