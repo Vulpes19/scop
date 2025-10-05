@@ -10,11 +10,6 @@ MainMenu::MainMenu(void)
 	initVertexData(TITLE);
 	initVertexData(BUTTONN);
 
-	std::cout << "VAO => " << VAO << std::endl;
-	std::cout << "VBO => " << VBO << std::endl;
-	std::cout << "titleVAO => " << titleVAO << std::endl;
-	std::cout << "titleVBO => " << titleVBO << std::endl;
-
     #ifdef _WIN32
         shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
@@ -169,6 +164,7 @@ void	MainMenu::render(Vulpes3D::Matrix4x4)
 	shader->setUniform("isTitle", true);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textTitle);
+	shader->setUniform("textTexture", 0);
 	float titleWidth = 400.0f;
     float titleHeight = 200.0f;
     float x = (WIDTH - titleWidth) / 2.0f;
