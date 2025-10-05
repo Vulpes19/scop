@@ -73,8 +73,16 @@ class Scene : public State, public InputObserver {
         unsigned int VBO; //vertex buffer object we need to store verticies in GPU memory
         unsigned int VAO;
         unsigned int EBO;
-        Vulpes3D::Matrix4x4   model;;
+        Vulpes3D::Matrix4x4   model;
+        Vulpes3D::Matrix4x4   scaling;
+        Vulpes3D::Matrix4x4   rotation;
+        Vulpes3D::Matrix4x4   translation;
         Vulpes3D::Matrix4x4   projection;
+        Vector                position;
+        float                 scaleFactor = 1.0f;
+        float                 rotX = 0.0f;
+        float                 rotY = 0.0f;
+        float                 rotZ = 0.0f;
         unsigned int          modelLoc;
         unsigned int          projectionLoc;
         unsigned int          viewLoc;
@@ -83,7 +91,6 @@ class Scene : public State, public InputObserver {
         bool                  textureToggle = false;
         float                 blend = 0.0f;
         size_t                colorIndex = 0;
-        float                 angle = 0.0f;
         Vector                center;
         int                   normalColoring = 0;
 };

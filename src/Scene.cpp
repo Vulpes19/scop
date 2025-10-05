@@ -3,6 +3,11 @@
 Scene::Scene(std::string modelName, Vector cameraPos) {
 	stateName = SceneState;
     
+    model = Vulpes3D::Matrix4x4::identity();
+    translation = Vulpes3D::Matrix4x4::identity();
+    scaling = Vulpes3D::Matrix4x4::identity();
+    rotation = Vulpes3D::Matrix4x4::identity();
+
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
@@ -317,6 +322,22 @@ void    Scene::render(Vulpes3D::Matrix4x4 view) {
 }
 
 void    Scene::update(float deltaTime) {
+    // Rebuild rotation matrix each frame
+    // rotation = Vulpes3D::Matrix4x4::identity();
+    // rotation.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(rotX));
+    // rotation.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(rotY));
+    // rotation.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(rotZ));
+
+    // Rebuild translation and scaling
+    translation = Vulpes3D::Matrix4x4::identity();
+    translation.translate(position);
+
+    scaling = Vulpes3D::Matrix4x4::identity();
+    scaling.scale(Vector(scaleFactor, scaleFactor, scaleFactor));
+
+    // Combine them: Translate → Rotate → Scale
+    model = translation * rotation * scaling;
+
     float speed = 5.0f;
     float target = textureToggle ? 1.0f : 0.0f;
     float epsilon = 0.01f;
@@ -332,45 +353,34 @@ void    Scene::update(float deltaTime) {
 void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, Camera *camera) {
     (void)camera;
     (void)deltaTime;
+
+    float rotSpeed = Vulpes3D::to_radians(5.0f);
+
     if (InputDetector::getInstance()->isKeyPressed(key)) {
         if (key == SDL_SCANCODE_I) {
-            angle += 5.0f;
-            // model.translate(-center);
-            model = Vulpes3D::Matrix4x4::identity();
-            model.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(angle));
+            rotX += 2.0f;
+            Vulpes3D::Matrix4x4 deltaRot = Vulpes3D::Matrix4x4::identity();
+            deltaRot.rotate(Vector(), X_AXIS, rotSpeed);
+            rotation = deltaRot * rotation;
         }
         if (key == SDL_SCANCODE_O) {
-            angle += 5.0f;
-            // model.translate(-center);
-            model = Vulpes3D::Matrix4x4::identity();
-            model.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(angle));
-            // model.translate(center);
+            rotY += 2.0f;
+            Vulpes3D::Matrix4x4 deltaRot = Vulpes3D::Matrix4x4::identity();
+            deltaRot.rotate(Vector(), Y_AXIS, rotSpeed);
+            rotation = deltaRot * rotation;
         }
         if (key == SDL_SCANCODE_P) {
-            angle += 5.0f;
-            // model.translate(-center);
-            model = Vulpes3D::Matrix4x4::identity();
-            model.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(angle));
-            // model.translate(center);
+            rotZ += 2.0f;
+            Vulpes3D::Matrix4x4 deltaRot = Vulpes3D::Matrix4x4::identity();
+            deltaRot.rotate(Vector(), Z_AXIS, rotSpeed);
+            rotation = deltaRot * rotation;
         }
-        if (key == SDL_SCANCODE_UP) {
-            model.translate(Vector(0.0f, deltaTime * 20.0f, 0.0f));
-        }
-        if (key == SDL_SCANCODE_DOWN) {
-            model.translate(Vector(0.0f, -deltaTime * 20.0f, 0.0f));
-        }
-        if (key == SDL_SCANCODE_RIGHT) {
-            model.translate(Vector(deltaTime * 20.0f, 0.0f, 0.0f));
-        }
-        if (key == SDL_SCANCODE_LEFT) {
-            model.translate(Vector(-deltaTime * 20.0f, 0.0f, 0.0f));
-        }
-        if (key == SDL_SCANCODE_B) {
-            model.scale(Vector(1.1f, 1.1f, 1.1f));
-        }
-        if (key == SDL_SCANCODE_V) {
-            model.scale(Vector(0.9f, 0.9f, 0.9f));
-        }
+        if (key == SDL_SCANCODE_UP) position.y += deltaTime * 20.0f;
+        if (key == SDL_SCANCODE_DOWN) position.y -= deltaTime * 20.0f;
+        if (key == SDL_SCANCODE_RIGHT) position.x += deltaTime * 20.0f;
+        if (key == SDL_SCANCODE_LEFT) position.x -= deltaTime * 20.0f;
+        if (key == SDL_SCANCODE_B) scaleFactor *= 1.1f;
+        if (key == SDL_SCANCODE_V) scaleFactor *= 0.9f;
         if (key == SDL_SCANCODE_T) {
             textureToggle = !textureToggle;
         }
