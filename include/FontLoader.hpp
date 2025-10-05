@@ -21,7 +21,7 @@ class FontLoader {
         void readFontDir(void);
         void loadFont(const char *);
         unsigned int    nextPowerOfTwo(unsigned int);
-        unsigned int    getText(std::string, const char *);
+        unsigned int    getText(std::string, const char *, SDL_Color);
     private:
         static FontLoader* instance;
         FontLoader(void);

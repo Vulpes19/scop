@@ -47,8 +47,9 @@ ListScenesMenu::ListScenesMenu(void)
 	glEnableVertexAttribArray(1);
 
 	shader->useShader();
-	shader->setUniform("baseColor", Vector(220.0f / 250.0f, 20.0f / 250.0f, 60.0f / 250.0f));
-	shader->setUniform("highlightColor", Vector(1.0f, 1.0f, 1.0f));
+	shader->setUniform("baseColor", Vector(45.0f / 255.0f, 45.0f / 255.0f, 48.0f / 255.0f));
+	shader->setUniform("highlightColor", Vector(58.0f / 255.0f, 58.0f / 255.0f, 61.0f / 255.0f));
+	shader->setUniform("textHighlightColor", Vector(86.0f / 255.0f, 156.0f / 255.0f, 214.0f / 255.0f));
 	shader->setUniform("selectedIndex", selectedIndex);
 	shader->setUniform("button", 1);
 
@@ -117,7 +118,7 @@ void	ListScenesMenu::update(float)
 void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 {
 	glDisable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->useShader();
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
@@ -126,16 +127,19 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 	int buttonId = 0;
 	for (int j = 0; j < 2; j++) {
 		for (int i = 0; i < 3; ++i) {
+			/* load text texture for the button*/
 			glActiveTexture(GL_TEXTURE0);
 			auto it = buttonTexts.find(modelPaths[buttonId]);
 			GLint text = it->second;
 			glBindTexture(GL_TEXTURE_2D, text);
+
+			/* positioning the button */
 			model = Vulpes3D::Matrix4x4::identity();
-			std::cout << modelPaths[i] << " - " << i << " - " << it->first << std::endl;
 			float yPadding = (j == 0) ? 50.0f : 400.0f;
 			model.translate(Vector(i * 500.0f, yPadding, 0.0f));
-			// shader->setUniform("model", model);
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
+
+			/* set button id uniform and selectedIndex to highlight the selected button */
 			shader->setUniform("button", buttonId);
 			shader->setUniform("selectedIndex", selectedIndex);  // This one changes with key input
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -159,11 +163,11 @@ void ListScenesMenu::getModels(void) {
 			/* get full path of .obj model file */
             std::string fullPath = "./assets/models/" + modelName;
 			/* load text texture for each button */
-			unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str());
+			unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str(), SDL_Color {255, 255, 255, 0});
 			if (text == UINT_MAX) {
 				throw(ErrorHandler("Failed to get texture for: " + modelName + " - " + std::string(TTF_GetError()), __FILE__, __LINE__));
 			}
-			buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str());
+			buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str(), SDL_Color {255, 255, 255, 0});
 
             modelPaths.push_back(fullPath);
         }

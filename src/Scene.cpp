@@ -265,14 +265,12 @@ void    Scene::parseMaterial(void) {
         filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
     #endif
 
-    std::cout << filePath << std::endl;
     std::ifstream file(filePath.c_str());
 
     if (!file.is_open())
         return ;
         // throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
     
-    std::cout << "im here lmao" << std::endl;
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream iss(line);
