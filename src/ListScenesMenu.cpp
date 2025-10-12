@@ -64,7 +64,11 @@ ListScenesMenu::ListScenesMenu(void)
 }
 
 ListScenesMenu::~ListScenesMenu(void)
-{}
+{
+	for (auto it = buttonTexts.begin(); it != buttonTexts.end(); ++it) {
+		glDeleteTextures(1, &it->second);
+    }
+}
 
 void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera *camera)
 {

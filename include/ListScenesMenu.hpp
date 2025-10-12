@@ -24,5 +24,5 @@ class ListScenesMenu : public State, public InputObserver
 		void getModels(void);
 	private:
 		std::vector<std::string> modelPaths;
-		std::map<std::string, GLint> buttonTexts;
+		std::map<std::string, unsigned int> buttonTexts;
 };

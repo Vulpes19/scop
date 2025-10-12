@@ -23,8 +23,6 @@ MainMenu::MainMenu(void)
     shader->createShader();
 
 	
-        // SDL_Color color = {255, 255, 255, 0};
-
 	textStart = FontLoader::getInstance()->getText("Roboto", "Start", SDL_Color {255, 255, 255, 0});
     if (textStart == UINT_MAX) {
 		throw(ErrorHandler("Failed to get texture for: Start - " + std::string(TTF_GetError()), __FILE__, __LINE__));
@@ -63,6 +61,7 @@ MainMenu::~MainMenu(void)
 {
 	glDeleteTextures(1, &textStart);
 	glDeleteTextures(1, &textExit);
+	glDeleteTextures(1, &textTitle);
 }
 
 void	MainMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *input, Camera*)
