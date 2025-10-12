@@ -10,7 +10,9 @@ FontLoader::FontLoader(void) {
 }
 
 FontLoader::~FontLoader(void) {
-    // TTF_CloseFont(font);
+    for (auto it = fonts.begin(); it != fonts.end(); ++it) {
+        TTF_CloseFont(it->second);
+    }
     TTF_Quit();
 }
 
@@ -72,8 +74,6 @@ unsigned int    FontLoader::getText(std::string ID, const char *text, SDL_Color 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
         SDL_Surface* surface = TTF_RenderText_Solid(fonts[ID], text, color);
 

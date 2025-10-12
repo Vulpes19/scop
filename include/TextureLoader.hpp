@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include "ErrorHandler.hpp"
+#include "./glad/glad.h"
 #ifdef __APPLE__
     #include <dirent.h>
 #elif __linux__

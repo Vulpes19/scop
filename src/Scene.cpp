@@ -322,20 +322,12 @@ void    Scene::render(Vulpes3D::Matrix4x4 view) {
 }
 
 void    Scene::update(float deltaTime) {
-    // Rebuild rotation matrix each frame
-    // rotation = Vulpes3D::Matrix4x4::identity();
-    // rotation.rotate(Vector(), X_AXIS, Vulpes3D::to_radians(rotX));
-    // rotation.rotate(Vector(), Y_AXIS, Vulpes3D::to_radians(rotY));
-    // rotation.rotate(Vector(), Z_AXIS, Vulpes3D::to_radians(rotZ));
-
-    // Rebuild translation and scaling
     translation = Vulpes3D::Matrix4x4::identity();
     translation.translate(position);
 
     scaling = Vulpes3D::Matrix4x4::identity();
     scaling.scale(Vector(scaleFactor, scaleFactor, scaleFactor));
 
-    // Combine them: Translate → Rotate → Scale
     model = translation * rotation * scaling;
 
     float speed = 5.0f;
@@ -391,6 +383,7 @@ void    Scene::keyDown(SDL_Scancode key, float deltaTime, InputManager* input, C
         // Change texture to one of the textures under /assets/textures or change colors
         if (key == SDL_SCANCODE_K) {
             if (textureToggle) {
+                glBindTexture(GL_TEXTURE_2D, texture1);
                 SDL_Surface *image = TextureLoader::getInstance()->getImage(textureIndex);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, 
                         GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
