@@ -2,7 +2,9 @@
 
 ## Overview
 Scop is a 3D rendering project written in **C++** using **OpenGL** and **SDL2**.
+
 It provides a basic rendering engine capable of loading and displaying 3D models, applying transformations, handling textures, and rendering custom UI menus (main menu, scene menu, etc.) using both OpenGL and SDL_ttf for text rendering.
+
 This project was built entirely from scratch: no external game engines, to deepen understanding of graphics pipelines, matrix transformations, and rendering architectures.
 
 ## Features
@@ -103,3 +105,11 @@ scop/
 ├── run.sh
 └── README.md
 ```
+## Screenshots
+
+## Author
+**Ayman Baioumy**
+
+Computer Graphics Enthusiast | C++ Developer
+
+**Current Position:** DevOps & Cloud Engineer 
