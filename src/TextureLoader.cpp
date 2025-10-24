@@ -18,6 +18,7 @@ TextureLoader::~TextureLoader(void) {
 }
 
 void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
+    #ifdef __APPLE__
     DIR *directory = opendir(dirPath);
     struct dirent *dir;
 
@@ -34,6 +35,33 @@ void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
         }
     }
     (void)closedir(directory);
+    #elif _WIN32
+    std::string winDirPath = std::string(dirPath);
+    std::replace(winDirPath.begin(), winDirPath.end(), '/', '\\');
+    std::string searchPath = winDirPath + "\\*";
+    WIN32_FIND_DATA findData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        throw std::runtime_error("Error opening directory: " + std::string(dirPath));
+    }
+
+    do {
+        const char* name = findData.cFileName;
+
+        if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+            continue;
+
+        std::string fullPath = winDirPath + "\\" + std::string(name);
+        std::cout << fullPath << std::endl;
+
+        if (type == TEXTURE)
+            loadImage(fullPath.c_str());
+        else
+            loadButtons(fullPath.c_str());
+
+    } while (FindNextFile(hFind, &findData) != 0);
+    #endif
 }
 
 TextureLoader* TextureLoader::getInstance(void)

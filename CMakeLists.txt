@@ -4,7 +4,8 @@ project(scop)
 
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
-# find_package(SDL2_ttf CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
+
 include_directories(${SDL2_INCLUDE_DIRS})
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -22,9 +23,13 @@ set(SOURCES
     src/Camera.cpp
     src/InputManager.cpp
     src/InputDetector.cpp
-    src/Model.cpp
+    src/FontLoader.cpp
+    src/ListScenesMenu.cpp
+    src/MainMenu.cpp
+    src/Scene.cpp
+    src/State.cpp
+    src/StateManager.cpp
 )
-
 add_subdirectory(ext/glad)
 
 add_executable(scop ${SOURCES})
@@ -33,7 +38,7 @@ target_link_libraries(scop PRIVATE
     SDL2::SDL2main
     SDL2::SDL2
     SDL2_image::SDL2_image
-    # SDL2_ttf::SDL2_ttf
+    SDL2_ttf::SDL2_ttf
     glad
     opengl32
 )

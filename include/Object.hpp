@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef _WIN32
+#include "./glad/glad.h"
+#elif __APPLE__
 #include "glad.h"
+#endif
 #include <iostream>
 #include "Shader.hpp"
 #include "SDL.h"

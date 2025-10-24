@@ -1,17 +1,18 @@
 #include "Scene.hpp"
 
 Scene::Scene(std::string modelName, Vector cameraPos) {
-	stateName = SceneState;
+    stateName = SceneState;
     
     model = Vulpes3D::Matrix4x4::identity();
     translation = Vulpes3D::Matrix4x4::identity();
     scaling = Vulpes3D::Matrix4x4::identity();
     rotation = Vulpes3D::Matrix4x4::identity();
-
+    
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
     
+    exit(1);
     colors.push_back(Vector(1.0f, 0.0f, 0.0f)); // Red
     colors.push_back(Vector(0.0f, 1.0f, 0.0f)); // Green
     colors.push_back(Vector(0.0f, 0.0f, 1.0f)); // Blue
@@ -151,7 +152,6 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
     glEnableVertexAttribArray(3);
 
-    // SDL_FreeSurface(image);
 }
 
 Scene::~Scene(void) {
@@ -159,12 +159,13 @@ Scene::~Scene(void) {
 }
 
 void    Scene::parseModel(std::string &modelName) {
-    std::string filePath = "assets/models/" + modelName + ".obj";
-
-    #ifdef _WIN32
-        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    #ifdef __APPLE__
+        std::string filePath = "assets/models/" + modelName + ".obj";
+    #elif _WIN32
+        std::string filePath = "assets\\models\\" + modelName + ".obj";
     #endif
-
+    std::cout << filePath << std::endl;
+    exit(1);
     std::ifstream file(filePath.c_str());
 
     if (!file.is_open())
@@ -264,14 +265,13 @@ std::vector<VertexIndex>    Scene::parseFaceVertex(std::string line) {
 
 void    Scene::parseMaterial(void) {
     material.name.erase(material.name.find_last_not_of("\r\n") + 1);
-    std::string filePath = "./assets/materials/" + material.name;
-
-    #ifdef _WIN32
-        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
+    #ifdef __APPLE__
+        std::string filePath = "./assets/materials/" + material.name;
+    #elif _WIN32
+        std::string filePath = "assets\\materials\\" + material.name;
     #endif
 
     std::ifstream file(filePath.c_str());
-
     if (!file.is_open())
         return ;
         // throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));
