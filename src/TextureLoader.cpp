@@ -11,6 +11,9 @@ TextureLoader::TextureLoader(void) {
 }
 
 TextureLoader::~TextureLoader(void) {
+    for (auto texture : textures) {
+        SDL_FreeSurface(texture);
+    }
     textures.clear();
 }
 
@@ -45,7 +48,7 @@ void    TextureLoader::loadImage(const char *path) {
     if (!image) {
         throw(ErrorHandler("Error failed to load image in path (" + std::string(path) + "): " + std::string(IMG_GetError()), __FILE__, __LINE__));
     }
-
+    
     std::string strPath = std::string(path);
     size_t index = strPath.find("assets");
 
