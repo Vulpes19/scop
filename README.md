@@ -98,7 +98,7 @@ scop/
 ├── shaders/            # Vertex & Fragment shaders
 │
 ├── ext/
-│   ├── glad            # Load OpenGL using Glad
+│   └── glad            # Load OpenGL using Glad
 │
 ├── CMakeLists.txt
 ├── Makefile
@@ -106,6 +106,10 @@ scop/
 └── README.md
 ```
 ## Screenshots
+![42 Logo in red](/common/images/42_red.png "42 Logo in Red")
+![42 Logo default](/common/images/42_default.png "42 Logo default")
+![42 Logo with texture](/common/images/42_texture.png "42 Logo with texture")
+![Plant](/common/images/plant_white.png "Plant")
 
 ## Author
 **Ayman Baioumy**
