@@ -106,6 +106,7 @@ scop/
 └── README.md
 ```
 ## Screenshots
+![alt text](https://github.com/Vulpes/scop/common/images/42_red.png "42 Logo in Red")
 
 ## Author
 **Ayman Baioumy**
