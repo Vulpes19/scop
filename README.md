@@ -98,7 +98,7 @@ scop/
 ├── shaders/            # Vertex & Fragment shaders
 │
 ├── ext/
-│   ├── glad            # Load OpenGL using Glad
+│   └── glad            # Load OpenGL using Glad
 │
 ├── CMakeLists.txt
 ├── Makefile
