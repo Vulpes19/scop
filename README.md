@@ -106,7 +106,10 @@ scop/
 └── README.md
 ```
 ## Screenshots
-![42 Logo in red](https://github.com/Vulpes19/scop/tree/main/common/images/42_red.png "42 Logo in Red")
+![42 Logo in red](/common/images/42_red.png "42 Logo in Red")
+![42 Logo default](/common/images/42_default.png "42 Logo default")
+![42 Logo with texture](/common/images/42_texture.png "42 Logo with texture")
+![Plant](/common/images/plant_white.png "Plant")
 
 ## Author
 **Ayman Baioumy**
