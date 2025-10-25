@@ -86,6 +86,18 @@ Through Scop I gained in-depth experience with:
    ./run.sh
    ```
 
+## Controls
+| Key         | Action                      |
+| ----------- | --------------------------- |
+| `I / O / P` | Rotate on X / Y / Z axes    |
+| Arrow Keys  | Move object on screen       |
+| `B / V`     | Scale up / down             |
+| `K`         | Switch textures             |
+| `T`         | Toggle texture mode         |
+| `N`         | Toggle normal visualization |
+| `ESC`       | Return to menu / quit       |
+
+
 ## Project Structure
 ```
 scop/
