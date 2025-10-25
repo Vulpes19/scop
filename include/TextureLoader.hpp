@@ -4,13 +4,19 @@
 #include <iostream>
 #include <map>
 #include "ErrorHandler.hpp"
+#include <vector>
+#include <string>
+#include <algorithm>
 #include "./glad/glad.h"
 #ifdef __APPLE__
     #include <dirent.h>
 #elif __linux__
     #include <dirent.h>
 #elif _WIN32
+    #define NOMINMAX
     #include <windows.h>
+    #include <tchar.h>
+    #include <stdio.h>
 #endif
 
 enum Type {

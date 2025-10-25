@@ -17,6 +17,7 @@ FontLoader::~FontLoader(void) {
 }
 
 void FontLoader::readFontDir(void) {
+    #ifdef __APPLE__
     DIR *directory = opendir("./assets/fonts");
     struct dirent *dir;
 
@@ -30,6 +31,28 @@ void FontLoader::readFontDir(void) {
         }
     }
     (void)closedir(directory);
+    #elif _WIN32
+    std::string fontDir = "assets\\fonts\\";
+    std::string searchPath = fontDir + "*";
+    WIN32_FIND_DATA findData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        throw std::runtime_error("Error opening directory: assets/fonts");
+    }
+
+    do {
+        const char* name = findData.cFileName;
+
+        if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+            continue;
+
+        std::string fullPath = "assets\\fonts\\" + std::string(name);
+
+        loadFont(fullPath.c_str());
+
+    } while (FindNextFile(hFind, &findData) != 0);
+    #endif
 }
 
 FontLoader* FontLoader::getInstance(void)
@@ -46,7 +69,12 @@ void    FontLoader::loadFont(const char *path) {
     }
 
     std::string strPath = std::string(path);
-    std::string ID = strPath.substr(14);
+    #ifdef __APPLE__
+    int size = 14;
+    #elif _WIN32
+    int size = 13;
+    #endif
+    std::string ID = strPath.substr(size);
     ID.erase(ID.find(".ttf"));
 
     fonts[ID] = font;

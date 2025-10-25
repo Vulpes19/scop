@@ -1,13 +1,13 @@
 #include "Scene.hpp"
 
 Scene::Scene(std::string modelName, Vector cameraPos) {
-	stateName = SceneState;
+    stateName = SceneState;
     
     model = Vulpes3D::Matrix4x4::identity();
     translation = Vulpes3D::Matrix4x4::identity();
     scaling = Vulpes3D::Matrix4x4::identity();
     rotation = Vulpes3D::Matrix4x4::identity();
-
+    
     parseModel(modelName);
     if (material.isMaterial)
         parseMaterial();
@@ -81,7 +81,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     }
     Vector size = max - min;
     #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
+        shader = new Shader("shaders\\VertexShader.glsl", "shaders\\FragmentShader.glsl");
     #elif __APPLE__
         shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
     #elif __linux__
@@ -151,7 +151,6 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
     glEnableVertexAttribArray(3);
 
-    // SDL_FreeSurface(image);
 }
 
 Scene::~Scene(void) {
@@ -159,12 +158,11 @@ Scene::~Scene(void) {
 }
 
 void    Scene::parseModel(std::string &modelName) {
-    std::string filePath = "assets/models/" + modelName + ".obj";
-
-    #ifdef _WIN32
-        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\models\\" + modelName + ".obj";
+    #ifdef __APPLE__
+        std::string filePath = "assets/models/" + modelName + ".obj";
+    #elif _WIN32
+        std::string filePath = "assets\\models\\" + modelName + ".obj";
     #endif
-
     std::ifstream file(filePath.c_str());
 
     if (!file.is_open())
@@ -264,14 +262,13 @@ std::vector<VertexIndex>    Scene::parseFaceVertex(std::string line) {
 
 void    Scene::parseMaterial(void) {
     material.name.erase(material.name.find_last_not_of("\r\n") + 1);
-    std::string filePath = "./assets/materials/" + material.name;
-
-    #ifdef _WIN32
-        filePath = "C:\\Users\\asus\\Documents\\scop\\assets\\materials\\" + modelName + ".obj";
+    #ifdef __APPLE__
+        std::string filePath = "./assets/materials/" + material.name;
+    #elif _WIN32
+        std::string filePath = "assets\\materials\\" + material.name;
     #endif
 
     std::ifstream file(filePath.c_str());
-
     if (!file.is_open())
         return ;
         // throw(ErrorHandler("Failed to open material file: " + std::string(filePath.c_str()), __FILE__, __LINE__));

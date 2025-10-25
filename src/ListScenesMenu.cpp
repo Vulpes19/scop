@@ -17,7 +17,7 @@ ListScenesMenu::ListScenesMenu(void)
 	};
 	stateName = ListScenesMenuState;
     #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
+        shader = new Shader("shaders\\MenuVertexShader.glsl", "shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
     #elif __linux__
@@ -92,7 +92,11 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 		if (key == SDL_SCANCODE_RETURN)
 		{
 			std::string strPath = modelPaths[selectedIndex];
+			#ifdef _WIN32
+			std::string ID = strPath.substr(14);
+			#elif __APPLE__
 			std::string ID = strPath.substr(16);
+			#endif
 			ID.erase(ID.find(".obj"));
 			StatesManager::getInstance()->addState(new Scene(ID, camera->getPosition()));
 			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
@@ -155,6 +159,7 @@ void	ListScenesMenu::render(Vulpes3D::Matrix4x4)
 }
 
 void ListScenesMenu::getModels(void) {
+	#ifdef __APPLE__
 	DIR *directory = opendir("./assets/models/");
     struct dirent *dir;
 
@@ -177,4 +182,35 @@ void ListScenesMenu::getModels(void) {
         }
     }
     (void)closedir(directory);
+	#elif _WIN32
+	std::string modelDir = "assets\\models\\";
+    std::string searchPath = modelDir + "*";
+
+    WIN32_FIND_DATA findData;
+    HANDLE hFind = FindFirstFile(searchPath.c_str(), &findData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        throw std::runtime_error("Error opening directory: assets/models");
+    }
+
+    do {
+        const char* name = findData.cFileName;
+
+        if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+            continue;
+
+        std::string fullPath = "assets\\models\\" + std::string(name);
+
+		std::string modelName = std::string(name);
+        /* load text texture for each button */
+		unsigned int text = FontLoader::getInstance()->getText("Prisma", (modelName.erase(modelName.find(".obj"))).c_str(), SDL_Color {255, 255, 255, 0});
+		if (text == UINT_MAX) {
+			throw(ErrorHandler("Failed to get texture for: " + modelName + " - " + std::string(TTF_GetError()), __FILE__, __LINE__));
+		}
+		buttonTexts[fullPath] = FontLoader::getInstance()->getText("Prisma", modelName.c_str(), SDL_Color {255, 255, 255, 0});
+
+		modelPaths.push_back(fullPath);
+
+    } while (FindNextFile(hFind, &findData) != 0);
+	#endif
 }

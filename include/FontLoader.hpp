@@ -11,7 +11,10 @@
 #elif __linux__
     #include <dirent.h>
 #elif _WIN32
+    #define NOMINMAX
     #include <windows.h>
+    #include <tchar.h>
+    #include <stdio.h>
 #endif
 
 class FontLoader {
