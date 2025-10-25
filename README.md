@@ -71,7 +71,20 @@ Through Scop I gained in-depth experience with:
     assets/models
     ```
 ### Windows
-...
+1. Install `CMake` and `vcpkg` on your windows machine
+2. Modify the field `VCPKG_ROOT` in `CMakeUsersPresets.json` to point to `vcpkg` in your machine.
+3. Install dependencies
+   ```
+   cmake --preset vcpkg
+   ```
+4. Build the project
+   ```
+   cmake --build build --config Release
+   ```
+5. Use the script `run.sh` to run the program
+   ```
+   ./run.sh
+   ```
 
 ## Project Structure
 ```
