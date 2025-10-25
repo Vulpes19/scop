@@ -11,7 +11,7 @@ MainMenu::MainMenu(void)
 	initVertexData(BUTTONN);
 
     #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
+        shader = new Shader("shaders\\MenuVertexShader.glsl", "shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
     #elif __linux__

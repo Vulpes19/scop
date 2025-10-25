@@ -6,8 +6,12 @@ TextureLoader::TextureLoader(void) {
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
         throw(ErrorHandler("Error failed to init SDL_image: " + std::string(IMG_GetError()), __FILE__, __LINE__));
     }
+    #ifdef __APPLE__
     readTextureDir("./assets/textures/", TEXTURE);
     readTextureDir("./assets/buttons/", BUTTON);
+    #elif _WIN32
+    readTextureDir("assets\\textures\\", TEXTURE);
+    #endif
 }
 
 TextureLoader::~TextureLoader(void) {
@@ -37,7 +41,7 @@ void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
     (void)closedir(directory);
     #elif _WIN32
     std::string winDirPath = std::string(dirPath);
-    std::replace(winDirPath.begin(), winDirPath.end(), '/', '\\');
+    // std::replace(winDirPath.begin(), winDirPath.end(), '/', '\\');
     std::string searchPath = winDirPath + "\\*";
     WIN32_FIND_DATA findData;
     HANDLE hFind = FindFirstFile(searchPath.c_str(), &findData);
@@ -52,8 +56,7 @@ void TextureLoader::readTextureDir(const char *dirPath, enum Type type) {
         if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
             continue;
 
-        std::string fullPath = winDirPath + "\\" + std::string(name);
-        std::cout << fullPath << std::endl;
+        std::string fullPath = winDirPath + std::string(name);
 
         if (type == TEXTURE)
             loadImage(fullPath.c_str());

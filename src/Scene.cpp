@@ -12,7 +12,6 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     if (material.isMaterial)
         parseMaterial();
     
-    exit(1);
     colors.push_back(Vector(1.0f, 0.0f, 0.0f)); // Red
     colors.push_back(Vector(0.0f, 1.0f, 0.0f)); // Green
     colors.push_back(Vector(0.0f, 0.0f, 1.0f)); // Blue
@@ -82,7 +81,7 @@ Scene::Scene(std::string modelName, Vector cameraPos) {
     }
     Vector size = max - min;
     #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\VertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\FragmentShader.glsl");
+        shader = new Shader("shaders\\VertexShader.glsl", "shaders\\FragmentShader.glsl");
     #elif __APPLE__
         shader = new Shader("./shaders/VertexShader.glsl", "./shaders/FragmentShader.glsl");
     #elif __linux__
@@ -164,8 +163,6 @@ void    Scene::parseModel(std::string &modelName) {
     #elif _WIN32
         std::string filePath = "assets\\models\\" + modelName + ".obj";
     #endif
-    std::cout << filePath << std::endl;
-    exit(1);
     std::ifstream file(filePath.c_str());
 
     if (!file.is_open())

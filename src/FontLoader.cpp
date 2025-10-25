@@ -48,7 +48,6 @@ void FontLoader::readFontDir(void) {
             continue;
 
         std::string fullPath = "assets\\fonts\\" + std::string(name);
-        std::cout << fullPath << std::endl;
 
         loadFont(fullPath.c_str());
 
@@ -77,7 +76,6 @@ void    FontLoader::loadFont(const char *path) {
     #endif
     std::string ID = strPath.substr(size);
     ID.erase(ID.find(".ttf"));
-    std::cout << "ID " << ID << std::endl;
 
     fonts[ID] = font;
 }
@@ -96,7 +94,6 @@ unsigned int FontLoader::nextPowerOfTwo(unsigned int n) {
 unsigned int    FontLoader::getText(std::string ID, const char *text, SDL_Color color) {
     auto it = fonts.find(ID);
 
-    std::cout << "fonts size " << fonts.size() << std::endl;
     if (it != fonts.end()) {
         unsigned int texture;
         glGenTextures(1, &texture);

@@ -17,7 +17,7 @@ ListScenesMenu::ListScenesMenu(void)
 	};
 	stateName = ListScenesMenuState;
     #ifdef _WIN32
-        shader = new Shader("C:\\Users\\asus\\Documents\\scop\\shaders\\MenuVertexShader.glsl", "C:\\Users\\asus\\Documents\\scop\\shaders\\MenuFragmentShader.glsl");
+        shader = new Shader("shaders\\MenuVertexShader.glsl", "shaders\\MenuFragmentShader.glsl");
     #elif __APPLE__
         shader = new Shader("./shaders/MenuVertexShader.glsl", "./shaders/MenuFragmentShader.glsl");
     #elif __linux__
@@ -92,7 +92,11 @@ void	ListScenesMenu::keyDown(SDL_Scancode key, float deltaTime, InputManager *in
 		if (key == SDL_SCANCODE_RETURN)
 		{
 			std::string strPath = modelPaths[selectedIndex];
+			#ifdef _WIN32
+			std::string ID = strPath.substr(14);
+			#elif __APPLE__
 			std::string ID = strPath.substr(16);
+			#endif
 			ID.erase(ID.find(".obj"));
 			StatesManager::getInstance()->addState(new Scene(ID, camera->getPosition()));
 			InputObserver* levelObserver = dynamic_cast<InputObserver*>(StatesManager::getInstance()->getCurrentStateInstance());
@@ -196,7 +200,6 @@ void ListScenesMenu::getModels(void) {
             continue;
 
         std::string fullPath = "assets\\models\\" + std::string(name);
-        std::cout << fullPath << std::endl;
 
 		std::string modelName = std::string(name);
         /* load text texture for each button */
